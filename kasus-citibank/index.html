@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Aplikasi imersif Kasus Citibank Malinda Dee untuk pembelajaran Sistem Informasi Akuntansi tingkat Magister Akuntansi.">
+  <title>Kasus Citibank — 117 Transfer</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="eyebrow">LABORATORIUM KASUS SIA</span>
+      <h1>117 Transfer</h1>
+      <p>Kasus Citibank Indonesia</p>
+    </div>
+
+    <div class="case-status">
+      <span class="status-dot"></span>
+      <div><strong>Mode investigasi</strong><small>Kasus historis berbasis bukti publik</small></div>
+    </div>
+
+    <nav id="mainNav" class="nav">
+      <button class="active" data-view="briefing">01 <span>Briefing</span></button>
+      <button data-view="transaksi">02 <span>Transaksi</span></button>
+      <button data-view="jaringan">03 <span>Jaringan Rekening</span></button>
+      <button data-view="formulir">04 <span>Form Transfer</span></button>
+      <button data-view="bukti">05 <span>Wawancara & Bukti</span></button>
+      <button data-view="notebook">06 <span>Notebook Investigasi</span></button>
+      <button data-view="kesimpulan">07 <span>Kesimpulan</span></button>
+    </nav>
+
+    <div class="progress-box">
+      <div class="progress-label"><span>Progres investigasi</span><b id="progressText">0%</b></div>
+      <div class="progress"><span id="progressBar"></span></div>
+    </div>
+
+    <button id="resetBtn" class="btn ghost full">Reset investigasi</button>
+    <p class="legal-note">Aplikasi pendidikan. Fakta historis diberi label sumber. Elemen antarmuka dan artefak yang tidak tersedia publik diberi label rekonstruksi pembelajaran.</p>
+  </aside>
+
+  <main class="workspace">
+    <header class="topbar">
+      <div>
+        <span class="eyebrow">TIM REVIEW FORENSIK • PRIVATE BANKING</span>
+        <h2 id="viewTitle">Briefing Kasus</h2>
+      </div>
+      <div class="top-actions">
+        <span class="badge primary">Bukti bertahap aktif</span>
+        <span class="badge" id="evidenceCount">0 bukti ditinjau</span>
+      </div>
+    </header>
+
+    <section class="content">
+      <div id="briefingView" class="view active"></div>
+      <div id="transaksiView" class="view"></div>
+      <div id="jaringanView" class="view"></div>
+      <div id="formulirView" class="view"></div>
+      <div id="buktiView" class="view"></div>
+      <div id="notebookView" class="view"></div>
+      <div id="kesimpulanView" class="view"></div>
+    </section>
+  </main>
+</div>
+
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <button id="modalClose" class="modal-close" aria-label="Tutup">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="data-kasus.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
