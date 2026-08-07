@@ -2,6 +2,12 @@
 
 A lightweight, browser-based mock simulation for **Sistem Informasi dan Pengendalian Internal (SIPI)**. The application uses one simulated company, **PT NusaNiaga**, to support integrated case exploration across 14 sessions.
 
+## Aplikasi kasus imersif
+
+Repository ini juga mulai menampung aplikasi kasus dunia nyata untuk pembelajaran Sistem Informasi Akuntansi tingkat Magister.
+
+- [Kasus Citibank — 117 Transfer](kasus-citibank/) — investigasi pengendalian transaksi, otorisasi, verifikasi, segregasi tugas, audit trail, wawancara berbasis bukti publik, dan judgment profesional.
+
 ## Purpose
 
 The application is a **case-immersion and professional-reasoning scaffold**. Learners explore mock ERP records, inspect evidence, identify material clues, document an investigation, and make a defensible decision.
