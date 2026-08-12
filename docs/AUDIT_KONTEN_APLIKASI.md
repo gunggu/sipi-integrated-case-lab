@@ -1,156 +1,101 @@
-# Audit Konten SIPI Integrated Case Lab
+# Audit Konten SIPI Integrated Case & Certification Lab
 
 ## Ringkasan keputusan
 
-**Status saat ini: layak untuk demonstrasi, orientasi kasus, diskusi kelompok, dan latihan professional judgment terbimbing.**
+**Status setelah revisi: layak untuk demonstrasi, diskusi kelompok, formative assessment, latihan evidence-based professional judgment, dan mock certification terbimbing.**
 
-Aplikasi **belum layak digunakan sebagai pengganti modul SIPI, ERP training system, atau alat penilaian sumatif otomatis**. Konten simulasi saat ini adalah mock-up pedagogis: mahasiswa mengeksplorasi layar sistem, record, evidence, clue, dan decision gate, tetapi transaksi, dokumen, dan log belum membentuk database akuntansi yang benar-benar memproses transaksi.
+Aplikasi tetap **bukan** pengganti Modul SIPI, ERP training system, atau alat penilaian sumatif otomatis. Namun, beberapa kelemahan MVP utama sudah diperbaiki secara substantif.
 
-## Basis audit
+## Perbaikan yang telah diterapkan
 
-Audit dilakukan terhadap:
+### 1. Evidence tidak lagi sepenuhnya generik pada Sesi 11–14
 
-- struktur 14 skenario pada `simulator.js`;
-- alur halaman utama pada `index.html`;
-- fungsi ERP mock-up, Evidence Room, Investigation Notebook, Decision Gate, dan local progress;
-- dokumentasi repositori pada `README.md`;
-- kesesuaian umum dengan struktur materi SIPI yang telah digunakan untuk Sesi 1–14.
+Evidence kini memiliki:
 
-## Temuan positif
+- Evidence ID;
+- jenis/source;
+- status;
+- reliability;
+- period;
+- preparer;
+- observed content;
+- limitation.
 
-### 1. Satu perusahaan simulasi untuk seluruh semester
+Status mencakup confirmed fact, incomplete evidence, conflicting evidence, management representation, dan corroborated evidence.
 
-PT NusaNiaga digunakan secara konsisten sehingga mahasiswa dapat melihat hubungan antarsesi, bukan 14 kasus yang tidak saling terkait.
+### 2. Dataset modul Sesi 11–14 sudah berbeda
 
-### 2. Alur pedagogis sudah benar
+Setiap tab modul pada Sesi 11–14 menampilkan record yang berbeda dan relevan dengan fungsi modul, sehingga ERP mock-up tidak lagi hanya mengganti nama tab untuk empat sesi integratif/lanjutan tersebut.
 
-Aplikasi memaksa mahasiswa mengikuti urutan:
+### 3. Decision Gate sudah memiliki traceability requirement
 
-1. membaca briefing;
-2. membuka modul mock ERP;
-3. memeriksa record;
-4. membuka evidence;
-5. memilih clue;
-6. menulis catatan investigasi;
-7. membuat keputusan.
+Mahasiswa harus memilih evidence citation sebelum basis keputusan dapat disimpan. Basis keputusan juga harus cukup substantif dan mengikuti reasoning yang menghubungkan issue, principle, analysis, recommendation, evidence, residual uncertainty, dan conclusion.
 
-Urutan ini lebih kuat daripada memberi kasus dan pertanyaan sekaligus karena mahasiswa harus membangun pemahaman sebelum menyimpulkan.
+### 4. Student Mode dan Instructor Mode sudah dipisahkan
 
-### 3. Cakupan 14 sesi sudah representatif
+Instructor Mode menampilkan debrief guidance dan rubric guidance untuk Sesi 11–14. Student Mode menyembunyikannya.
 
-Semua area utama tersedia:
+**Catatan penting:** ini pemisahan pedagogis, bukan security boundary. Karena source code repo publik, materi rahasia tidak boleh disimpan di Instructor Mode.
 
-- sistem, aktor, risiko, dan tata kelola;
-- data, dokumen, interface, dan lineage;
-- ERP selection dan implementation;
-- internal control frameworks;
-- audit SI dan CAATs;
-- revenue, expenditure, production, payroll, GL, reporting, dan ICoFR;
-- kasus integratif;
-- cloud, cyber, AI, RPA, biometric, privacy, remediation, dan capstone.
+### 5. Sesi 11–14 sudah disinkronkan dengan paket pembelajaran terbaru
 
-### 4. Tidak memberikan jawaban benar terlalu cepat
+- Sesi 11: duplicate vendor, role conflict, interface exception, change tanpa UAT/rollback, sales-to-GL reconciliation, audit evidence, blocking condition.
+- Sesi 12: terminated employees, bank-file change, payroll reconciliation, unsupported journal, suspense ageing, XBRL/AI reporting, deficiency aggregation, ICoFR.
+- Sesi 13: cloud shared responsibility, SOC/CUECs, AI/RPA governance, bot identity, biometric privacy, remediation.
+- Sesi 14: integrated certification case, evidence conflict, management representation, publication gates, ICoFR, timer.
 
-Record dan evidence menggunakan prompt investigasi, bukan label jawaban final. Ini mendukung professional judgment.
+### 6. Export hasil tersedia
 
-### 5. Privasi MVP memadai
+Aplikasi menyediakan:
 
-Catatan dan progres disimpan pada `localStorage`. Aplikasi tidak mengirim data mahasiswa ke server.
+- Export JSON berisi reviewed records/evidence, clues, citations, notes, decision, justification, dan progress;
+- Print/PDF melalui browser.
 
-## Temuan yang perlu diperhatikan
+### 7. Mock certification diperkuat
 
-### A. Evidence masih generik
+Sesi 14 memiliki timer 45 menit opsional, evidence dengan reliability/limitation berbeda, management representation yang perlu dikorroborasi, dan structured decision requirement.
 
-Evidence Room saat ini menampilkan template penilaian yang hampir sama untuk banyak bukti. Isi belum selalu menyerupai dokumen nyata seperti invoice, role matrix, reconciliation, SOC exception, payroll register, atau XBRL validation report.
-
-**Implikasi:** aplikasi membantu memahami pola analisis, tetapi belum cukup untuk melatih pemeriksaan dokumen secara detail.
-
-**Prioritas pengembangan:** tinggi.
-
-### B. Record belum membentuk transaksi end-to-end
-
-Record dalam setiap sesi berdiri sebagai baris kasus. Belum ada relasi eksplisit seperti:
-
-`purchase order → receipt → invoice → payment → journal → GL`.
-
-**Implikasi:** mahasiswa dapat menemukan anomali, tetapi belum sepenuhnya menelusuri konsekuensinya ke transaksi, account, assertion, dan laporan.
-
-**Prioritas pengembangan:** tinggi.
-
-### C. Tab modul belum benar-benar menyaring data
-
-Nama modul berubah saat dipilih, tetapi record kasus masih berasal dari daftar sesi yang sama. Modul belum memiliki dataset dan layar yang benar-benar berbeda.
-
-**Implikasi:** kesan ERP masih berupa mock-up navigasi, belum simulasi modul.
-
-**Prioritas pengembangan:** tinggi.
-
-### D. Clue tidak memiliki tingkat reliability atau conflict
-
-Clue dipilih sebagai material atau tidak material, tetapi belum dibedakan menjadi:
-
-- confirmed fact;
-- allegation;
-- incomplete evidence;
-- conflicting evidence;
-- management explanation;
-- auditor corroboration.
-
-**Implikasi:** mahasiswa belum cukup dilatih mengelola uncertainty dan conflicting evidence.
-
-**Prioritas pengembangan:** menengah–tinggi.
-
-### E. Decision gate belum memiliki structured justification
-
-Keputusan dan reasoning tersedia, tetapi aplikasi belum mewajibkan mahasiswa mengaitkan keputusan dengan record dan evidence tertentu.
-
-**Implikasi:** mahasiswa masih dapat memberi kesimpulan generik tanpa traceability yang cukup.
-
-**Prioritas pengembangan:** tinggi.
-
-### F. Belum ada rubric atau model-answer logic di dalam aplikasi
-
-Aplikasi belum menilai:
-
-- ketepatan issue;
-- penggunaan principle;
-- evidence sufficiency;
-- alternative defensible judgment;
-- consistency antara severity, remediation, dan conclusion.
-
-**Implikasi:** penilaian tetap harus dilakukan dosen menggunakan teaching note dan rubrik eksternal.
-
-**Prioritas pengembangan:** tinggi sebelum digunakan untuk penilaian sumatif.
-
-### G. Sesi 1–5 lebih abstrak daripada sesi transaksi
-
-Sesi 6–14 memiliki anomali yang lebih konkret. Sesi 1–5 masih banyak menggunakan register atau daftar konseptual.
-
-**Implikasi:** dosen perlu memberi briefing tambahan agar mahasiswa memahami apa yang harus “dilakukan” dalam mock-up.
-
-**Prioritas pengembangan:** menengah.
-
-### H. Belum ada mode dosen dan mahasiswa yang terpisah
-
-Semua pengguna melihat struktur yang sama. Tidak ada hidden clue, staged evidence release, timer, rubric, atau model answer khusus dosen.
-
-**Implikasi:** dosen harus mengendalikan briefing dan debrief di luar aplikasi.
-
-**Prioritas pengembangan:** tinggi.
-
-## Penilaian per fungsi
+## Penilaian per fungsi setelah revisi
 
 | Fungsi | Status | Catatan |
 |---|---|---|
 | Briefing kasus | Baik | Ringkas dan relevan per sesi |
-| ERP mock-up | Cukup | Visual dan navigasi ada; data belum benar-benar modular |
-| Evidence Room | Cukup | Konsep benar; dokumen masih generik |
-| Investigation Notebook | Baik untuk latihan | Belum ada structured citation ke evidence |
-| Decision Gate | Baik untuk diskusi | Belum cukup untuk auto-grading |
-| Progress | Memadai | Hanya pada browser/perangkat yang sama |
-| Instructor analytics | Belum tersedia | Perlu ekspor atau backend pada fase berikutnya |
-| Alignment 14 sesi | Baik | Tema utama terwakili |
-| Penilaian sumatif | Belum layak | Membutuhkan rubric, answer logic, dan identitas pengguna |
+| ERP mock-up Sesi 1–10 | Cukup | Masih ringkas |
+| ERP mock-up Sesi 11–14 | Baik untuk mock case | Dataset modular berbeda |
+| Evidence Room Sesi 1–10 | Cukup | Legacy evidence masih sederhana |
+| Evidence Room Sesi 11–14 | Baik | ID, status, reliability, limitation tersedia |
+| Investigation Notebook | Baik | Material clue + evidence citation |
+| Decision Gate | Baik untuk formative use | Citation requirement + structured justification |
+| Student/Instructor Mode | Baik secara pedagogis | Bukan security boundary |
+| Export | Baik untuk pengumpulan formative | JSON dan Print/PDF |
+| Mock certification | Baik untuk latihan terbimbing | Timer dan evidence conflict tersedia |
+| Penilaian sumatif otomatis | Belum layak | Professional judgment tetap dinilai dosen |
+
+## Batas yang masih tersisa
+
+### A. Belum merupakan transaction-processing database
+
+Aplikasi tidak benar-benar melakukan posting, calculation, subledger processing, atau journal generation. Record dan evidence membentuk pedagogical trace, bukan ledger engine.
+
+### B. Sesi 1–10 belum sekaya Sesi 11–14
+
+Empat sesi terakhir telah menerima evidence model dan modular dataset yang lebih dalam. Sesi 1–10 masih menggunakan evidence yang lebih ringkas.
+
+### C. Authentication aman belum tersedia
+
+GitHub Pages adalah static public site. Instructor Mode tidak boleh digunakan untuk menyimpan model answer rahasia atau data sensitif.
+
+### D. Belum ada centralized instructor analytics
+
+Progress masih tersimpan di browser mahasiswa. JSON export dapat dikumpulkan, tetapi belum ada backend/dashboard.
+
+### E. Belum ada auto-grading professional judgment
+
+Ini sengaja dipertahankan sebagai human-in-the-loop assessment. Alternative defensible judgment harus tetap dapat diterima bila reasoning dan evidence konsisten.
+
+### F. Staged evidence release belum otomatis
+
+Dosen masih perlu mengontrol waktu/urutan evidence melalui instruksi kelas. Timer tersedia pada Sesi 14, tetapi evidence belum dirilis otomatis per tahap.
 
 ## Cara penggunaan yang disarankan
 
@@ -160,10 +105,12 @@ Semua pengguna melihat struktur yang sama. Tidak ada hidden clue, staged evidenc
 - diskusi kelompok;
 - latihan identifikasi risiko dan kontrol;
 - evidence-based questioning;
-- latihan keputusan release/hold/go/no-go;
 - formative assessment;
-- debrief antarsesi;
-- persiapan mock certification.
+- latihan release/hold/go/no-go;
+- deficiency and ICoFR reasoning;
+- technology-readiness review;
+- mock certification;
+- debrief antarsesi.
 
 ### Belum disarankan untuk
 
@@ -171,22 +118,17 @@ Semua pengguna melihat struktur yang sama. Tidak ada hidden clue, staged evidenc
 - menggantikan RPKPS, slide, atau teaching note;
 - menghitung nilai akhir secara otomatis;
 - menyimpan data sensitif mahasiswa;
-- menilai kemampuan audit dokumen tanpa bukti tambahan;
-- menyimpulkan bahwa mahasiswa menguasai ERP hanya karena mampu menggunakan mock-up.
+- menyimpan answer key rahasia di repo publik;
+- menyimpulkan mahasiswa menguasai ERP nyata hanya karena mampu menggunakan mock-up.
 
-## Rekomendasi prioritas pengembangan
+## Prioritas pengembangan berikutnya
 
-1. Buat evidence artefact yang realistis untuk Sesi 6, 8, 9, 10, 11, 12, dan 14.
-2. Hubungkan record end-to-end dengan ID transaksi dan journal trail.
-3. Buat data berbeda untuk setiap tab modul.
-4. Wajibkan citation dari decision ke record dan evidence.
-5. Tambahkan reliability, completeness, conflict, dan limitation status pada evidence.
-6. Pisahkan Student Mode dan Instructor Mode.
-7. Tambahkan rubric manual dan answer-key logic yang menerima alternative defensible judgment.
-8. Tambahkan ekspor JSON/PDF agar hasil dapat dikumpulkan di eLOK.
-9. Tambahkan skenario bercabang dan staged evidence release.
-10. Lakukan pilot pada satu sesi sebelum digunakan untuk semua sesi.
+1. Enrich evidence Sesi 1–10 menggunakan model Evidence ID/status/reliability/limitation yang sama.
+2. Tambahkan explicit transaction/journal trace IDs lintas dokumen dan modul.
+3. Tambahkan staged evidence release yang dikendalikan dosen.
+4. Tambahkan optional local rubric checklist tanpa mengubahnya menjadi rigid auto-grading.
+5. Jika dibutuhkan untuk penilaian formal, pindahkan Instructor Mode dan analytics ke backend/authenticated environment.
 
-## Kesimpulan audit
+## Kesimpulan
 
-Aplikasi saat ini sudah memenuhi tujuan sebagai **mock-up sederhana tetapi profesional untuk membantu mahasiswa memasuki konteks kasus**. Nilai pedagogisnya terletak pada eksplorasi dan reasoning, bukan pada realisme transaksi atau penilaian otomatis. Untuk penggunaan kelas, aplikasi harus dipasangkan dengan modul, slide, kasus, teaching note, dan debrief dosen.
+Aplikasi sekarang sudah melampaui mock-up navigasi sederhana. Untuk Sesi 11–14, mahasiswa harus mengevaluasi evidence dengan kualitas berbeda, mengutip evidence, menyusun reasoning, dan membuat keputusan yang traceable. Ini cukup kuat untuk formative assessment dan mock certification terbimbing, tetapi professional judgment tetap harus dinilai dan didebrief oleh dosen.
