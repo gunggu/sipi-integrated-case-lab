@@ -1,12 +1,12 @@
 # Panduan Mahasiswa
 
-## SIPI Integrated Case Lab
+## SIPI Integrated Case & Certification Lab
 
 ## 1. Tujuan aplikasi
 
-SIPI Integrated Case Lab adalah mock-up perusahaan simulasi PT NusaNiaga. Aplikasi membantu Anda memahami kasus melalui eksplorasi sistem, record, evidence, clue, dan decision gate.
+SIPI Integrated Case & Certification Lab adalah lingkungan mock case PT NusaNiaga. Aplikasi membantu Anda memahami kasus melalui eksplorasi modul, record, evidence, clue, evidence citation, dan decision gate.
 
-Aplikasi ini **bukan ERP sungguhan** dan bukan pengganti Modul SIPI. Gunakan aplikasi bersama modul, slide, kasus, dan instruksi dosen.
+Aplikasi ini **bukan ERP sungguhan** dan bukan pengganti Modul SIPI. Gunakan bersama modul, slide, kasus, dan instruksi dosen.
 
 ## 2. Hasil belajar yang diharapkan
 
@@ -14,48 +14,42 @@ Setelah menggunakan aplikasi, Anda diharapkan mampu:
 
 - memahami konteks proses dan sistem;
 - mengenali fakta dan anomali;
-- membedakan fakta, evidence, dan asumsi;
+- membedakan confirmed fact, incomplete evidence, conflicting evidence, management representation, dan corroborated evidence;
 - menghubungkan issue, risk, control, evidence, dan decision;
-- menyatakan evidence yang belum tersedia;
-- membuat keputusan profesional yang dapat dipertanggungjawabkan.
+- menyatakan limitation serta evidence yang belum tersedia;
+- membuat keputusan profesional yang traceable dan dapat dipertanggungjawabkan.
 
 ## 3. Sebelum mulai
 
 1. Gunakan browser modern pada laptop atau tablet.
-2. Pastikan Anda menggunakan perangkat dan browser yang sama sampai tugas selesai.
+2. Gunakan perangkat dan browser yang sama sampai tugas selesai.
 3. Progres disimpan pada browser menggunakan `localStorage`, bukan pada server.
-4. Jangan menghapus browser data sebelum hasil dicatat atau dikumpulkan.
-5. Baca briefing dosen dan tujuan sesi sebelum membuka record.
+4. Jangan menghapus browser data sebelum hasil diekspor atau dikumpulkan.
+5. Pastikan aplikasi berada pada **Student Mode** kecuali dosen menginstruksikan lain.
 
 ## 4. Struktur aplikasi
 
 ### Briefing
 
-Menampilkan:
+Menampilkan fokus sesi, misi investigasi, indikator awal, alur kerja, dan pada Sesi 14 timer mock certification opsional.
 
-- fokus sesi;
-- misi investigasi;
-- indikator awal;
-- alur kerja.
-
-Indikator pada dashboard adalah **signal awal**, bukan kesimpulan.
+Indikator dashboard adalah **signal awal**, bukan kesimpulan.
 
 ### ERP Mock-up
 
-Menampilkan modul dan record simulasi. Klik nomor record untuk membuka detail.
+Menampilkan modul dan record simulasi. Pada Sesi 11–14, setiap tab modul memiliki dataset yang berbeda sehingga eksplorasi tidak hanya mengganti nama tab.
 
 Saat membaca record, tanyakan:
 
-- apa business objective yang terdampak;
-- proses dan actor mana yang terlibat;
-- account atau assertion apa yang mungkin terdampak;
+- objective atau assertion apa yang terdampak;
+- actor dan proses mana yang terlibat;
 - control apa yang seharusnya ada;
-- evidence apa yang belum tersedia;
-- apakah status saat ini dapat dipercaya.
+- evidence apa yang mendukung atau masih hilang;
+- apakah record perlu digunakan sebagai clue material.
 
 ### Evidence Room
 
-Menampilkan dokumen, report, log, dan artefak simulasi.
+Setiap evidence memiliki **Evidence ID**, tipe, status, reliability, observed content, dan limitation. Evidence ID digunakan sebagai citation token pada catatan dan keputusan.
 
 Jangan menerima evidence begitu saja. Nilai:
 
@@ -66,152 +60,95 @@ Jangan menerima evidence begitu saja. Nilai:
 - approval;
 - logic;
 - limitation;
-- hubungan dengan record lain.
+- conflict dengan evidence lain;
+- hubungan dengan record.
 
 ### Investigation Notebook
 
-Pilih clue yang material dan tulis catatan profesional.
+Pilih clue material, pilih evidence citation yang relevan, lalu tulis catatan I-P-A-R-E-C.
 
-Gunakan format minimum:
+Format minimum:
 
-> issue → risk/assertion → expected control → evidence/limitation → action → closure evidence
+> Issue → Principle → Analysis → Recommendation → Evidence IDs → Residual uncertainty → Conclusion
 
 ### Decision Gate
 
-Pilih keputusan sesuai konteks, misalnya:
-
-- release;
-- hold;
-- reverse;
-- investigate;
-- escalate;
-- go;
-- conditional go;
-- no-go;
-- effective;
-- ineffective;
-- insufficient basis;
-- ready;
-- conditionally ready;
-- not ready.
-
-Keputusan harus disertai reasoning. Jangan memilih keputusan hanya karena opsi tersebut tampak paling konservatif.
+Pilih keputusan sesuai konteks. Basis keputusan **tidak dapat disimpan tanpa minimal satu evidence citation** dan harus memuat reasoning yang cukup substantif.
 
 ## 5. Alur penggunaan yang disarankan
 
-### Langkah 1 — Baca misi
+1. Baca misi dan required decision.
+2. Eksplorasi setiap modul yang relevan.
+3. Buka record dan evidence.
+4. Bedakan fakta, limitation, conflict, dan management explanation.
+5. Pilih clue material.
+6. Pilih evidence citation.
+7. Tulis I-P-A-R-E-C notes.
+8. Pilih keputusan.
+9. Tulis structured justification.
+10. Export JSON atau gunakan Print/PDF sesuai instruksi dosen.
 
-Pahami keputusan akhir yang diminta sebelum membuka detail.
+## 6. Evidence citation
 
-### Langkah 2 — Lihat indikator awal
+Citation bukan sekadar formalitas. Gunakan evidence hanya bila benar-benar mendukung analisis.
 
-Gunakan indikator untuk menyusun pertanyaan awal. Jangan langsung menyimpulkan.
+Contoh:
 
-### Langkah 3 — Buka modul dan record
+> Sales-to-GL difference belum dapat dijelaskan dan masih menjadi reporting blocker (`EV-11-05`). Perubahan pricing juga tidak memiliki retained UAT/rollback evidence (`EV-11-04`).
 
-Periksa seluruh record yang relevan. Tandai hubungan antar-record.
+Jangan menyebut Evidence ID yang belum diperiksa.
 
-### Langkah 4 — Buka evidence
+## 7. I-P-A-R-E-C
 
-Cari evidence yang mendukung atau melemahkan dugaan Anda.
+- **Issue:** fakta dan risiko yang relevan.
+- **Principle:** konsep SIPI, assertion, framework, atau control objective.
+- **Analysis:** sebab, dampak, interdependency, evidence, limitation, dan uncertainty.
+- **Recommendation:** immediate action, sustainable remediation, owner, dan timing.
+- **Evidence:** bukti implementasi, operation, retest, closure, serta Evidence ID.
+- **Conclusion:** release/hold/go/no-go, ICoFR, readiness, atau insufficient basis.
 
-### Langkah 5 — Pilih clue material
+## 8. Sesi 11–14
 
-Pilih hanya clue yang dapat memengaruhi risk, control, amount, reporting, atau decision.
+### Sesi 11
 
-### Langkah 6 — Tulis catatan investigasi
+Fokus pada vendor/master data, SoD, interface exception, change management, sales-to-GL reconciliation, audit evidence, blocking condition, dan separate operational/reporting decision.
 
-Catatan harus menyebut evidence yang ada dan yang masih hilang.
+### Sesi 12
 
-### Langkah 7 — Buat keputusan
+Fokus pada terminated employees, bank-file integrity, payroll reconciliation, unsupported journal, suspense ageing, XBRL/AI reporting, deficiency aggregation, publication gates, dan ICoFR.
 
-Pastikan keputusan konsisten dengan:
+### Sesi 13
 
-- fakta;
-- severity;
-- evidence;
-- control status;
-- remediation status;
-- residual uncertainty.
+Fokus pada cloud shared responsibility, SOC report, CUECs, RPA identity, AI traceability, biometric privacy, dan remediation 30/60/90 hari.
 
-### Langkah 8 — Siapkan debrief
+### Sesi 14
 
-Siapkan jawaban untuk pertanyaan:
+Fokus pada mock certification terpadu. Timer 45 menit bersifat opsional. Management representation harus dinilai bersama corroborating evidence. Alternative defensible judgment diperbolehkan jika reasoning, evidence, dan safeguards konsisten.
 
-1. Apa issue terpenting?
-2. Evidence apa yang paling kuat?
-3. Evidence apa yang masih kurang?
-4. Apa control yang seharusnya ada?
-5. Apa tindakan segera?
-6. Apa sustainable remediation?
-7. Apa keputusan Anda dan mengapa?
+## 9. Export hasil
 
-## 6. Cara menulis catatan yang kuat
+- **Export JSON** menghasilkan file berisi sesi, record yang direview, evidence yang direview, material clues, citations, notes, decision, justification, dan progress.
+- **Print/PDF** menggunakan fitur cetak browser untuk menghasilkan ringkasan yang dapat disimpan sebagai PDF.
+- Export bukan bukti identitas atau keaslian pengerjaan. Pengumpulan formal tetap mengikuti instruksi dosen/eLOK.
 
-### Lemah
+## 10. Aturan penggunaan akademik
 
-> Ada kesalahan payroll. Perusahaan harus memperbaiki sistem.
-
-### Lebih kuat
-
-> Dua pegawai terminasi masih tercantum pada active roster dan dibayar. Hal ini memengaruhi occurrence dan accuracy payroll expense serta cash. Expected control adalah timely termination update dan active-roster-to-payroll reconciliation. Evidence belum menunjukkan complete terminated-employee population atau independent review. Payroll terkait harus ditahan/dikoreksi, seluruh populasi terminasi diuji, root cause diperbaiki, dan control dioperasikan serta diretest sebelum closure.
-
-## 7. I‑P‑A‑R‑E‑C untuk sesi integratif
-
-Gunakan struktur berikut bila diminta:
-
-- **Issue:** fakta dan risiko yang relevan;
-- **Principle:** konsep SIPI yang tepat;
-- **Analysis:** sebab, dampak, hubungan, evidence, dan uncertainty;
-- **Recommendation:** tindakan, owner, dan timing;
-- **Evidence:** bukti implementasi, operation, retest, dan closure;
-- **Conclusion:** release/hold/qualify, ICoFR, residual risk, atau readiness.
-
-## 8. Aturan penggunaan akademik
-
-- Kerjakan sesuai instruksi individu atau kelompok.
-- Jangan menganggap semua indikator merah otomatis fraud.
+- Jangan menganggap indikator merah otomatis fraud atau material weakness.
 - Jangan membuat fakta yang tidak ditampilkan.
 - Nyatakan asumsi bila informasi tidak lengkap.
+- Bedakan correction, containment, remediation, dan closure.
 - Alternative judgment diperbolehkan jika reasoning dan evidence konsisten.
-- Aplikasi mendukung proses berpikir; jawaban final tetap tanggung jawab Anda.
-
-## 9. Penyimpanan dan reset
-
-- Progres tersimpan otomatis pada browser.
-- Data tidak otomatis berpindah ke perangkat lain.
-- Tombol reset menghapus catatan dan progres pada browser tersebut.
-- Sebelum reset, salin atau ekspor hasil bila fitur ekspor tersedia.
-
-## 10. Masalah umum
-
-### Progres hilang
-
-Kemungkinan penyebab:
-
-- browser data dihapus;
-- menggunakan private/incognito mode;
-- berpindah browser atau perangkat;
-- local storage diblokir.
-
-### Record tidak terbuka
-
-- refresh halaman;
-- pastikan JavaScript aktif;
-- gunakan browser modern;
-- laporkan sesi dan nomor record kepada dosen.
-
-### Tidak yakin dengan keputusan
-
-Jangan mencari opsi yang “paling aman”. Kembali ke evidence dan nyatakan missing evidence atau insufficient basis bila memang belum cukup.
+- Aplikasi mendukung professional judgment; keputusan final tetap tanggung jawab Anda.
 
 ## 11. Checklist sebelum mengumpulkan
 
-- [ ] Semua record relevan sudah diperiksa.
+- [ ] Semua modul yang relevan sudah diperiksa.
+- [ ] Record material sudah dibuka.
 - [ ] Evidence utama sudah dibuka.
+- [ ] Reliability dan limitation evidence sudah dipertimbangkan.
 - [ ] Clue material sudah dipilih.
-- [ ] Catatan mencakup issue, risk, control, evidence, dan action.
-- [ ] Missing evidence dinyatakan.
+- [ ] Evidence citations sudah dipilih.
+- [ ] Catatan menggunakan struktur I-P-A-R-E-C.
 - [ ] Decision konsisten dengan analysis.
 - [ ] Residual uncertainty dinyatakan.
-- [ ] Hasil telah disalin atau diekspor sesuai instruksi dosen.
+- [ ] Hasil sudah diekspor atau disimpan sesuai instruksi dosen.
