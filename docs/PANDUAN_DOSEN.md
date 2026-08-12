@@ -1,277 +1,138 @@
 # Panduan Dosen
 
-## SIPI Integrated Case Lab
+## SIPI Integrated Case & Certification Lab
 
-## 1. Peran aplikasi dalam pembelajaran
+## 1. Peran aplikasi
 
-SIPI Integrated Case Lab adalah mock-up kasus interaktif berbasis perusahaan simulasi PT NusaNiaga. Aplikasi membantu mahasiswa memasuki konteks proses, sistem, record, evidence, investigation, dan decision.
+Aplikasi ini adalah mock case environment PT NusaNiaga untuk latihan eksplorasi sistem, evaluasi evidence, professional reasoning, dan mock certification. Aplikasi **bukan** pengganti Modul SIPI IAI, ERP nyata, atau auto-grading engine.
 
-Aplikasi **bukan**:
+Gunakan bersama RPKPS, slide, Student Learning Pack, Applied Case, Teaching Note, kuis, dan rubrik.
 
-- pengganti Modul SIPI IAI;
-- ERP atau accounting system yang benar-benar memproses transaksi;
-- auto-grading engine;
-- sumber tunggal untuk penilaian sumatif;
-- repository aman untuk data sensitif mahasiswa.
+## 2. Student Mode dan Instructor Mode
 
-Gunakan aplikasi bersama RPKPS, slide, Student Learning Pack, Applied Case, Teaching Note, kuis, dan rubrik.
+- **Student Mode** menyembunyikan debrief guidance dan rubric guidance.
+- **Instructor Mode** menampilkan expected reasoning dan rubric guidance untuk Sesi 11–14.
 
-## 2. Mengapa panduan dosen berbeda
-
-Dosen memiliki tugas tambahan yang tidak dilakukan mahasiswa:
-
-- menentukan scope dan tujuan aktivitas;
-- mengatur individual atau group work;
-- mengendalikan urutan eksplorasi;
-- memberi atau menahan contextual information;
-- memfasilitasi challenge dan debrief;
-- menilai reasoning, bukan hanya decision;
-- menerima alternative defensible judgment;
-- mengelola keterbatasan mock-up.
+Karena repo dan GitHub Pages bersifat publik, Instructor Mode adalah **pemisahan pedagogis, bukan security boundary**. Jangan menaruh model answer rahasia, data mahasiswa, atau materi ujian berisiko tinggi di source code publik.
 
 ## 3. Persiapan sebelum kelas
 
-### A. Tentukan tujuan sesi
+1. Buka sesi yang akan digunakan.
+2. Periksa briefing, module-specific records, evidence, limitation, dan decision options.
+3. Cocokkan dengan paket sesi di Google Drive.
+4. Tentukan evidence mana yang wajib diperiksa.
+5. Tentukan minimum citation requirement dan output.
+6. Siapkan alternative defensible judgments untuk debrief.
+7. Tentukan apakah timer Sesi 14 digunakan.
 
-Pilih satu atau dua kemampuan utama, misalnya:
+## 4. Alur 75–150 menit
 
-- data lineage dan exception;
-- ERP cutover readiness;
-- control design;
-- population validation;
-- transaction release;
-- reconciliation;
-- deficiency evaluation;
-- remediation readiness;
-- integrated professional judgment.
-
-Jangan mencoba menilai seluruh kemampuan sekaligus dalam satu aktivitas pendek.
-
-### B. Uji aplikasi
-
-Sebelum kelas:
-
-1. buka sesi yang akan digunakan;
-2. periksa briefing, modul, record, evidence, dan decision options;
-3. cocokkan dengan slide dan teaching note;
-4. identifikasi evidence yang masih generik;
-5. siapkan bukti tambahan bila diperlukan;
-6. tentukan expected reasoning dan alternative judgments;
-7. tentukan waktu dan output.
-
-### C. Siapkan bukti tambahan
-
-Karena Evidence Room MVP masih generik, dosen dianjurkan menambahkan atau membagikan artefak dari paket sesi, seperti:
-
-- invoice atau purchase order;
-- role matrix;
-- access log;
-- reconciliation;
-- payroll register;
-- bank response;
-- journal support;
-- XBRL validation report;
-- SOC exception;
-- remediation tracker.
-
-### D. Tentukan mode pengerjaan
-
-- **Demonstrasi:** dosen membuka sistem dan melakukan think-aloud.
-- **Kelompok:** kelompok memeriksa evidence dan mempertahankan decision.
-- **Individu:** mahasiswa menulis issue note atau I‑P‑A‑R‑E‑C.
-- **Hybrid:** eksplorasi kelompok, keputusan individu.
-
-## 4. Alur pembelajaran 75–150 menit
-
-### Format ringkas 75 menit
-
-| Waktu | Aktivitas |
+| Tahap | Aktivitas |
 |---|---|
-| 0–10 | Briefing tujuan dan required decision |
-| 10–25 | Eksplorasi ERP mock-up |
-| 25–40 | Evidence Room dan clue selection |
-| 40–55 | Investigation note |
-| 55–65 | Decision gate |
-| 65–75 | Debrief |
+| Briefing | Role, objective, required decision, time limit |
+| ERP exploration | Periksa module-specific records dan transaction/control conditions |
+| Evidence review | Nilai status, reliability, limitation, dan conflict |
+| Investigation | Pilih material clues dan evidence citations |
+| Decision | Structured justification berbasis evidence |
+| Debrief | Bandingkan reasoning paths dan alternative judgments |
 
-### Format penuh 150 menit
+## 5. Evidence discipline
 
-| Waktu | Aktivitas |
-|---|---|
-| 0–15 | Recall konsep dan briefing kasus |
-| 15–40 | Eksplorasi system/module/record |
-| 40–70 | Evidence review dan reconciliation |
-| 70–95 | Investigation and issue mapping |
-| 95–115 | Group presentation/challenge |
-| 115–135 | Debrief dan model reasoning |
-| 135–145 | Individual decision/quiz |
-| 145–150 | Exit ticket |
+Evidence pada Sesi 11–14 sekarang memiliki:
 
-## 5. Cara memberi briefing
+- Evidence ID;
+- type;
+- status;
+- reliability;
+- period;
+- preparer/source;
+- observed content;
+- limitation.
 
-Briefing sebaiknya hanya menjelaskan:
+Status evidence mencakup confirmed fact, incomplete evidence, conflicting evidence, management representation, dan corroborated evidence. Mahasiswa harus memahami bahwa `high reliability` tidak sama dengan `complete evidence`.
 
-- peran mahasiswa;
-- keputusan yang harus dibuat;
-- periode dan konteks;
-- batas informasi;
-- output;
-- waktu.
+Decision Gate mewajibkan minimal satu evidence citation sebelum basis keputusan dapat disimpan.
 
-Hindari menjelaskan lebih dahulu record mana yang salah atau control apa yang seharusnya ada.
+## 6. Fokus Sesi 11–14
 
-Contoh:
+### Sesi 11 — Integrated Data, ERP, Control, and Audit
 
-> Anda adalah tim assurance PT NusaNiaga. CFO meminta keputusan apakah monthly reporting dapat dirilis. Periksa system records dan evidence yang tersedia. Identifikasi material blockers, missing evidence, immediate action, dan closure criteria. Jangan mengasumsikan fakta yang tidak tersedia.
+Expected issues meliputi duplicate-vendor indicators, role conflict, interface exception, perubahan konfigurasi tanpa UAT/rollback evidence, population limitation, dan sales-to-GL reconciliation. Dosen harus meminta separate operational dan reporting decision.
 
-## 6. Pertanyaan fasilitasi
+### Sesi 12 — Payroll, Close, Reporting, and ICoFR
 
-Gunakan pertanyaan yang mendorong reasoning:
+Fokus pada terminated employees, post-approval bank-file change, payroll reconciliation, unsupported journal, old suspense, XBRL/AI reporting, deficiency aggregation, publication gates, dan ICoFR conclusion.
 
-- Apa business objective yang terdampak?
-- Fakta mana yang confirmed dan mana yang masih allegation?
-- Apa population yang seharusnya diperiksa?
-- Evidence mana yang paling reliable? Mengapa?
-- Apa evidence yang hilang?
-- Apakah ini correction, containment, atau remediation?
-- Apakah control didesain dengan baik tetapi tidak beroperasi, atau desainnya sendiri lemah?
-- Apa account, assertion, process, atau output yang terdampak?
-- Adakah common cause atau cross-control dependency?
-- Apakah keputusan operasi dan reporting harus sama?
-- Apa closure evidence yang dapat diuji?
-- Apa residual uncertainty yang harus dikomunikasikan?
+### Sesi 13 — Technology Readiness
+
+Fokus pada cloud shared responsibility, SOC scope/CUECs, bot identity, AI traceability, biometric privacy, remediation ownership, dan 30/60/90 prioritisation.
+
+### Sesi 14 — Mock Certification
+
+Gunakan timer 45 menit bila sesuai. Mahasiswa harus:
+
+1. mengidentifikasi priority issues;
+2. menghubungkan principle dan control objective;
+3. cite evidence;
+4. membedakan corroborated evidence dari management representation;
+5. menilai residual uncertainty;
+6. menghasilkan separate operational, publication, dan ICoFR judgments bila relevan.
 
 ## 7. Debrief yang disarankan
 
-Debrief harus membandingkan **reasoning paths**, bukan hanya menyebut jawaban benar.
+Urutan:
 
-Urutan debrief:
+1. confirmed facts;
+2. conflicting/incomplete evidence;
+3. evidence reliability dan limitation;
+4. affected objective/assertion;
+5. expected control;
+6. issue severity dan interdependency;
+7. immediate action;
+8. sustainable remediation;
+9. closure evidence;
+10. decision;
+11. alternative defensible judgment.
 
-1. fakta dan evidence;
-2. missing evidence dan limitation;
-3. issue dan affected objective/assertion;
-4. expected control;
-5. severity dan interdependency;
-6. immediate action;
-7. sustainable remediation;
-8. closure evidence;
-9. decision;
-10. alternative defensible judgment.
+Jangan menilai hanya pilihan keputusan. Dua mahasiswa dapat memilih `hold` dengan kualitas reasoning yang sangat berbeda.
 
-## 8. Penilaian
-
-### Jangan menilai hanya pilihan keputusan
-
-Dua mahasiswa dapat memilih `hold`, tetapi kualitas analisisnya sangat berbeda. Nilai minimal mencakup:
-
-- issue identification;
-- concept selection;
-- evidence use;
-- missing-evidence awareness;
-- causal analysis;
-- recommendation specificity;
-- closure evidence;
-- consistency of conclusion.
-
-### Rubrik generik
+## 8. Rubrik generik
 
 | Kriteria | Bobot contoh |
 |---|---:|
-| Identifikasi fakta dan issue | 15% |
-| Konsep SIPI dan risk/control linkage | 20% |
-| Evidence dan limitation | 20% |
-| Analysis, prioritisation, aggregation | 20% |
-| Recommendation dan closure evidence | 15% |
-| Decision dan komunikasi profesional | 10% |
+| Issue dan principle | 20–25% |
+| Analysis dan prioritisation | 20–25% |
+| Evidence use dan limitation | 20–25% |
+| Recommendation dan closure | 15–25% |
+| Conclusion consistency | 10–20% |
+| Professional communication | 5–10% |
 
-Sesuaikan dengan rubrik paket masing-masing sesi.
+Gunakan rubrik spesifik yang muncul pada Instructor Mode untuk Sesi 11–14 dan sesuaikan dengan paket resmi sesi.
 
-### Alternative judgment
+## 9. Export dan pengumpulan
 
-Terima jawaban berbeda bila:
+- `Export JSON` menghasilkan structured result berisi reviewed records/evidence, clues, citations, notes, decision, justification, dan progress.
+- `Print/PDF` dapat digunakan untuk arsip atau pengumpulan manual.
+- File export bukan verified assessment record dan tidak membuktikan identitas mahasiswa.
+- Untuk penilaian formal, hasil tetap dikumpulkan melalui eLOK atau mekanisme program studi.
 
-- fakta dan asumsi dinyatakan;
-- evidence mendukung;
-- severity konsisten;
-- missing evidence diakui;
-- tindakan dan safeguards memadai;
-- kesimpulan tidak bertentangan dengan analisis.
+## 10. Batas aplikasi yang masih berlaku
 
-## 9. Pemetaan penggunaan per sesi
+- Aplikasi tetap mock-up dan tidak melakukan posting atau calculation akuntansi nyata.
+- Sesi 11–14 memiliki dataset modular yang lebih realistis; Sesi 1–10 masih lebih ringkas.
+- Belum ada centralized instructor dashboard atau backend.
+- Tidak ada authentication yang aman pada static GitHub Pages.
+- Belum ada auto-grading professional judgment.
+- End-to-end transaction database masih bersifat pedagogical trace, bukan ledger engine nyata.
 
-| Sesi | Fokus penggunaan aplikasi |
-|---:|---|
-| 1 | Memahami system landscape, actor, objective, risk, governance |
-| 2 | Menelusuri source, interface, mapping, lineage, exception |
-| 3 | Membandingkan fit-gap, migration, testing, cutover decision |
-| 4 | Menghubungkan objective, risk, control, owner, evidence, deficiency |
-| 5 | Memvalidasi population, procedure, evidence, finding |
-| 6 | Menelusuri revenue/expenditure transactions dan release decision |
-| 7 | Menghubungkan physical, digital, dan cost records |
-| 8 | Menelusuri employee master sampai bank, GL, dan liabilities |
-| 9 | Menilai journal, reconciliation, close, XBRL, narrative |
-| 10 | Melakukan scoping, testing, deficiency, aggregation, conclusion |
-| 11 | Integrated data–ERP–control–audit decision |
-| 12 | Payroll-to-report, publication gates, communication, ICoFR |
-| 13 | Cloud/cyber/AI/RPA/privacy remediation dan readiness |
-| 14 | Mock certification dengan I‑P‑A‑R‑E‑C dan peer review |
+## 11. Pilot dan QA
 
-## 10. Keterbatasan yang harus dijelaskan kepada mahasiswa
+Sebelum penggunaan kelas penuh:
 
-- mock-up tidak melakukan posting atau calculation nyata;
-- record belum selalu memiliki transaction trail end-to-end;
-- evidence tertentu masih berupa template;
-- tab modul belum selalu memiliki dataset yang berbeda;
-- aplikasi belum memverifikasi jawaban secara otomatis;
-- local progress bukan bukti identitas atau keaslian pengerjaan;
-- indikator merah bukan otomatis fraud atau material weakness.
-
-## 11. Privasi dan pengumpulan hasil
-
-- Data tersimpan pada browser mahasiswa.
-- Tidak ada centralized instructor dashboard pada MVP.
-- Jangan meminta mahasiswa memasukkan data pribadi atau data perusahaan nyata.
-- Untuk pengumpulan, gunakan memo, screenshot, salinan notes, atau ekspor bila tersedia.
-- Untuk penilaian formal, unggah output ke eLOK sesuai prosedur kelas.
-
-## 12. Pilot yang disarankan
-
-Sebelum penerapan penuh:
-
-1. pilih satu sesi, disarankan Sesi 6, 8, 9, atau 11;
-2. gunakan pada kelompok kecil;
-3. amati apakah mahasiswa memahami navigasi;
-4. catat record/evidence yang membingungkan;
-5. nilai apakah decision terlalu mudah ditebak;
-6. revisi briefing dan evidence;
-7. baru perluas ke sesi lain.
-
-## 13. Checklist dosen
-
-### Sebelum kelas
-
-- [ ] Tujuan dan required decision jelas.
-- [ ] Sesi aplikasi telah diuji.
-- [ ] Slide, case, dan teaching note konsisten.
-- [ ] Evidence tambahan siap.
-- [ ] Expected reasoning dan alternatives ditentukan.
-- [ ] Waktu, kelompok, dan output ditetapkan.
-
-### Selama kelas
-
-- [ ] Tidak membocorkan jawaban terlalu awal.
-- [ ] Mendorong citation ke record/evidence.
-- [ ] Menanyakan missing evidence.
-- [ ] Membedakan correction dan remediation.
-- [ ] Menguji consistency antara analysis dan decision.
-
-### Setelah kelas
-
-- [ ] Debrief membahas reasoning, bukan pilihan saja.
-- [ ] Feedback mengacu pada rubrik.
-- [ ] Masalah konten atau UX dicatat.
-- [ ] Hasil mahasiswa dikumpulkan melalui kanal resmi.
-
-## 14. Kesimpulan penggunaan
-
-Gunakan aplikasi sebagai **case immersion and reasoning scaffold**. Nilai utamanya adalah membuat mahasiswa melihat, menelusuri, mempertanyakan, dan mengambil keputusan. Validitas akademik tetap bergantung pada kualitas briefing, evidence tambahan, facilitation, debrief, dan penilaian dosen.
+1. uji Student Mode dan Instructor Mode;
+2. uji semua tab Sesi 11–14;
+3. buka seluruh evidence dan periksa Evidence ID;
+4. uji citation requirement pada Decision Gate;
+5. uji JSON export dan Print/PDF;
+6. uji timer Sesi 14;
+7. lakukan debrief pilot dan catat ambiguity atau alternative judgments yang muncul.
