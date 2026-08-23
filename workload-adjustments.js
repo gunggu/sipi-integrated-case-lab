@@ -1,0 +1,26 @@
+(function(){
+  const cfg={
+    2:{metrics:[['8–10','Core risk rows'],['6','Critical data elements'],['2','Publication decisions']],note:'Proporsionalisasi tugas: kelompok cukup menyerahkan 1 data-flow map, 1 risk-control-evidence matrix berisi 8–10 risiko inti, serta keputusan dashboard dan AI summary disertai memo singkat. Data dictionary dipadatkan menjadi 6 CDE dan boleh digabung ke matrix.'},
+    3:{metrics:[['3','Required outputs'],['7%','Vendor-master duplicate flags'],['62%','Training completion']],note:'Proporsionalisasi tugas: fokus pada 3 output—vendor/solution & fit-gap assessment, readiness/blocker table, serta Go/Conditional Go/No-Go memo. Tidak perlu membuat artefak terpisah untuk setiap subarea bila sudah tercakup di readiness table.'},
+    4:{metrics:[['8','Core matrix rows'],['3','Lines of accountability'],['1','Audit-committee memo']],note:'Proporsionalisasi tugas: gunakan 8 risk-control-evidence rows utama. Mahasiswa tidak wajib menerapkan COSO, ERM, dan COBIT pada setiap isu; pilih framework yang paling relevan dan jelaskan alasannya. Tetap petakan Three Lines dan simpulkan kondisi control.'},
+    5:{metrics:[['3','Audit objectives in depth'],['1','Overall evidence-basis conclusion'],['1','Audit memo']],note:'Proporsionalisasi tugas: analisis mendalam hanya 3 dari 6 audit objectives; objective lain cukup dipetakan singkat. Untuk 3 objective terpilih, susun procedure, evidence evaluation, alternative procedure bila perlu, finding, dan conclusion. Decision Gate tetap overall evidence basis.'},
+    6:{metrics:[['8–10','Core risk/exception rows'],['6','Cross-cycle exceptions'],['4','Decision actions']],note:'Proporsionalisasi tugas: 8–10 risk-control-evidence rows sudah memadai. Utamakan enam exception utama, downstream effects, exception ownership, dan keputusan release/hold/reverse/escalate.'},
+    7:{metrics:[['8','Key threat-control-evidence rows'],['3','Required reconciliations'],['1','Margin/WIP decision']],note:'Proporsionalisasi tugas: cukup 8 key rows dan 3 reconciliation blocks—material, WIP, dan margin-release readiness. BOM/MRP/MES/scrap/overhead tetap dianalisis sebagai evidence, tetapi tidak perlu menjadi deliverable terpisah.'},
+    8:{metrics:[['8–10','Core payroll risk rows'],['6','Core issues'],['1','Overall payroll decision']],note:'Proporsionalisasi tugas: 8–10 core risks, item-level actions untuk enam issue, satu reconciliation summary, dan satu overall payroll release memo. Tidak perlu membuat artefak terpisah untuk cloud/privacy bila sudah tercakup di matrix.'},
+    9:{metrics:[['8–10','Core reporting risk rows'],['3+','Per-output decisions'],['1','CFO memo']],note:'Proporsionalisasi tugas: batasi matrix menjadi 8–10 risiko inti. Pertahankan bagian yang paling penting: reconciliation/journal/XBRL/AI analysis dan keputusan Release/Hold/Qualify per output.'},
+    10:{metrics:[['4','Key controls supplied for evaluation'],['3','Evaluation layers'],['1','ICoFR conclusion']],note:'Proporsionalisasi tugas: kasus menjadi guided case. Scope awal dan empat key-control areas diberikan; mahasiswa tidak perlu membangun full scoping dari nol. Fokus pada design/implementation/OE, severity/aggregation, remediation/communication, dan final ICoFR conclusion.'},
+    11:{metrics:[['10','Integrated risk rows'],['2','Separate decisions'],['7 min','Presentation']],note:'Integrated Case I tetap lebih berat, tetapi matrix dibatasi menjadi sekitar 10 risiko prioritas. Output utama: integrated map, priority/closure matrix, separate operations-versus-reporting decision, presentasi 7 menit dan memo ringkas.'},
+    12:{metrics:[['10','Integrated risk rows'],['4','Separate decisions'],['8 min','Presentation']],note:'Integrated Case II tetap sebagai synthesis case. Gunakan sekitar 10 priority risks, satu integrated payroll-to-report map, satu deficiency/aggregation table, dan empat separate decisions (FS, XBRL, AI narrative, ICoFR). Hindari artefak tambahan yang mengulang analisis.'},
+    13:{metrics:[['4','Issues analysed in depth'],['6','Issues considered for readiness'],['3','Personal priorities']],note:'Sesi 13 bukan PR mingguan. Kelompok memilih 4 dari 6 technology issues untuk analisis mendalam; seluruh 6 tetap dipertimbangkan secara ringkas dalam readiness decision. Output cukup satu 30/60/90 remediation dashboard, readiness conclusion, dan tiga personal study priorities.'},
+    14:{metrics:[['5','Priority I-P-A-R-E-C issue blocks'],['5','Separate decisions'],['3','Personal actions']],note:'Sesi 14 adalah capstone, bukan PR mingguan. Mahasiswa menyusun I-P-A-R-E-C mendalam untuk 5 priority issues; isu lain cukup diprioritaskan dalam summary matrix. Tetap buat lima separate decisions dan three-action personal readiness plan.'}
+  };
+  Object.entries(cfg).forEach(([k,v])=>{
+    const s=sessions.find(x=>x.n===Number(k));
+    if(!s)return;
+    s.metrics=v.metrics;
+    s.workloadNote=v.note;
+    if(s.instructor && s.instructor.expected && !s.instructor.expected.includes(v.note)) s.instructor.expected.unshift(v.note);
+  });
+  const select=document.getElementById('sessionSelect');
+  if(select && Number(select.value)>=2) select.dispatchEvent(new Event('change'));
+})();
