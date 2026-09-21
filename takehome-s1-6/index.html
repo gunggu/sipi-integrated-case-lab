@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SIPI PRO Take-Home Case — Sesi 1–6</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="gate" class="gate">
+  <div class="gate-card">
+    <div class="eyebrow">SIPI Professional • Individual Take-Home</div>
+    <h1>PT NusaNiaga Digital</h1>
+    <p>Evidence Room untuk kasus komprehensif Sesi 1–6.</p>
+    <label for="pw">Password akses</label>
+    <div class="pw-row"><input id="pw" type="password" autocomplete="current-password"/><button id="unlock">Buka</button></div>
+    <p id="gate-msg" class="muted"></p>
+    <p class="fine">Gate ini bersifat pedagogis pada static site. Deadline resmi mengikuti timestamp eLOK.</p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header>
+  <div>
+    <div class="eyebrow">SIPI Professional • Sesi 1–6</div>
+    <h1>PT NusaNiaga Digital — Evidence Room</h1>
+  </div>
+  <div class="timer-card">
+    <div class="timer-label">Waktu tersisa lokal</div>
+    <div id="timer">24:00:00</div>
+    <div class="fine">Bukan penentu deadline resmi</div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div>
+    <h2>Mandat</h2>
+    <p>Board meminta assurance atas integrasi sistem, data, ERP, internal control, audit evidence, serta revenue-to-cash dan procure-to-pay.</p>
+  </div>
+  <div class="hero-actions">
+    <button onclick="window.print()">Print / Save PDF</button>
+    <button id="reset-view" class="secondary">Reset filter</button>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">Evidence Pack</div>
+      <h2>15 artefak kasus</h2>
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
+  <div id="evidence-grid" class="grid"></div>
+</section>
+
+<section class="instruction">
+  <div class="eyebrow">Submission discipline</div>
+  <h2>Gunakan Evidence ID dalam setiap finding</h2>
+  <p>Jangan menyimpulkan hanya dari satu artefak. Bedakan fakta, inference, control gap, audit limitation, dan rekomendasi. Gunakan eLOK sebagai sistem resmi pengumpulan.</p>
+</section>
+</main>
+
+<footer>PT NusaNiaga adalah simulasi pedagogis. Jangan memasukkan data nyata atau data personal.</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
