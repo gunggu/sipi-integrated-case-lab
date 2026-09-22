@@ -3,32 +3,32 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SIPI PRO Take-Home Case — Sesi 1–6</title>
+<title>SIPI PRO Take-Home Case — Evidence Room</title>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <div id="gate" class="gate">
   <div class="gate-card">
-    <div class="eyebrow">SIPI Professional • Individual Take-Home</div>
+    <div class="eyebrow">SIPI Professional • Individual Take-Home • 1 × 24 Jam</div>
     <h1>PT NusaNiaga Digital</h1>
-    <p>Evidence Room untuk kasus komprehensif Sesi 1–6.</p>
+    <p>Masuk ke Evidence Room untuk menelaah artefak kasus. Gunakan Evidence ID dalam setiap finding dan kesimpulan.</p>
     <label for="pw">Password akses</label>
-    <div class="pw-row"><input id="pw" type="password" autocomplete="current-password"/><button id="unlock">Buka</button></div>
+    <div class="pw-row"><input id="pw" type="password" autocomplete="current-password"/><button id="unlock">Buka Evidence Room</button></div>
     <p id="gate-msg" class="muted"></p>
-    <p class="fine">Gate ini bersifat pedagogis pada static site. Deadline resmi mengikuti timestamp eLOK.</p>
+    <p class="fine">Gate dan timer bersifat pedagogis pada static site. Deadline resmi mengikuti timestamp eLOK.</p>
   </div>
 </div>
 
 <div id="app" class="hidden">
 <header>
   <div>
-    <div class="eyebrow">SIPI Professional • Sesi 1–6</div>
+    <div class="eyebrow">SIPI Professional • Take-Home Examination</div>
     <h1>PT NusaNiaga Digital — Evidence Room</h1>
   </div>
   <div class="timer-card">
     <div class="timer-label">Waktu tersisa lokal</div>
     <div id="timer">24:00:00</div>
-    <div class="fine">Bukan penentu deadline resmi</div>
+    <div class="fine">Deadline resmi: eLOK</div>
   </div>
 </header>
 
@@ -36,34 +36,99 @@
 <section class="hero">
   <div>
     <h2>Mandat</h2>
-    <p>Board meminta assurance atas integrasi sistem, data, ERP, internal control, audit evidence, serta revenue-to-cash dan procure-to-pay.</p>
+    <p>Board meminta assurance atas integrasi sistem, kualitas data, ERP readiness, internal control, audit evidence, serta revenue-to-cash dan procure-to-pay. Tidak semua artefak menunjukkan masalah; sebagian adalah evidence normal, sebagian ambigu, dan sebagian perlu dikaitkan dengan artefak lain.</p>
   </div>
   <div class="hero-actions">
-    <button onclick="window.print()">Print / Save PDF</button>
-    <button id="reset-view" class="secondary">Reset filter</button>
+    <button id="print-btn">Print / Save PDF</button>
+    <button id="export-btn" class="secondary">Export workspace</button>
+    <button id="reset-view" class="secondary">Reset view</button>
   </div>
+</section>
+
+<section class="workspace-summary">
+  <div class="metric"><strong id="metric-reviewed">0</strong><span>artefak diperiksa</span></div>
+  <div class="metric"><strong id="metric-bookmarks">0</strong><span>bookmarks</span></div>
+  <div class="metric"><strong id="metric-notes">0</strong><span>catatan</span></div>
+  <div class="metric"><strong id="metric-classified">0</strong><span>diklasifikasi</span></div>
 </section>
 
 <section>
   <div class="section-head">
     <div>
       <div class="eyebrow">Evidence Pack</div>
-      <h2>15 artefak kasus</h2>
+      <h2>30 artefak profesional</h2>
+      <p class="muted">Cari, filter, inspeksi metadata, dan buat working notes. Kategori sengaja menggunakan area profesional, bukan nomor sesi.</p>
     </div>
-    <div class="filters" id="filters"></div>
   </div>
+
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Cari ID, judul, sumber, isi evidence..."/>
+    <select id="category-filter"><option value="ALL">Semua kategori</option></select>
+    <select id="review-filter">
+      <option value="ALL">Semua status kerja</option>
+      <option value="BOOKMARKED">Bookmarked</option>
+      <option value="UNREVIEWED">Belum diperiksa</option>
+      <option value="NOTED">Ada catatan</option>
+    </select>
+  </div>
+
   <div id="evidence-grid" class="grid"></div>
 </section>
 
 <section class="instruction">
-  <div class="eyebrow">Submission discipline</div>
-  <h2>Gunakan Evidence ID dalam setiap finding</h2>
-  <p>Jangan menyimpulkan hanya dari satu artefak. Bedakan fakta, inference, control gap, audit limitation, dan rekomendasi. Gunakan eLOK sebagai sistem resmi pengumpulan.</p>
+  <div class="eyebrow">Evidence discipline</div>
+  <h2>Bangun finding dari evidence, jangan hanya mencari “jawaban”</h2>
+  <p>Bedakan fakta, inference, control gap, audit limitation, dan rekomendasi. Satu artefak belum tentu cukup. Gunakan metadata, raw extract, cross-evidence reasoning, serta alternative explanation sebelum menyimpulkan.</p>
 </section>
 </main>
 
-<footer>PT NusaNiaga adalah simulasi pedagogis. Jangan memasukkan data nyata atau data personal.</footer>
+<footer>PT NusaNiaga Digital adalah simulasi pedagogis. Jangan memasukkan data nyata, data personal, atau materi ujian lain ke aplikasi ini.</footer>
 </div>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <div class="modal-top">
+      <div>
+        <div id="modal-eyebrow" class="eyebrow"></div>
+        <h2 id="modal-title"></h2>
+      </div>
+      <button id="close-modal" class="icon-btn" aria-label="Tutup">×</button>
+    </div>
+
+    <div id="modal-meta" class="meta-grid"></div>
+    <p id="modal-summary" class="lead"></p>
+    <div id="modal-sections"></div>
+
+    <div class="workpaper">
+      <div class="workpaper-head">
+        <div>
+          <div class="eyebrow">My working paper</div>
+          <h3>Catatan pribadi untuk artefak ini</h3>
+        </div>
+        <button id="bookmark-btn" class="secondary"></button>
+      </div>
+
+      <label for="classification">Klasifikasi sementara</label>
+      <select id="classification">
+        <option value="">Belum diklasifikasi</option>
+        <option value="Background">Background / contextual</option>
+        <option value="Need corroboration">Need corroboration</option>
+        <option value="Candidate issue">Candidate issue</option>
+        <option value="Possible control strength">Possible control strength</option>
+        <option value="Audit limitation">Audit limitation</option>
+      </select>
+
+      <label for="note">Working note</label>
+      <textarea id="note" rows="7" placeholder="Tuliskan fakta, inference, evidence lain yang perlu dikaitkan, dan pertanyaan yang masih terbuka..."></textarea>
+      <div class="note-actions">
+        <span id="save-state" class="fine">Disimpan lokal di browser ini.</span>
+        <button id="save-note">Simpan catatan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="evidence-data.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
