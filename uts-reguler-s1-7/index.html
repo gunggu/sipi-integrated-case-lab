@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>UTS SIPI Reguler — Evidence Room Sesi 1–7</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="gate" class="gate">
+  <div class="gate-card">
+    <div class="eyebrow">UTS SIPI • Kelas Reguler • Individu • 1 × 24 Jam</div>
+    <h1>PT NusaNiaga Manufaktur</h1>
+    <p>Masuk untuk mengakses Evidence Room kasus UTS Sesi 1–7.</p>
+    <label for="pw">Password</label>
+    <div class="pw-row"><input id="pw" type="password"/><button id="unlock">Masuk</button></div>
+    <p id="gate-msg" class="muted"></p>
+    <p class="fine">Timer pada halaman ini bersifat bantuan. Deadline resmi mengikuti eLOK.</p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header>
+  <div>
+    <div class="eyebrow">UTS SIPI — Kelas Reguler</div>
+    <h1>PT NusaNiaga Manufaktur — Evidence Room</h1>
+  </div>
+  <div class="timer-card"><span>Waktu tersisa lokal</span><strong id="timer">24:00:00</strong><small>Deadline resmi: eLOK</small></div>
+</header>
+
+<main>
+<section class="hero">
+  <div>
+    <h2>Tujuan</h2>
+    <p>Gunakan bukti di bawah untuk menganalisis sistem, data, ERP, pengendalian, audit SI, siklus pendapatan/pengeluaran, serta produksi dan akuntansi biaya.</p>
+  </div>
+  <div class="hero-actions">
+    <button id="print-btn">Cetak / Simpan PDF</button>
+    <button id="export-btn" class="secondary">Ekspor Catatan</button>
+  </div>
+</section>
+
+<section class="task-panel">
+  <div class="eyebrow">Panduan pengerjaan</div>
+  <h2>9 bagian tugas</h2>
+  <ol>
+    <li>Peta aliran informasi utama.</li>
+    <li>Pilih dan analisis 10 isu paling penting.</li>
+    <li>Evaluasi kesiapan ERP (E04–E06).</li>
+    <li>Usulkan 4 prosedur audit SI untuk E08.</li>
+    <li>Buat keputusan atas E09–E14.</li>
+    <li>Hitung dan analisis E15–E18.</li>
+    <li>Gunakan kerangka pengendalian pada minimal 3 isu.</li>
+    <li>Susun rencana 30/60 hari.</li>
+    <li>Tulis kesimpulan manajemen maksimal 300 kata.</li>
+  </ol>
+</section>
+
+<section class="workspace-summary">
+  <div class="metric"><strong id="metric-reviewed">0</strong><span>dibuka</span></div>
+  <div class="metric"><strong id="metric-notes">0</strong><span>catatan</span></div>
+  <div class="metric"><strong id="metric-bookmarks">0</strong><span>ditandai</span></div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div><div class="eyebrow">Evidence Pack</div><h2>18 artefak</h2><p class="muted">Gunakan pencarian dan kategori. Baca petunjuk fokus pada tiap artefak, tetapi tetap buat analisis sendiri.</p></div>
+  </div>
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Cari ID, judul, atau isi evidence..."/>
+    <select id="category-filter"><option value="ALL">Semua kategori</option></select>
+    <select id="review-filter">
+      <option value="ALL">Semua status</option>
+      <option value="UNREVIEWED">Belum dibuka</option>
+      <option value="BOOKMARKED">Ditandai</option>
+      <option value="NOTED">Ada catatan</option>
+    </select>
+  </div>
+  <div id="evidence-grid" class="grid"></div>
+</section>
+</main>
+<footer>Simulasi pedagogis untuk UTS SIPI. Jangan memasukkan data nyata atau informasi rahasia.</footer>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-top"><div><div id="modal-eyebrow" class="eyebrow"></div><h2 id="modal-title"></h2></div><button id="close-modal" class="icon-btn">×</button></div>
+    <div id="modal-meta" class="meta-grid"></div>
+    <div id="focus-box" class="focus-box"></div>
+    <p id="modal-summary" class="lead"></p>
+    <div id="modal-sections"></div>
+    <div class="workpaper">
+      <div class="workpaper-head"><div><div class="eyebrow">Catatan kerja</div><h3>Catatan Anda untuk bukti ini</h3></div><button id="bookmark-btn" class="secondary"></button></div>
+      <label for="note">Tuliskan kondisi, risiko, pengendalian, atau hal yang masih perlu dicek.</label>
+      <textarea id="note" rows="6"></textarea>
+      <div class="note-actions"><span id="save-state" class="fine">Catatan disimpan lokal di browser.</span><button id="save-note">Simpan</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="evidence-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
