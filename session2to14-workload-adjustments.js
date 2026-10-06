@@ -2,6 +2,35 @@
   const get=n=>sessions.find(s=>s.n===n);
   const add=(s,text)=>{ if(s && s.instructor && !s.instructor.expected.includes(text)) s.instructor.expected.push(text); };
 
+  // Session 1 — keep the orientation case lightweight for first-time users.
+  let s=get(1);
+  if(s){
+    s.metrics=[['2','Isu utama'],['2','Bukti inti'],['1','Keputusan singkat']];
+    s.mission='Sesi 1 adalah orientasi ke cara berpikir SIPI, bukan tugas investigasi penuh. Tinjau dua record dan dua bukti inti, pilih paling banyak dua isu yang menurut Anda material, lalu buat satu keputusan singkat tentang apakah landscape sistem dan tata kelolanya sudah memadai. Catatan cukup 100–150 kata; tidak perlu menyusun I-P-A-R-E-C lengkap atau daftar risiko yang panjang.';
+    s.records=[
+      ['SYS-01','Integrasi kanal penjualan','Marketplace dan POS masuk melalui antarmuka ke ERP; satu jalur belum memiliki owner monitoring yang jelas.','Review','warn'],
+      ['SYS-02','Pelaporan dan tata kelola data','ERP mengalir ke buku besar dan dasbor; definisi pelanggan aktif berbeda antara Sales dan Finance.','Review','warn']
+    ];
+    s.modules=['Landscape sistem','Tata kelola & pelaporan'];
+    s.moduleRecords=[
+      [s.records[0]],
+      [s.records[1]]
+    ];
+    s.evidence=[
+      {id:'EV-01-01',title:'Peta sistem dan aktor',type:'Architecture overview',status:'Confirmed fact',reliability:'High',period:'Current landscape',prepared:'IT Architecture',detail:'Marketplace dan POS mengirim transaksi melalui antarmuka ke cloud ERP. ERP meneruskan data ke buku besar dan dasbor. Finance, Operations, IT, HR, dan Treasury menjadi aktor utama.',limitation:'Peta menunjukkan hubungan sistem dan aktor, tetapi belum membuktikan bahwa seluruh ownership dan monitoring berjalan efektif.'},
+      {id:'EV-01-02',title:'Catatan tata kelola data dan KPI',type:'Governance note',status:'Needs evaluation',reliability:'Medium',period:'Current policy',prepared:'Management Reporting',detail:'Pemilik formal data pelanggan belum ditetapkan. Sales mendefinisikan pelanggan aktif berdasarkan pembelian 12 bulan, sedangkan Finance memakai saldo atau aktivitas kas 6 bulan.',limitation:'Perbedaan definisi belum tentu salah, tetapi dapat menimbulkan pelaporan yang tidak konsisten bila tidak dijelaskan dan disepakati.'}
+    ];
+    s.decision=['Memadai','Perlu perbaikan terbatas','Belum memadai'];
+    s.instructor={
+      expected:[
+        'Mahasiswa cukup mengidentifikasi dua isu paling penting; jangan menilai dari banyaknya temuan.',
+        'Jawaban yang baik menghubungkan sistem, aktor, informasi, tujuan, dan accountability tanpa memaksa penggunaan framework yang belum dibahas mendalam.',
+        'Satu keputusan singkat dengan dua evidence citation sudah cukup untuk Sesi 1.'
+      ],
+      rubric:'Pemahaman landscape 30%; pemilihan dua isu 30%; penggunaan evidence 20%; keputusan dan alasan singkat 20%.'
+    };
+  }
+
   // Session 2 — reduce artefact count; retain core data-cycle judgement.
   let s=get(2);
   if(s){
