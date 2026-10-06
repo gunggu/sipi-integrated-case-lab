@@ -32,7 +32,7 @@
   }
 
   // Session 2 — reduce artefact count; retain core data-cycle judgement.
-  let s=get(2);
+  s=get(2);
   if(s){
     s.metrics=[['8–10','Key risks'],['6+','CDEs embedded in analysis'],['2','Publication decisions']];
     s.mission='Gunakan Applied Case 2 sebagai sumber konteks dan tugas utama. Untuk beban mingguan yang proporsional, hasil kelompok cukup berupa: (1) satu data-flow map yang menggabungkan activity-resource-party, dokumen/file dan batch/real-time/hybrid; (2) risk-control-evidence matrix 8–10 risiko utama; dan (3) keputusan terpisah untuk dashboard dan AI summary disertai memo singkat. Critical data elements tetap dianalisis, tetapi tidak perlu menjadi dokumen data-dictionary terpisah; masukkan minimal 6 CDE ke map/matrix.';
