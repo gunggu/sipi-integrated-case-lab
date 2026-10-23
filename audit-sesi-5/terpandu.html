@@ -63,7 +63,7 @@ const initial=()=>({step:0,team:"",answers:[{},{},{}],notes:["","",""],final:"",
 let S;try{S=JSON.parse(localStorage.getItem(STORE))||initial()}catch{S=initial()}
 if(!S||!Number.isInteger(S.step)||S.step<0||S.step>4||!Array.isArray(S.answers)||S.answers.length!==3)S=initial();
 const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(S))}catch{}};
-const select=(part,index,list)=>list.map((val,i)=>'<button class="choice" aria-pressed="'+(S.answers[index][part]===i)+'" data-part="'+part+'" data-idx="'+index+'" data-val="'+i+'">'+safe(val)+'</button>').join("");
+const select=(part,index,list)=>[...list.keys()].sort((a,b)=>((a+index*2+(part==="risk"?1:part==="evidence"?2:3))%4)-((b+index*2+(part==="risk"?1:part==="evidence"?2:3))%4)).map(i=>'<button class="choice" aria-pressed="'+(S.answers[index][part]===i)+'" data-part="'+part+'" data-idx="'+index+'" data-val="'+i+'">'+safe(val)+'</button>').join("");
 function score(){const subs=S.answers.map((a,i)=>["risk","evidence","conclusion"].map((p,j)=>a[p]===cases[i].keys[j]));return {byCase:subs.map(x=>x.filter(Boolean).length),total:subs.flat().filter(Boolean).length,overall:Math.round(subs.flat().filter(Boolean).length/9*100)}}
 function render(){
  $("status").innerHTML='<span class="tag">Tahap '+(S.step+1)+' dari 5</span><span class="tag">±20 menit</span><span class="tag">'+(S.step===4?"Umpan balik":"Jawaban tidak ditampilkan sebelum penyerahan")+'</span>';
