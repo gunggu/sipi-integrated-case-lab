@@ -1,0 +1,89 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mode Terpandu · Audit SI Sesi 5</title>
+<style>
+:root{font-family:system-ui,Arial,sans-serif;background:#f3f5f9;color:#1c2c40}*{box-sizing:border-box}body{margin:0}header{background:#18344f;color:white;padding:24px max(16px,calc((100vw - 920px)/2))}header small{color:#eecf82}h1{font-size:clamp(24px,4vw,32px);margin:7px 0}h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:12px 0}p{line-height:1.55}main{max-width:920px;padding:18px 14px 55px;margin:auto}.card{background:white;border:1px solid #dbe1e9;border-radius:13px;padding:20px;margin:12px 0}.choice{display:block;text-align:left;width:100%;border:1px solid #becad5;background:white;border-radius:10px;padding:12px;margin:8px 0;cursor:pointer;font:inherit;line-height:1.45}.choice[aria-pressed=true]{background:#e5f1f6;border:2px solid #32627c;padding:11px}.choice:hover{background:#f2f6fa}.muted{color:#617184;font-size:13px}.notice{background:#f3f7fb;padding:11px 14px;border-left:4px solid #5d7f9e;border-radius:4px}.nav{display:flex;justify-content:space-between;gap:8px;margin-top:18px;flex-wrap:wrap}button{font:inherit;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}.primary,.secondary{border:0;padding:11px 16px;border-radius:8px;font-weight:700}.primary{background:#25496d;color:white}.secondary{background:#e7edf3;color:#1b3c55}input,textarea{width:100%;padding:10px;border:1px solid #abbaca;border-radius:7px;font:inherit}textarea{min-height:76px}.tag{display:inline-block;border-radius:16px;padding:5px 10px;background:#e2eaf1;font-size:12px;font-weight:650;margin:4px}.artifact{white-space:pre-wrap;background:#f6f8fb;border:1px solid #d5dde6;padding:13px;border-radius:8px;font-family:ui-monospace,monospace;font-size:13px;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.score{font-weight:800;font-size:28px;color:#245276}a{color:#1c547c}header a{color:#f2d893}small{line-height:1.5}progress{width:100%}.print{display:none}@media print{header,.nav,.noprint{display:none!important}body{background:white}.card{break-inside:avoid;border-color:#aaa}.print{display:block}}
+</style></head><body><header><small>FEB UGM · SIPI SESI 5 · LATIHAN BERKELOMPOK</small><h1>Investigasi Risiko Sistem Informasi</h1><p>Mode terpandu · 3 kasus × 5 menit · ±20 menit · <a href="./">Kembali ke pilihan mode</a></p></header>
+<main><div id="status"></div><div id="app"></div></main>
+<script>
+"use strict";
+const STORE="sipi5-guided-v2",$=id=>document.getElementById(id),safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cases=[
+ {name:"Akun mantan pegawai",story:"Seorang pegawai berhenti pada 5 September. Daftar pengguna ERP tanggal 20 September masih menunjukkan akun tersebut berstatus aktif. Pengelola sistem mengatakan akun belum pernah dipakai lagi.",riskQuestion:"Apa risiko utama yang perlu dinilai?",risk:[
+  "Akun yang masih aktif berpotensi digunakan pihak yang tidak berwenang.",
+  "Perusahaan pasti mengalami kerugian karena akun belum dinonaktifkan.",
+  "Status akun tidak penting selama pegawai belum menerima gaji.",
+  "Masalah hanya terkait kelengkapan daftar pegawai, bukan akses sistem."],
+ evidenceQuestion:"Pilih bukti PALING relevan untuk menentukan apakah pengendalian penonaktifan akun berjalan.",evidence:[
+  "Daftar perubahan hak akses serta tiket penonaktifan dan tanggal pelaksanaannya.",
+  "Daftar hadir rapat pengelola sistem selama bulan September.",
+  "Ringkasan anggaran pemeliharaan ERP dan biaya lisensi pengguna.",
+  "Pernyataan lisan bahwa akun tidak pernah dipakai lagi."],
+ document:"Bukti tambahan:\n- Kebijakan: akun harus dinonaktifkan maksimal 2 hari kerja sesudah pegawai berhenti.\n- Riwayat status: akun dinonaktifkan 21 September.\n- Log masuk: tidak ada aktivitas sejak 5 September.\n- Tiket: permintaan HR 6 September, selesai 21 September.",
+ conclusionQuestion:"Kesimpulan mana yang paling dapat dipertanggungjawabkan?",conclusions:[
+  "Pengendalian penonaktifan terlambat dijalankan; tidak ada bukti penggunaan akun selama jeda.",
+  "Pengendalian efektif karena tidak ada aktivitas masuk setelah pegawai berhenti.",
+  "Telah terjadi kebocoran data karena akun masih berstatus aktif.",
+  "Kesimpulan harus ditunda sampai laporan keuangan diterbitkan."],
+ keys:[0,0,0], explanation:"Keterlambatan penonaktifan dapat dibuktikan dari tanggal HR, log status, dan kebijakan. Tidak ada dasar untuk menyatakan akun disalahgunakan."},
+ {name:"Selisih transaksi antarsistem",story:"Sistem penjualan mencatat 500 transaksi. Laporan penerimaan ERP memuat 485 transaksi untuk hari yang sama. Staf menyatakan 15 transaksi kemungkinan masih dalam antrean.",riskQuestion:"Risiko utama apa yang muncul?",risk:[
+  "Transaksi mungkin belum diproses atau dicatat secara lengkap di ERP.",
+  "Pasti ada penjualan fiktif sebesar 15 transaksi.",
+  "Selisih tidak perlu diperiksa jika nilai total penjualan meningkat.",
+  "Risiko hanya pada kecepatan komputer, bukan integritas informasi."],
+ evidenceQuestion:"Bukti PALING relevan untuk menilai selisih 15 transaksi?",evidence:[
+  "Rekonsiliasi nomor transaksi sumber–ERP berikut daftar antrean dan status penolakan.",
+  "Cuplikan dashboard ERP yang menunjukkan 485 transaksi.",
+  "Pernyataan kepala penjualan mengenai pertumbuhan omzet.",
+  "Daftar pengguna yang memiliki akses mengubah harga jual."],
+ document:"Bukti tambahan:\n- Rekonsiliasi menemukan 15 nomor transaksi belum tercatat di ERP.\n- Sepuluh transaksi memiliki catatan antrean dan berhasil diproses keesokan pagi.\n- Lima transaksi ditolak sistem dan belum ada catatan penyelesaian.\n- Tidak tersedia bukti transaksi ganda untuk nomor tersebut.",
+ conclusionQuestion:"Kesimpulan mana yang paling dapat dipertanggungjawabkan?",conclusions:[
+  "Lima penolakan masih perlu ditindaklanjuti; sepuluh antrean telah memiliki bukti penyelesaian.",
+  "Seluruh 15 transaksi pasti hilang dan menyebabkan kerugian.",
+  "Selisih 15 transaksi dapat diabaikan karena sebagian selesai keesokan hari.",
+  "ERP tidak dapat digunakan karena satu laporan memiliki selisih."],
+ keys:[0,0,0], explanation:"Pengecualian harus ditelusuri hingga status akhir. Sepuluh sudah ada bukti penyelesaian; lima belum. Selisih bukan otomatis salah saji atau fraud."},
+ {name:"Perubahan aturan harga",story:"Tim TI mengubah aturan harga pada ERP. Ada persetujuan manajer sebelum penerapan, tetapi daftar pengujian menunjukkan 8 dari 12 skenario memiliki hasil terdokumentasi.",riskQuestion:"Risiko utama dalam kasus ini?",risk:[
+  "Aturan harga dapat menghasilkan nilai keliru pada kondisi yang belum diuji.",
+  "Harga pasti salah untuk seluruh pelanggan setelah perubahan.",
+  "Persetujuan manajer menghilangkan seluruh risiko kesalahan perhitungan.",
+  "Perubahan harga adalah masalah pemasaran saja, bukan pengendalian TI."],
+ evidenceQuestion:"Bukti PALING relevan untuk menguji apakah perubahan telah diperiksa sebelum diterapkan?",evidence:[
+  "Hasil 12 skenario pengujian serta persetujuan pengecualian bila ada.",
+  "Surat persetujuan manajer tanpa dokumen hasil pengujian.",
+  "Rekap biaya pelatihan pengguna ERP pada bulan berjalan.",
+  "Catatan rapat tim pemasaran mengenai strategi diskon."],
+ document:"Bukti tambahan:\n- Persetujuan penerapan ditandatangani 16 September.\n- Delapan skenario dinyatakan lulus.\n- Empat skenario tidak memiliki hasil uji atau persetujuan pengecualian.\n- Belum dilakukan pemeriksaan transaksi setelah penerapan.",
+ conclusionQuestion:"Kesimpulan mana yang paling dapat dipertanggungjawabkan?",conclusions:[
+  "Persetujuan ada, tetapi bukti pengujian belum lengkap; diperlukan pemeriksaan tambahan dan tindak lanjut.",
+  "Pengendalian efektif karena sudah ada tanda tangan manajer.",
+  "Seluruh transaksi penjualan setelah 16 September pasti salah.",
+  "Tidak ada masalah karena mayoritas skenario sudah lulus."],
+ keys:[0,0,0], explanation:"Persetujuan dan pengujian adalah dua kontrol berbeda. Empat skenario tanpa hasil belum membuktikan kesalahan, tetapi membatasi keyakinan auditor."}
+];
+const initial=()=>({step:0,team:"",answers:[{},{},{}],notes:["","",""],final:"",submitted:false});
+let S;try{S=JSON.parse(localStorage.getItem(STORE))||initial()}catch{S=initial()}
+if(!S||!Number.isInteger(S.step)||S.step<0||S.step>4||!Array.isArray(S.answers)||S.answers.length!==3)S=initial();
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(S))}catch{}};
+const select=(part,index,list)=>list.map((val,i)=>'<button class="choice" aria-pressed="'+(S.answers[index][part]===i)+'" data-part="'+part+'" data-idx="'+index+'" data-val="'+i+'">'+safe(val)+'</button>').join("");
+function score(){const subs=S.answers.map((a,i)=>["risk","evidence","conclusion"].map((p,j)=>a[p]===cases[i].keys[j]));return {byCase:subs.map(x=>x.filter(Boolean).length),total:subs.flat().filter(Boolean).length,overall:Math.round(subs.flat().filter(Boolean).length/9*100)}}
+function render(){
+ $("status").innerHTML='<span class="tag">Tahap '+(S.step+1)+' dari 5</span><span class="tag">±20 menit</span><span class="tag">'+(S.step===4?"Umpan balik":"Jawaban tidak ditampilkan sebelum penyerahan")+'</span>';
+ let h="";
+ if(S.step===0)h='<div class="card"><h2>Petunjuk untuk kelompok</h2><p>Anda berperan sebagai tim pemeriksa sistem informasi. Tidak diperlukan perhitungan akuntansi. Untuk setiap kasus, pilih <b>risiko utama, bukti terbaik, dan simpulan yang sesuai bukti</b>.</p><div class="notice">Tidak semua hal yang mencurigakan sudah terbukti salah. Pemeriksa harus membedakan risiko, bukti, dan kesimpulan. Anda boleh berdiskusi dalam kelompok sebelum memilih.</div><p><label for="team"><b>Nama kelompok</b></label><input id="team" maxlength="80" placeholder="Contoh: Kelompok 2" value="'+safe(S.team)+'"></p><p class="muted">Semua data fiktif. Hasil disimpan hanya di perangkat ini; tidak dikirim ke server.</p><div class="nav"><button class="secondary" data-action="reset">Mulai ulang</button><button class="primary" data-action="next">Mulai kasus pertama →</button></div></div>';
+ if(S.step>=1&&S.step<=3){let i=S.step-1,c=cases[i],a=S.answers[i];h='<div class="card"><h2>Kasus '+(i+1)+': '+safe(c.name)+'</h2><p>'+safe(c.story)+'</p><h3>1. Kenali risiko</h3><p>'+safe(c.riskQuestion)+'</p>'+select("risk",i,c.risk)+'<h3>2. Pilih bukti pemeriksaan</h3><p>'+safe(c.evidenceQuestion)+'</p>'+select("evidence",i,c.evidence)+'<div class="notice"><b>Dokumen pemeriksaan diberikan setelah Anda memilih risiko dan bukti.</b><br>'+(Number.isInteger(a.risk)&&Number.isInteger(a.evidence)?'<div class="artifact">'+safe(c.document)+'</div>':'Pilih dua keputusan di atas terlebih dahulu.')+'</div>';
+ if(Number.isInteger(a.risk)&&Number.isInteger(a.evidence))h+='<h3>3. Ambil kesimpulan</h3><p>'+safe(c.conclusionQuestion)+'</p>'+select("conclusion",i,c.conclusions);
+ h+='<label for="note"><b>Alasan singkat kelompok (opsional, 1 kalimat)</b></label><textarea id="note" maxlength="450" placeholder="Bukti apa yang mendukung keputusan ini?">'+safe(S.notes[i])+'</textarea><div class="nav"><button class="secondary" data-action="back">Kembali</button><button class="primary" data-action="next">'+(i===2?"Ke ringkasan akhir →":"Kasus selanjutnya →")+'</button></div></div>'}
+ if(S.step===4){let z=score();h='<div class="card"><h2>Laporan ringkas hasil kelompok</h2><p><b>'+safe(S.team||"Kelompok tanpa nama")+'</b></p><div class="grid">'+cases.map((c,i)=>'<div class="card"><b>'+safe(c.name)+'</b><p>Keputusan sesuai bukti: <b>'+z.byCase[i]+'/3</b></p><div class="muted">Risiko: '+safe(c.risk[S.answers[i].risk]||"-")+'</div><div class="muted">Bukti: '+safe(c.evidence[S.answers[i].evidence]||"-")+'</div><div class="muted">Simpulan: '+safe(c.conclusions[S.answers[i].conclusion]||"-")+'</div><p class="muted">Alasan: '+safe(S.notes[i]||"Belum ditulis")+'</p></div>').join("")+'</div><h3>Umpan balik</h3><div class="score">'+z.overall+'/100</div><p class="muted">Skor membantu refleksi, bukan penilaian profesional yang tervalidasi.</p>'+cases.map((c,i)=>'<details><summary>Kasus '+(i+1)+': pembahasan</summary><p>'+safe(c.explanation)+'</p><p><b>Risiko:</b> '+safe(c.risk[0])+'</p><p><b>Bukti:</b> '+safe(c.evidence[0])+'</p><p><b>Simpulan:</b> '+safe(c.conclusions[0])+'</p></details>').join("")+'<h3>Satu pelajaran paling penting</h3><textarea id="final" maxlength="650" placeholder="Tuliskan satu kalimat yang dipelajari kelompok.">'+safe(S.final)+'</textarea><p class="notice">Pesan utama: menemukan tanda masalah bukan berarti telah membuktikan kesalahan. Kesimpulan harus mengikuti bukti yang tersedia.</p><div class="nav noprint"><button class="secondary" data-action="back">Tinjau jawaban</button><button class="secondary" data-action="export">Unduh ringkasan (.txt)</button><button class="primary" data-action="print">Cetak / simpan PDF</button></div></div>'}
+ $("app").innerHTML=h;save();
+}
+function exportText(){let z=score();return ["SIPI Sesi 5 - HASIL INVESTIGASI RISIKO","Kelompok: "+S.team,"Skor latihan: "+z.overall+"/100","",...cases.flatMap((c,i)=>["Kasus "+(i+1)+": "+c.name,"Risiko: "+c.risk[S.answers[i].risk],"Bukti: "+c.evidence[S.answers[i].evidence],"Simpulan: "+c.conclusions[S.answers[i].conclusion],"Alasan: "+S.notes[i],"Skor: "+z.byCase[i]+"/3",""]), "Pelajaran utama: "+S.final,"Catatan: data simulasi; bukan laporan audit nyata."].join("\n")}
+document.addEventListener("input",e=>{if(e.target.id==="team")S.team=e.target.value;if(e.target.id==="note")S.notes[S.step-1]=e.target.value;if(e.target.id==="final")S.final=e.target.value;save()});
+document.addEventListener("click",e=>{let b=e.target.closest("[data-action],[data-part]");if(!b)return;let a=b.dataset.action;
+if(b.dataset.part){S.answers[Number(b.dataset.idx)][b.dataset.part]=Number(b.dataset.val);render();return}
+if(a==="reset"){if(confirm("Hapus jawaban di perangkat ini?")){S=initial();render()}return}
+if(a==="back"){S.step=Math.max(0,S.step-1);render();return}
+if(a==="next"){if(S.step>0&&S.step<4){let x=S.answers[S.step-1];if(!["risk","evidence","conclusion"].every(k=>Number.isInteger(x[k]))){alert("Selesaikan ketiga keputusan sebelum melanjutkan.");return}}S.step=Math.min(4,S.step+1);render();return}
+if(a==="export"){let blob=new Blob([exportText()],{type:"text/plain;charset=utf-8"}),u=URL.createObjectURL(blob),l=document.createElement("a");l.href=u;l.download="SIPI5_Hasil_"+(S.team||"Kelompok").replace(/[^a-z0-9_-]/gi,"_")+".txt";l.click();setTimeout(()=>URL.revokeObjectURL(u),1000);return}
+if(a==="print")window.print();
+});
+render();
+</script></body></html>
