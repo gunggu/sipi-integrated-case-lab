@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorium Audit SI | SIPI Sesi 5</title>
+<style>
+:root{font-family:Inter,system-ui,Arial,sans-serif;color:#203047;background:#f4f6fa}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(110deg,#122947,#304866);color:white;padding:26px max(20px,calc((100vw - 1100px)/2))}header small{color:#edd9a0;font-weight:700;letter-spacing:.08em}h1{font-size:clamp(23px,4vw,34px);margin:8px 0}header p{margin:0;color:#e2eaf4;line-height:1.5}main{max-width:1100px;margin:auto;padding:20px 16px 60px}.bar{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:15px}.pills{display:flex;flex-wrap:wrap;gap:7px}.pill{background:#e5eaf2;border-radius:20px;padding:7px 11px;font-size:12px;font-weight:700}.pill.active{background:#29496b;color:white}.panel{background:white;padding:22px;border:1px solid #dce2eb;border-radius:16px;box-shadow:0 4px 18px #192f4a08;margin:14px 0}h2{font-size:22px;color:#1c3553;margin:0 0 12px}h3{margin:10px 0;color:#284463}.hint{background:#edf3f8;border-left:4px solid #557d9a;border-radius:5px;padding:12px 15px;line-height:1.55}.warning{background:#fff6e6;border-color:#b77f26}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.tile,.choice{border:1px solid #cad4e1;border-radius:12px;padding:13px;background:#fff}.tile p{font-size:14px;line-height:1.45}.choice{display:block;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;transition:.14s}.choice:hover{border-color:#567b9c;background:#f5f8fc}.choice.selected{border:2px solid #26547a;background:#eaf2f9;padding:12px}.choice:disabled{opacity:.55;cursor:not-allowed}button{font:inherit;cursor:pointer}.primary,.secondary{border:0;border-radius:9px;padding:11px 17px;font-weight:700}.primary{background:#25486e;color:white}.primary:disabled{background:#9aabbc;cursor:not-allowed}.secondary{background:#e9eef4;color:#253f59}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-top:20px}.tiny{font-size:13px;color:#617085}.strong{font-weight:700}.metric{font-size:27px;font-weight:800;color:#244569}.artifact{background:#f9fbff;border:1px dashed #a1b1c4;padding:13px;margin:9px 0;border-radius:9px;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:13px;line-height:1.55}.tag{display:inline-block;border:1px solid #cad5df;padding:4px 8px;border-radius:30px;font-size:12px;margin:2px}.danger{color:#a23840}.good{color:#23764b}.muted{color:#627184}textarea,input[type=text]{width:100%;border:1px solid #9daebe;border-radius:8px;padding:11px;font:inherit}textarea{min-height:100px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:9px;border-bottom:1px solid #dfe5eb}th{background:#edf2f6}.scroll{overflow-x:auto}details{margin-top:9px;padding:8px 12px;background:#f6f8fb;border-radius:8px}summary{cursor:pointer;font-weight:650}progress{width:100%;height:12px;accent-color:#2c5279}.printonly{display:none}footer{text-align:center;padding:25px;font-size:12px;color:#607084}@media print{header,.bar,.actions,.noprint,footer{display:none!important}.panel{box-shadow:none;break-inside:avoid}body{background:white}main{padding:0}.printonly{display:block}}
+</style></head><body>
+<header><small>PPAk FEB UGM · SIPI SESI 5 · SIMULASI KASUS</small><h1>Laboratorium Audit Sistem Informasi</h1><p>PT NusaNiaga Digital · Penugasan audit berbasis risiko setelah penerapan ERP awan · 25 menit</p></header>
+<main><div class="bar"><div id="steps" class="pills"></div><div><span class="pill" id="budget"></span> <span class="pill" id="clock"></span></div></div><div id="app"></div><footer>Simulasi edukatif • Data sepenuhnya fiktif • Berjalan di browser, tanpa akun atau server • Bukan sistem ERP</footer></main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id), esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const key="sipi-audit5-v1";
+const areas=[
+{id:"akses",title:"Akses istimewa",risk:"Akun vendor dan akun darurat tidak tercakup dalam reviu akses triwulanan.",impact:"Tinggi",reason:"Akses berlebih dapat memengaruhi otorisasi dan jejak perubahan."},
+{id:"ubah",title:"Perubahan konfigurasi",risk:"Aturan harga dipindahkan ke produksi ketika bukti UAT belum lengkap.",impact:"Tinggi",reason:"Salah konfigurasi dapat salah hitung harga transaksi."},
+{id:"interface",title:"Antarmuka penjualan",risk:"Laporan antarmuka mencatat 19 transaksi tertolak dan tidak terlihat tindak lanjutnya.",impact:"Tinggi",reason:"Kelengkapan transaksi dari sumber ke ERP belum terjamin."},
+{id:"cadang",title:"Cadangan dan pemulihan",risk:"Vendor memberikan ringkasan pencadangan, tetapi bukti uji pemulihan terbatas.",impact:"Sedang",reason:"Kemampuan pulih tidak dapat disimpulkan dari jadwal cadangan."},
+{id:"laporan",title:"Akses laporan",risk:"Laporan finansial menggunakan hak akses per divisi tanpa reviu bulanan.",impact:"Sedang",reason:"Risiko paparan data dan akses tidak sesuai peran."},
+{id:"manual",title:"Jurnal penyesuaian",risk:"Beberapa jurnal akhir bulan dibuat manual dengan lampiran yang belum seragam.",impact:"Sedang",reason:"Ketepatan posting dan otorisasi memerlukan pemeriksaan."}
+];
+const procedures=[
+{id:"policy",name:"Telaah kebijakan dan bagan peran",kind:"Reviu desain sistem",cost:1,area:"akses",score:1,desc:"Menilai rancangan; belum membuktikan operasi."},
+{id:"access",name:"Uji seluruh populasi akun istimewa dan bukti reviunya",kind:"Uji operasi kontrol",cost:3,area:"akses",score:3,desc:"Menguji cakupan, waktu reviu, dan pengecualian."},
+{id:"ticket",name:"Periksa tiket perubahan dan alur persetujuan",kind:"Reviu desain sistem",cost:1,area:"ubah",score:1,desc:"Menguraikan aturan dan rancangan alur perubahan."},
+{id:"uat",name:"Uji sampel perubahan terhadap UAT dan persetujuan penerapan",kind:"Uji operasi kontrol",cost:2,area:"ubah",score:3,desc:"Menguji apakah prosedur dilaksanakan."},
+{id:"extract",name:"Validasi cakupan ekspor transaksi dan periode audit",kind:"Validasi data",cost:2,area:"interface",score:4,desc:"Memastikan populasi sebelum analisis data."},
+{id:"recon",name:"Lakukan ulang rekonsiliasi sumber–ERP dan daftar penolakan",kind:"Uji operasi kontrol",cost:3,area:"interface",score:4,desc:"Menilai ketuntasan proses rekonsiliasi."},
+{id:"analytic",name:"Analisis duplikasi pada file hasil ekspor",kind:"Pengujian substantif/CAATs",cost:2,area:"interface",score:2,desc:"Menguji duplikasi pada data yang tersedia."},
+{id:"restore",name:"Periksa bukti pelaksanaan uji pemulihan",kind:"Uji operasi kontrol",cost:2,area:"cadang",score:2,desc:"Membedakan jadwal cadangan dari bukti pemulihan."},
+{id:"finaccess",name:"Uji sampel pengguna laporan dan dasar hak aksesnya",kind:"Uji operasi kontrol",cost:2,area:"laporan",score:2,desc:"Menilai akses aktual dan pengecualian."},
+{id:"journal",name:"Telusuri sampel jurnal ke dokumen dan persetujuan",kind:"Pengujian substantif/CAATs",cost:2,area:"manual",score:2,desc:"Menguji validitas pencatatan."}
+];
+const evidence=[
+{id:"e1",area:"akses",label:"Bagan peran versi 2.1",text:"Aturan: akun istimewa direviu tiap 3 bulan.\nCakupan lampiran: 41 akun pegawai; daftar akun vendor/darurat ada di berkas lain.\nTidak tersedia tanda tangan reviu atas akun vendor.",best:"Terbatas",why:"Kebijakan menunjukkan desain, tetapi populasi akun dan bukti operasi tidak lengkap."},
+{id:"e2",area:"akses",label:"Reviu akses April–Juni",text:"41 akun pegawai ditandai 'sudah direviu'.\n5 akun vendor dan 2 akun darurat tidak masuk daftar.\nLog aktivitas tersedia untuk 6 dari 7 akun tersebut.",best:"Terbatas",why:"Reviu tidak mencakup semua akun berisiko; log aktivitas bukan pengganti reviu hak akses."},
+{id:"e3",area:"ubah",label:"Tiket perubahan harga PR-214",text:"Persetujuan manajer: 16 September.\nPenerapan produksi: 17 September.\nDokumen UAT: daftar 12 skenario, hasil hanya 8; 4 tanpa status.\nTidak tersedia bukti persetujuan pengecualian.",best:"Terbatas",why:"Persetujuan penerapan ada, tetapi bukti UAT belum lengkap; operasi kontrol belum dapat dinyatakan memadai."},
+{id:"e4",area:"interface",label:"Ringkasan rekonsiliasi antarmuka",text:"Tanggal 1–30 September: sumber 24.816 order; ERP 24.797 order.\nDaftar penolakan 19; 7 memiliki tiket penanganan, 12 tanpa status.\nNomor referensi sumber tersedia.",best:"Terbatas",why:"Selisih terukur, tetapi 12 penolakan tidak memiliki jejak tindak lanjut."},
+{id:"e5",area:"interface",label:"Metadata berkas analitik",text:"Nama berkas: orders_sep_export.csv\nPeriode filter: 3–30 September\nJumlah: 24.816 baris\nPemeriksaan duplikat: 0 hasil\nPernyataan: '100% data telah diuji'.",best:"Tidak mendukung",why:"Ekspor tidak mencakup tanggal 1–2 September; klaim pengujian penuh periode tidak terbukti."},
+{id:"e6",area:"cadang",label:"Laporan layanan penyedia",text:"Cadangan harian dinyatakan berhasil (30/30).\nUji pemulihan terakhir: 8 bulan lalu.\nTarget waktu pemulihan disebutkan, tetapi tidak ada hasil uji terkini.",best:"Terbatas",why:"Bukti cadangan tidak sama dengan uji kemampuan pemulihan aktual."},
+{id:"e7",area:"laporan",label:"Daftar akses laporan keuangan",text:"27 pengguna; 3 pengguna pindah divisi bulan ini.\nReviu akses terakhir 4 bulan lalu.\nTidak ada penegasan kebutuhan akses setelah perpindahan.",best:"Terbatas",why:"Terdapat potensi hak akses tidak diperbarui; perlu validasi dengan pemilik proses."},
+{id:"e8",area:"manual",label:"Sampel jurnal penyesuaian",text:"Sampel 8 jurnal dari 63 jurnal manual.\n6 memiliki dokumen dan persetujuan; 2 lampiran belum tersedia.\nTidak ada bukti penelusuran populasi di luar sampel.",best:"Terbatas",why:"Dua sampel tanpa bukti dan keterbatasan lingkup mencegah kesimpulan atas seluruh populasi."}
+];
+const caat=[{id:"dup",name:"Periksa transaksi ganda",text:"Hasil: 0 kandidat duplikasi dari 24.816 baris yang diekspor.\nKETERBATASAN: filter hanya 3–30 September.",points:1},
+{id:"gap",name:"Periksa nomor referensi yang hilang",text:"Hasil: 19 referensi tidak ditemukan di ERP, berkaitan dengan daftar penolakan.\n12 tidak memiliki bukti penyelesaian.",points:3},
+{id:"match",name:"Bandingkan total sumber dan ERP",text:"Hasil: sumber 24.816, ERP 24.797, selisih 19.\nPERHATIAN: definisi periode dan integritas ekspor tetap perlu validasi.",points:3}];
+const findings=[
+{label:"Pengecualian antarmuka",choices:["19 transaksi tidak ada di ERP; semua dinyatakan salah saji dan fraud.","19 penolakan, 12 tanpa bukti penyelesaian; tindak lanjut dan rekonsiliasi perlu diuji.","Tidak ada duplikasi, maka antarmuka dinyatakan efektif.","Selisih 19 dinyatakan tidak material sehingga tidak perlu dilaporkan."],correct:1,explain:"Hasil analitik adalah pengecualian yang memerlukan pengujian kriteria, dampak, penyebab dan bukti tindak lanjut; belum otomatis fraud atau salah saji."},
+{label:"Kontrol pengimbang",choices:["Log masuk saja sudah cukup mengimbangi ketiadaan reviu akun vendor.","Reviu transaksi pengguna biasa otomatis mengimbangi akses vendor.","Reviu aktivitas vendor mungkin mengimbangi jika independen, tepat waktu, teliti, lengkap, dan terbukti dilakukan.","Tidak perlu menguji kontrol lain jika konfigurasi ERP masih berfungsi."],correct:2,explain:"Kontrol pengimbang harus menutup risiko yang sama dengan ketelitian, frekuensi, cakupan dan bukti operasi yang memadai."}
+];
+const conclusion=[
+"Terkendali sepenuhnya; uji menyeluruh telah selesai.",
+"Terkendali dengan catatan; tidak diperlukan pengujian tambahan.",
+"Efektivitas sebagian kontrol belum dapat disimpulkan; perlu tindak lanjut terarah atas bukti dan pengecualian.",
+"Tidak efektif di seluruh sistem; semua temuan adalah salah saji material."
+];
+const blank=()=>({step:0,team:"",started:Date.now(),risk:[],proc:[],viewed:[],judgments:{},caat:[],finding:{},conclusion:null,limitation:[],memo:"",done:false});
+let state;try{state=JSON.parse(localStorage.getItem(key))||blank()}catch(_){state=blank()}
+if(!state||!Number.isInteger(state.step)||state.step<0||state.step>6)state=blank();
+const remaining=()=>12-state.proc.reduce((a,id)=>a+(procedures.find(p=>p.id===id)?.cost||0),0);
+function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(_){}}
+function optButtons(items,selected,onClick,multi=true){return items.map(x=>'<button type="button" class="choice '+(selected.includes(x.id)?"selected":"")+'" data-action="'+onClick+'" data-id="'+esc(x.id)+'" aria-pressed="'+selected.includes(x.id)+'"><b>'+esc(x.title||x.name||x.label)+'</b><div class="tiny">'+esc(x.risk||x.desc||"")+'</div></button>').join("")}
+function nextButton(label="Lanjutkan"){return '<div class="actions"><button type="button" class="secondary" data-action="back">Kembali</button><button type="button" class="primary" data-action="next">'+label+'</button></div>'}
+function render(){
+ const labels=["Mulai","Prioritas risiko","Program audit","Ruang bukti","Analitik","Temuan & simpulan","Laporan"];
+ $("steps").innerHTML=labels.map((x,i)=>'<span class="pill '+(state.step===i?"active":"")+'">'+(i+1)+'. '+x+'</span>').join("");
+ $("budget").textContent="Sisa kredit audit: "+remaining()+"/12";
+ $("clock").textContent="Durasi rekomendasi: 25 menit";
+ let html="";
+ if(state.step===0)html='<section class="panel"><h2>Penugasan: reviu dua bulan setelah penerapan ERP</h2><p>Anda adalah auditor senior. Komite audit meminta penilaian terbatas terhadap pengendalian sistem informasi PT NusaNiaga Digital. Anda memiliki <strong>12 kredit audit</strong>; setiap prosedur menghabiskan kredit. Tidak semua bukti lengkap dan setiap kesimpulan harus menyatakan keterbatasannya.</p><div class="hint">Fokus: tujuan → risiko → pengendalian → prosedur → bukti → pengecualian → temuan → simpulan. Tidak ada umpan balik benar/salah sampai laporan akhir dibuat.</div><p><label class="strong" for="team">Nama/kelompok</label><input id="team" type="text" maxlength="80" value="'+esc(state.team)+'" placeholder="Contoh: Kelompok 3"></p><p class="tiny">Data adalah simulasi; hasil hanya tersimpan pada perangkat ini. Jangan masukkan data pribadi yang sensitif.</p><div class="actions"><button class="secondary" data-action="reset">Ulang dari awal</button><button class="primary" data-action="next">Mulai audit →</button></div></section>';
+ if(state.step===1)html='<section class="panel"><h2>1. Tentukan tiga prioritas risiko</h2><p>Pilih tepat <b>3</b> dari 6 isu di bawah ini. Pertimbangkan pengaruh pada informasi keuangan, kemungkinan salah saji, dan kelemahan kontrol. Prioritas Anda akan dinilai pada akhir simulasi.</p><div class="row">'+optButtons(areas,state.risk,"risk")+'</div><p class="tiny">Terpilih: '+state.risk.length+'/3</p>'+nextButton()+'</section>';
+ if(state.step===2)html='<section class="panel"><h2>2. Susun program audit berbasis risiko</h2><p>Pilih prosedur dengan sisa <b>12 kredit</b>. Pertimbangkan perbedaan telaah desain, uji operasi, dan pengujian substantif. Anda dapat memilih prosedur dari area lain, tetapi ketepatan terhadap prioritas dinilai.</p><div class="row">'+procedures.map(p=>'<button class="choice '+(state.proc.includes(p.id)?"selected":"")+'" data-action="proc" data-id="'+p.id+'"><b>'+esc(p.name)+'</b><div class="tiny">'+esc(p.kind)+' · '+p.cost+' kredit · '+esc(areas.find(a=>a.id===p.area).title)+'</div><div class="tiny">'+esc(p.desc)+'</div></button>').join("")+'</div><p class="hint">Kredit tersisa: <b>'+remaining()+'</b>. Tidak wajib menghabiskan seluruh kredit.</p>'+nextButton()+'</section>';
+ if(state.step===3)html='<section class="panel"><h2>3. Ruang bukti</h2><p>Buka artefak berikut dan beri penilaian kualitas bukti. <b>Terbatas</b> berarti hanya mendukung sebagian pernyataan; <b>Tidak mendukung</b> berarti tidak layak untuk klaim yang dinyatakan.</p>'+evidence.map(e=>'<details '+(state.viewed.includes(e.id)?"open":"")+'><summary>'+esc(e.label)+' · '+esc(areas.find(a=>a.id===e.area).title)+'</summary><div class="artifact">'+esc(e.text)+'</div><div class="pills">'+["Memadai","Terbatas","Tidak mendukung"].map(v=>'<button class="choice '+(state.judgments[e.id]===v?"selected":"")+'" style="width:auto" data-action="judge" data-id="'+e.id+'" data-value="'+v+'">'+v+'</button>').join("")+'</div></details>').join("")+'<p class="tiny">Dinilai: '+Object.keys(state.judgments).length+'/'+evidence.length+'.</p>'+nextButton()+'</section>';
+ if(state.step===4)html='<section class="panel"><h2>4. Laboratorium analitik audit</h2><p>Pilih analisis yang berguna. Analisis dijalankan pada <b>data simulasi</b> dan tidak dikenai kredit tambahan. Perhatikan bahwa pemeriksaan semua baris sebuah berkas belum tentu berarti seluruh transaksi periode audit tercakup.</p><div class="row">'+caat.map(c=>'<div class="tile"><h3>'+esc(c.name)+'</h3><button class="secondary" data-action="caat" data-id="'+c.id+'">Jalankan analisis</button>'+(state.caat.includes(c.id)?'<div class="artifact">'+esc(c.text)+'</div>':"")+'</div>').join("")+'</div>'+nextButton()+'</section>';
+ if(state.step===5)html='<section class="panel"><h2>5. Evaluasi temuan dan simpulan</h2><p>Pilih respons profesional. Jawaban yang terdengar paling tegas belum tentu paling dapat dipertanggungjawabkan.</p>'+findings.map((f,i)=>'<h3>'+esc(f.label)+'</h3><div class="row">'+f.choices.map((c,j)=>'<button class="choice '+(state.finding[i]===j?"selected":"")+'" data-action="finding" data-id="'+i+'" data-value="'+j+'">'+esc(c)+'</button>').join("")+'</div>').join("")+'<h3>Simpulan audit terbatas</h3><div class="row">'+conclusion.map((c,i)=>'<button class="choice '+(state.conclusion===i?"selected":"")+'" data-action="conclusion" data-value="'+i+'">'+esc(c)+'</button>').join("")+'</div><h3>Batasan bukti (pilih yang relevan)</h3><div class="row">'+[{id:"pop",title:"Periode hasil ekspor tidak lengkap"},{id:"acct",title:"Akun vendor belum tercakup reviu"},{id:"uat",title:"Bukti pengujian konfigurasi belum lengkap"},{id:"none",title:"Semua populasi dan bukti telah lengkap"}].map(l=>'<button class="choice '+(state.limitation.includes(l.id)?"selected":"")+'" data-action="limit" data-id="'+l.id+'">'+l.title+'</button>').join("")+'</div><h3>Memo singkat komite audit (maksimal 300 kata)</h3><textarea id="memo" placeholder="Kesimpulan, dasar bukti, keterbatasan, dan tindak lanjut ...">'+esc(state.memo)+'</textarea><p class="tiny" id="wordcount"></p>'+nextButton("Kirim simpulan & tampilkan laporan")+'</section>';
+ if(state.step===6){const sc=score();html='<section class="panel"><h2>6. Laporan hasil simulasi</h2><p><b>'+esc(state.team||"Peserta")+'</b> · Status penugasan: selesai</p><div class="row">'+Object.entries(sc.parts).map(([k,v])=>'<div class="tile"><div class="tiny">'+esc(k)+'</div><div class="metric">'+v.points+'/'+v.max+'</div></div>').join("")+'</div><h3>Skor gabungan: '+sc.total+'/100</h3><progress max="100" value="'+sc.total+'"></progress><p class="hint">Skor ini adalah umpan balik simulasi, bukan ukuran kompetensi audit yang tervalidasi. Bukti dan pertimbangan profesional tetap perlu didiskusikan.</p><h3>Umpan balik per keputusan</h3>'+sc.feedback.map(x=>'<p>• '+esc(x)+'</p>').join("")+'<h3>Ringkasan memo peserta</h3><div class="artifact">'+esc(state.memo||"(Belum diisi)")+'</div><div class="actions"><button class="secondary" data-action="reset">Ulang simulasi</button><button class="secondary" data-action="json">Unduh hasil JSON</button><button class="primary" data-action="print">Cetak / simpan PDF</button></div></section>';}
+ $("app").innerHTML=html;
+ if($("wordcount"))$("wordcount").textContent=countWords(state.memo)+"/300 kata";
+ save();
+}
+function countWords(s){return String(s).trim().split(/\s+/).filter(Boolean).length}
+function score(){
+ const priority=state.risk.filter(x=>["akses","ubah","interface"].includes(x)).length;
+ const procScore=state.proc.reduce((a,id)=>{let p=procedures.find(p=>p.id===id);return a+(p&&state.risk.includes(p.area)?p.score:0)},0);
+ const validated=state.proc.includes("extract");
+ const evid=Object.keys(state.judgments).reduce((a,id)=>a+(state.judgments[id]===evidence.find(e=>e.id===id)?.best?1:0),0);
+ const f0=state.finding[0]===1, f1=state.finding[1]===2, c=state.conclusion===2;
+ const limits=["pop","acct","uat"].filter(id=>state.limitation.includes(id)).length - (state.limitation.includes("none")?2:0);
+ const memo=state.memo.trim();const words=countWords(memo);
+ const parts={
+ "Prioritas risiko":{points:Math.round(priority/3*20),max:20},
+ "Rancangan prosedur":{points:Math.min(30,Math.round(procScore/12*24)+(validated?6:0)),max:30},
+ "Penilaian bukti":{points:Math.round(evid/8*22)+(state.caat.includes("gap")?4:0)+(state.caat.includes("match")?4:0),max:30},
+ "Temuan dan simpulan":{points:(f0?5:0)+(f1?5:0)+(c?5:0)+(limits>=3?3:0)+(words>=20&&words<=300?2:0),max:20}
+ };
+ const total=Object.values(parts).reduce((a,b)=>a+b.points,0);
+ let feedback=[
+ priority===3?"Prioritas Anda mencakup tiga risiko utama.":"Tinjau kembali prioritas akses istimewa, perubahan konfigurasi, dan antarmuka.",
+ validated?"Validasi populasi tersedia dalam program audit.":"Analitik tanpa validasi populasi dapat menimbulkan keyakinan semu.",
+ evid>=6?"Kualitas bukti sebagian besar diklasifikasikan tepat.":"Bedakan bukti desain, bukti operasi, dan bukti yang tidak mendukung klaim.",
+ f0?"Pengecualian antarmuka tidak langsung disimpulkan sebagai fraud.":"Pengecualian perlu diuji sebelum dinaikkan menjadi temuan.",
+ f1?"Persyaratan kontrol pengimbang dinilai dengan tepat.":"Kontrol pengimbang perlu menutup risiko yang sama dan memiliki bukti operasi.",
+ c?"Simpulan menekankan keterbatasan bukti.":"Kesimpulan menyeluruh tidak didukung oleh pekerjaan audit terbatas.",
+ limits>=3?"Keterbatasan utama telah disebutkan.":"Ungkap kekurangan periode ekspor, cakupan akun, dan bukti UAT."
+ ];
+ return {parts,total,feedback};
+}
+function fileDownload(name,contents,type){const a=document.createElement("a"),blob=new Blob([contents],{type});a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+document.addEventListener("input",e=>{if(e.target.id==="team"){state.team=e.target.value;save()}if(e.target.id==="memo"){state.memo=e.target.value;const words= countWords(state.memo);$("wordcount").textContent=words+"/300 kata";save()}});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;let a=b.dataset.action,id=b.dataset.id;
+ if(a==="reset"){if(confirm("Hapus hasil di perangkat ini dan mulai lagi?")){state=blank();render()}return}
+ if(a==="back"){state.step=Math.max(0,state.step-1);render();return}
+ if(a==="risk"){state.risk=state.risk.includes(id)?state.risk.filter(x=>x!==id):state.risk.length<3?[...state.risk,id]:state.risk;render();return}
+ if(a==="proc"){const p=procedures.find(x=>x.id===id);if(state.proc.includes(id))state.proc=state.proc.filter(x=>x!==id);else if(p&&remaining()>=p.cost)state.proc.push(id);else alert("Kredit tidak cukup.");render();return}
+ if(a==="judge"){state.judgments[id]=b.dataset.value;if(!state.viewed.includes(id))state.viewed.push(id);render();return}
+ if(a==="caat"){if(!state.caat.includes(id))state.caat.push(id);render();return}
+ if(a==="finding"){state.finding[id]=Number(b.dataset.value);render();return}
+ if(a==="conclusion"){state.conclusion=Number(b.dataset.value);render();return}
+ if(a==="limit"){state.limitation=state.limitation.includes(id)?state.limitation.filter(x=>x!==id):[...state.limitation,id];render();return}
+ if(a==="next"){
+  if(state.step===1&&state.risk.length!==3){alert("Pilih tepat tiga prioritas.");return}
+  if(state.step===2&&!state.proc.length){alert("Pilih setidaknya satu prosedur.");return}
+  if(state.step===3&&Object.keys(state.judgments).length<4){alert("Nilai setidaknya empat artefak.");return}
+  if(state.step===4&&!state.caat.length){alert("Jalankan setidaknya satu analisis.");return}
+  if(state.step===5){if(Object.keys(state.finding).length<2||state.conclusion===null||!state.limitation.length){alert("Lengkapi temuan, simpulan dan batasan.");return}if(countWords(state.memo)>300){alert("Memo melebihi 300 kata.");return}state.done=true}
+  state.step=Math.min(6,state.step+1);render();return}
+ if(a==="json"){fileDownload("SIPI_Sesi5_Hasil_"+(state.team||"kelompok").replace(/[^a-z0-9_-]/gi,"_")+".json",JSON.stringify({...state,scoring:score()},null,2),"application/json");return}
+ if(a==="print"){window.print();return}
+});
+render();
+</script></body></html>
