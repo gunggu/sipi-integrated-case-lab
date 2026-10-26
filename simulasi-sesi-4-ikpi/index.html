@@ -41,7 +41,7 @@ let state;try{state=Object.assign(blank(),JSON.parse(localStorage.getItem(KEY)||
 const $=x=>document.getElementById(x),save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function nav(){ $("steps").innerHTML=allSteps.map((t,i)=>'<button class="step '+(i===state.step?'active':'')+'" data-nav="'+i+'" '+(i>maxReach()?'disabled':'')+'><span class="n">'+(i+1)+'</span>'+esc(t)+'</button>').join("");document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(+b.dataset.nav))}
-function maxReach(){let r=0;for(let i=0;i<5;i++){if(!isComplete(cases[i]))break;r=i+2}return Math.min(6,Math.max(r,state.step))}
+function maxReach(){let r=1;for(let i=0;i<5;i++){if(!isComplete(cases[i]))break;r=i+2}return Math.min(6,Math.max(r,state.step))}
 function go(n){if(state.submitted&&n!==6)return;state.step=Math.min(n,maxReach());save();render();window.scrollTo({top:0,behavior:"smooth"})}
 function viewEvidence(c){return c.evidence.map((e,i)=>'<details class="evidence" data-evidence="'+c.id+':'+i+'" '+(state.opened[c.id]?.includes(i)?'open':'')+'><summary>📄 '+esc(e.label)+' <span class="muted" style="font-weight:normal;font-size:12px">· buka dokumen</span></summary><div class="inner">'+esc(e.body)+'</div></details>').join("")}
 function render(){nav();let s=state.submitted?6:state.step,h='';
