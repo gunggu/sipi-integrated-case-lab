@@ -45,7 +45,7 @@ function load(){const ep=localStorage.getItem(KEY+':last');loadEpisode(DATA[ep]?
 function switchEpisode(ep){if(!DATA[ep]||ep===model.ep)return;getFields();loadEpisode(ep);persist();render()}
 function change(key,value){if(model.submitted)return;if(model.initialLocked&&(key==='initial'||key==='initialReason'))return;model[key]=value;persist()}
 function field(id,label,value,placeholder='',rows=0){return '<label for="'+id+'">'+label+'</label>'+(rows?'<textarea id="'+id+'" placeholder="'+esc(placeholder)+'" '+(model.submitted||(model.initialLocked&&id==='initialReason')?'disabled':'')+'>'+esc(value)+'</textarea>':'<input id="'+id+'" placeholder="'+esc(placeholder)+'" value="'+esc(value)+'" '+(model.submitted?'disabled':'')+'>')}
-function getFields(){for(const k of ['team','members','initialReason','shockReason','risks','actions','roadmap','residual','memo','dissent']){let e=$(k);if(e)change(k,e.value)}}
+function getFields(){if(model.submitted)return;for(const k of ['team','members','initialReason','shockReason','risks','actions','roadmap','residual','memo','dissent']){let e=$(k);if(e)change(k,e.value)}}
 function choose(id,value){if(id==='ep'){switchEpisode(value);return}getFields();change(id,value);render()}
 function toStage(n){getFields();if(n>model.stage&&!valid())return;if(model.stage===3&&n>3&&!model.initialLocked){model.lockedInitial={decision:model.initial,reason:model.initialReason,at:new Date().toISOString()};model.initialLocked=true}model.stage=Math.max(0,Math.min(5,n));if(!model.startAt)model.startAt=Date.now();persist();render();window.scrollTo({top:0,behavior:'smooth'})}
 function warn(msg){let e=$('message');if(e){e.innerHTML='<div class="warn">'+esc(msg)+'</div>';e.scrollIntoView({behavior:'smooth',block:'center'})}}
@@ -56,7 +56,7 @@ if(model.stage===3&&!model.initialLocked&&(!model.initial||model.initialReason.t
 if(model.stage===4&&model.shockReason.trim().length<90){warn('Jelaskan dampak evidence shock minimal 90 karakter.');return false}
 return true}
 function render(){const d=DATA[model.ep];$('app').innerHTML='<div class="steps">'+STAGES.map((t,i)=>'<span class="step '+(i===model.stage?'active':'')+'">'+(i+1)+'. '+t+'</span>').join('')+'</div><div id="message"></div><div class="panel small">Waktu berjalan: <b><span id="clock">'+clockText()+'</span></b> · Target 30 menit · Progres tersimpan per episode</div>'+page(d)+'<div class="actions"><button class="outline" onclick="toStage('+Math.max(0,model.stage-1)+')" '+(model.stage===0?'disabled':'')+'>← Sebelumnya</button>'+(model.stage<5?'<button onclick="toStage('+(model.stage+1)+')">Berikutnya →</button>':'<button onclick="exportText()">Unduh memo TXT ↓</button>')+'</div>';bindFields()}
-function bindFields(){document.querySelectorAll('input[type=text],textarea').forEach(e=>{e.addEventListener('input',()=>change(e.id,e.value))})}
+function bindFields(){document.querySelectorAll('input:not([type]),input[type=text],textarea').forEach(e=>{e.addEventListener('input',()=>change(e.id,e.value))})}
 function clockText(){if(!model.startAt)return 'Belum mulai';let t=Math.floor((Date.now()-model.startAt)/1000);return Math.floor(t/60)+'m '+String(t%60).padStart(2,'0')+'s'}
 setInterval(()=>{let e=$('clock');if(e)e.textContent=clockText()},1000);
 function page(d){let s=model.stage;
