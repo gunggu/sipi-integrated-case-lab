@@ -27,7 +27,7 @@
 <main class="wrap">
 <div class="statusbar">
  <div class="pills"><span class="pill green">Bukan kuis bernilai</span><span class="pill">Tiga kasus baru</span><span class="pill">Tanpa login</span></div>
- <div class="row"><span id="time" class="timer" aria-live="off">30:00</span><button type="button" class="btn secondary" id="startTimer">Mulai</button><button type="button" class="btn secondary" id="pauseTimer">Jeda</button><button type="button" class="btn secondary" id="resetTimer">Ulang waktu</button><button type="button" class="btn secondary" id="teacherToggle" aria-pressed="false">Tampilan dosen</button></div>
+ <div class="row"><span id="time" class="timer" aria-live="off">30:00</span><button type="button" class="btn secondary" id="startTimer">Mulai</button><button type="button" class="btn secondary" id="pauseTimer">Jeda</button><button type="button" class="btn secondary" id="resetTimer">Ulang waktu</button><button type="button" class="btn secondary" id="refreshPage" title="Perbarui halaman dan pertahankan catatan">Muat versi terbaru</button><button type="button" class="btn secondary" id="teacherToggle" aria-pressed="false">Tampilan dosen</button></div>
 </div>
 <nav class="nav" aria-label="Tahapan diskusi">
 <button data-tab="intro" class="active">1 • Pembuka</button><button data-tab="pop">2 • Populasi</button><button data-tab="join">3 • Relasi data</button><button data-tab="method">4 • Metode</button><button data-tab="close">5 • Penutup</button>
@@ -87,6 +87,8 @@
 <script>
 "use strict";
 const STORE="psi10-classdiscussion-v1";
+const APP_VERSION="2026-11-04.2";
+let checkingVersion=null;
 const visits=[
 ["K01","dilayani","T011"],["K02","dilayani","T012"],["K03","batal",""],["K04","dilayani","T014"],
 ["K05","terjadwal",""],["K06","dilayani",""],["K07","dilayani","T017"],["K08","dilayani","T018"],
@@ -98,6 +100,32 @@ let state={};try{state=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e
 if(!state.notes)state.notes={};if(!state.choices)state.choices={};if(!state.tally)state.tally={};
 function save(){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}}
 function choose(k,v){state.choices[k]=v;save()}
+async function checkForUpdate(){
+ if(checkingVersion)return checkingVersion;
+ checkingVersion=(async()=>{
+  try{
+   const response=await fetch("./version.json?at="+Date.now(),{cache:"no-store"});
+   if(!response.ok)return false;
+   const info=await response.json();
+   if(typeof info.version==="string"&&info.version!==APP_VERSION){
+    state.tab=document.querySelector(".panel.active")?.id||state.tab||"intro";save();
+    const url=new URL(location.href);url.searchParams.set("v",info.version);url.searchParams.set("stage",state.tab);url.searchParams.set("updated",String(Date.now()));
+    location.replace(url.toString());return true;
+   }
+  }catch(e){console.info("Pemeriksaan versi tidak tersedia",e)}
+  return false;
+ })();
+ try{return await checkingVersion}finally{checkingVersion=null}
+}
+function forceReload(){
+ state.tab=document.querySelector(".panel.active")?.id||state.tab||"intro";save();
+ const u=new URL(location.href);u.searchParams.set("stage",state.tab);u.searchParams.set("reload",String(Date.now()));location.assign(u.toString())
+}
+$("refreshPage").addEventListener("click",forceReload);
+document.addEventListener("click",e=>{if(e.target.closest("button"))void checkForUpdate()},true);
+setInterval(()=>{if(!document.hidden)void checkForUpdate()},20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)void checkForUpdate()});
+
 function showTab(id){document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===id));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));window.scrollTo({top:0,behavior:"smooth"});state.tab=id;save()}
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.next)));
@@ -177,16 +205,27 @@ let id=el.dataset.vote,count=state.tally[id]||[0,0,0];el.innerHTML='<p class="sm
 document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{let id=b.dataset.inc,n=+b.dataset.n,a=state.tally[id]||[0,0,0];a[n]++;state.tally[id]=a;save();renderTally()});
 document.querySelectorAll("[data-clear]").forEach(b=>b.onclick=()=>{state.tally[b.dataset.clear]=[0,0,0];save();renderTally()})
 }renderTally();
-let seconds=1800,clockId=null;
+
+let clockId=null;
+let seconds=Number.isFinite(state.clock?.seconds)?Math.max(0,Math.min(1800,state.clock.seconds)):1800;
+let running=state.clock?.running===true;
+if(running&&Number.isFinite(state.clock?.savedAt)){seconds=Math.max(0,seconds-Math.floor((Date.now()-state.clock.savedAt)/1000))}
+function saveClock(){state.clock={seconds,running,savedAt:Date.now()};save()}
 function displayTime(){$("time").textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");$("time").style.color=seconds<120?"#b95346":""}
-$("startTimer").onclick=()=>{if(clockId)return;clockId=setInterval(()=>{if(seconds>0){seconds--;displayTime()}else{clearInterval(clockId);clockId=null}},1000)};
-$("pauseTimer").onclick=()=>{clearInterval(clockId);clockId=null};
-$("resetTimer").onclick=()=>{clearInterval(clockId);clockId=null;seconds=1800;displayTime()};displayTime();
+function tick(){if(seconds>0){seconds--;displayTime();if(seconds%5===0)saveClock()}else{clearInterval(clockId);clockId=null;running=false;saveClock()}}
+function startClock(){if(clockId||seconds<=0)return;running=true;saveClock();clockId=setInterval(tick,1000)}
+$("startTimer").onclick=startClock;
+$("pauseTimer").onclick=()=>{clearInterval(clockId);clockId=null;running=false;saveClock()};
+$("resetTimer").onclick=()=>{clearInterval(clockId);clockId=null;running=false;seconds=1800;displayTime();saveClock()};
+displayTime();if(running&&seconds>0)startClock();
+document.addEventListener("visibilitychange",()=>{if(document.hidden){saveClock()}else if(running&&state.clock?.savedAt){seconds=Math.max(0,state.clock.seconds-Math.floor((Date.now()-state.clock.savedAt)/1000));displayTime();saveClock()}});
 $("copySummary").onclick=async()=>{
 let out=["Diskusi PSI Sesi 10 — Catatan kelompok", "Populasi: "+(state.choices.population||"belum dipilih"),"Alasan: "+(state.notes.reasonPop||"—"),"Relasi data: "+(state.choices.joinChoice||"belum dipilih"),"Alasan: "+(state.notes.reasonJoin||"—"),"Metode: "+(state.choices.methodChoice||"belum dipilih"),"Alasan: "+(state.notes.reasonMethod||"—"),"Refleksi: "+(state.notes.takeaway||"—")].join("\n");
 try{await navigator.clipboard.writeText(out);$("copyStatus").textContent="Catatan telah disalin."}catch(e){const ta=document.createElement("textarea");ta.value=out;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();$("copyStatus").textContent="Silakan tempel hasil salinan pada catatan kelompok."}
 };
 $("resetWork").onclick=()=>{if(confirm("Hapus seluruh catatan dan pilihan pada perangkat ini?")){localStorage.removeItem(STORE);location.reload()}};
-if(["intro","pop","join","method","close"].includes(state.tab))showTab(state.tab);
+const requestedStage=new URLSearchParams(location.search).get("stage");
+if(["intro","pop","join","method","close"].includes(requestedStage||state.tab))showTab(requestedStage||state.tab);
+void checkForUpdate();
 </script>
 </body></html>
