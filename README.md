@@ -92,3 +92,8 @@ Learner progress is stored only in the browser using `localStorage`. No informat
 - There is no centralized instructor dashboard, backend authentication, or verified identity.
 - Professional judgment is not auto-graded; instructor assessment and debrief remain necessary.
 - Exported files are learning artefacts, not verified assessment records.
+## Standalone PSI Session 10 classroom discussion
+
+A separate, self-contained 30-minute classroom discussion is available under [`diskusi-psi10/`](diskusi-psi10/). It is **not** part of the NRD AuditLab and does not reuse the Sentinel scenario or the Session 10 quiz. Three independent micro-cases cover service-billing population selection, one-to-many join duplication, and Benford suitability. Suggested time: 3 + 8 + 8 + 8 + 3 minutes.
+
+The instructor display can be opened by appending `?dosen=1` to the standalone page. This is not authentication: the source is public. Tally counters are entered manually by the lecturer, not received from student devices. Student answers and notes are stored only in each device's browser; no central voting, user registration, scores, or data collection is implemented. GitHub Pages is enabled for this repository; allow the Pages build to complete after a commit.
