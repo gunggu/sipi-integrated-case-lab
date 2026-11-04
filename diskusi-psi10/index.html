@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="theme-color" content="#112f43">
+<title>Diskusi Audit Analytics — PSI Sesi 10</title>
+<style>
+:root{--navy:#112e45;--teal:#087e78;--tealsoft:#e9f5f1;--ink:#173044;--muted:#5c7180;--line:#d7e3e8;--bg:#f4f7f8;--white:#fff;--amber:#8c651f}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea{font:inherit}
+.top{background:linear-gradient(125deg,#0d293f,#16465b);color:#fff;padding:26px max(20px,calc((100vw - 1120px)/2)) 30px}.eyebrow{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#98dcd6;font-weight:800}.top h1{font-size:clamp(1.7rem,4vw,2.8rem);line-height:1.16;margin:7px 0}.top p{margin:0;color:#d4e7ed;max-width:700px}.top a{color:#bdf6ea}
+.wrap{max-width:1120px;padding:22px 18px 60px;margin:auto}.statusbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px;background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:16px;box-shadow:0 2px 12px #153d5410}.pills{display:flex;gap:8px;flex-wrap:wrap}.pill{font-size:.79rem;font-weight:800;padding:6px 10px;background:#e8eff2;border-radius:30px}.pill.green{background:#ddf4ec;color:#087667}.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px}.nav button{border:1px solid #c9d8e0;background:white;border-radius:10px;padding:9px 8px;min-height:58px;font-size:.86rem;cursor:pointer;color:#385366;font-weight:700}.nav button.active{background:#087e78;color:white;border-color:#087e78}.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:1.08fr .92fr;gap:15px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:21px;margin-bottom:15px;box-shadow:0 2px 14px #102d4009}.card h2{margin:0 0 10px;font-size:1.35rem;line-height:1.35}.card h3{font-size:1.04rem;margin:12px 0 5px}.muted{color:var(--muted)}.small{font-size:.87rem}.scenario{background:#f2f7f8;border-left:4px solid #168a83;padding:14px;border-radius:7px;margin:13px 0}.alert{background:#fff8e8;border-left-color:#bf862c}.option{display:flex;gap:10px;align-items:flex-start;cursor:pointer;border:1px solid #d0dfe5;padding:12px;border-radius:10px;margin:8px 0;line-height:1.4}.option:has(input:checked){border-color:#0f877d;background:var(--tealsoft)}.option input{accent-color:#087e78;margin-top:4px}.btn{background:#087e78;color:white;padding:10px 14px;border:1px solid #087e78;border-radius:10px;font-weight:800;cursor:pointer}.btn:hover{filter:brightness(.94)}.btn.secondary{color:#184459;border-color:#b6ccd6;background:#f6f9fa}.btn.ghost{color:#e8faf9;background:transparent;border-color:#aac4ce}.btn:disabled{opacity:.55;cursor:not-allowed}.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.right{margin-left:auto}.out{border:1px dashed #aac4cf;background:#f1f8f8;border-radius:12px;padding:14px;margin-top:14px}.out[hidden]{display:none}textarea{border:1px solid #bcced5;border-radius:9px;display:block;width:100%;min-height:78px;padding:11px;resize:vertical;color:var(--ink);background:#fff}table{border-collapse:collapse;width:100%;font-size:.87rem}th,td{border-bottom:1px solid #dfebee;padding:8px 6px;text-align:left}th{background:#eaf1f4;font-size:.8rem}td.num{text-align:right;font-variant-numeric:tabular-nums}.scroll{overflow-x:auto}.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.kpi div{background:#ebf5f5;padding:12px;border-radius:10px}.kpi strong{display:block;font-size:1.45rem;font-variant-numeric:tabular-nums}.kpi span{font-size:.78rem;color:#536d74}.teacher{display:none;border-color:#9ebec3;background:#f1faf8}.teacher.visible{display:block}.teacher h3{margin-top:0}.timer{font-weight:900;font-size:1.25rem;letter-spacing:.04em;font-variant-numeric:tabular-nums}.foot{font-size:.83rem;color:#5b7280;padding-top:8px}.hide{display:none!important}.stages{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.stages div{border-radius:10px;padding:10px;background:#e9f2f4;text-align:center;font-size:.82rem;font-weight:750}.stages b{display:block;font-size:1.18rem;color:#126f6a}.disclose{border:1px solid #d6e4e7;border-radius:11px;padding:12px;margin:10px 0}.disclose summary{cursor:pointer;font-weight:700}.answer{background:#e5f3f0;padding:10px 12px;border-radius:9px;margin-top:9px}.vote button{background:white;border:1px solid #9bb7c1;border-radius:7px;padding:7px 11px;cursor:pointer}.vote strong{font-variant-numeric:tabular-nums}.sr-only{position:absolute;clip:rect(0,0,0,0);height:1px;width:1px;overflow:hidden}@media(max-width:780px){.grid{grid-template-columns:1fr}.nav{grid-template-columns:repeat(3,1fr)}.stages{grid-template-columns:repeat(3,1fr)}.card{padding:16px}}@media print{.top{background:#fff!important;color:#111}.nav,.btn,.statusbar{display:none!important}.panel{display:block!important}.teacher{display:none!important}body{background:white}.card{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="eyebrow">AKU3304 • Pengauditan Sistem Informasi • FEB UGM</div>
+<h1>Diskusi Kelas: Audit Analytics</h1>
+<p>Tiga keputusan berbasis data • Sesi 10 • Durasi diskusi 30 menit</p></header>
+<main class="wrap">
+<div class="statusbar">
+ <div class="pills"><span class="pill green">Bukan kuis bernilai</span><span class="pill">Tiga kasus baru</span><span class="pill">Tanpa login</span></div>
+ <div class="row"><span id="time" class="timer" aria-live="off">30:00</span><button type="button" class="btn secondary" id="startTimer">Mulai</button><button type="button" class="btn secondary" id="pauseTimer">Jeda</button><button type="button" class="btn secondary" id="resetTimer">Ulang waktu</button><button type="button" class="btn secondary" id="teacherToggle" aria-pressed="false">Tampilan dosen</button></div>
+</div>
+<nav class="nav" aria-label="Tahapan diskusi">
+<button data-tab="intro" class="active">1 • Pembuka</button><button data-tab="pop">2 • Populasi</button><button data-tab="join">3 • Relasi data</button><button data-tab="method">4 • Metode</button><button data-tab="close">5 • Penutup</button>
+</nav>
+<section class="panel active" id="intro">
+ <div class="card"><h2>Audit analytics: sebelum menarik simpulan</h2>
+ <p>Dalam tiga diskusi singkat, Anda diminta menentukan populasi, memeriksa hasil penggabungan tabel, dan memilih prosedur analitik yang sesuai. Semua data berikut adalah contoh kelas, bukan data NRD atau kasus Sentinel.</p>
+ <div class="stages"><div><b>3'</b>Pembuka</div><div><b>8'</b>Populasi</div><div><b>8'</b>Relasi data</div><div><b>8'</b>Pemilihan metode</div><div><b>3'</b>Penutup</div></div>
+ <div class="scenario"><strong>Aturan diskusi:</strong> kerjakan dalam kelompok kecil. Setiap kelompok boleh memilih pendekatan berbeda, tetapi harus mampu menjelaskan asumsi, keterbatasan, dan tindak lanjutnya. Jawaban disimpan pada perangkat masing-masing; tidak ada pengiriman ke server.</div>
+ <button type="button" class="btn" data-next="pop">Masuk kasus pertama →</button></div>
+</section>
+<section class="panel" id="pop">
+ <div class="grid"><article class="card"><div class="pill green">KASUS A • 8 MENIT</div><h2>Kunjungan Klinik Surya Medika</h2>
+ <p>Tim audit menilai kelengkapan penagihan jasa konsultasi. Data sumber memuat 12 nomor kunjungan, sedangkan daftar tagihan hanya memuat sebagian nomor tersebut.</p>
+ <p><strong>Pilih populasi pengujian:</strong></p>
+ <label class="option"><input type="radio" name="population" value="all"> Seluruh nomor kunjungan yang dibuat</label>
+ <label class="option"><input type="radio" name="population" value="served"> Kunjungan yang sudah dilayani</label>
+ <label class="option"><input type="radio" name="population" value="billed"> Kunjungan yang sudah memiliki tagihan</label>
+ <button type="button" class="btn" id="runPop">Jalankan rekonsiliasi</button>
+ <div class="out" id="popResult" hidden aria-live="polite"></div>
+ </article><article class="card"><h3>Register kunjungan dan tagihan</h3><div class="scroll"><table><thead><tr><th>ID</th><th>Status</th><th>Nomor tagihan</th></tr></thead><tbody id="visitRows"></tbody></table></div>
+ <div class="small muted">Data sintetis. Status "dilayani" menandakan layanan selesai; penagihan dapat memiliki ketentuan pengecualian yang harus diverifikasi.</div></article></div>
+ <article class="card"><h3>Catatan kelompok</h3><label for="reasonPop" class="small muted">Apa yang perlu dikonfirmasi sebelum menyimpulkan ada kunjungan yang belum ditagih?</label><textarea id="reasonPop" maxlength="700" placeholder="Tuliskan dasar simpulan dan satu bukti tindak lanjut..."></textarea></article>
+ <div class="card teacher" data-teacher><h3>Panduan diskusi — kasus A</h3><p>Target risiko adalah jasa yang sudah dilaksanakan tetapi belum ditagih, sehingga daftar kunjungan selesai menjadi populasi yang lebih sesuai. Hasil ilustrasi: 8 layanan selesai, 7 memiliki tagihan, 1 calon pengecualian. Sebelum menyimpulkan salah saji, periksa aturan pembebasan biaya, status pembayaran, jadwal penerbitan tagihan, dan rekonsiliasi sumber.</p><div class="vote" data-vote="A"></div></div>
+</section>
+<section class="panel" id="join">
+ <div class="grid"><article class="card"><span class="pill green">KASUS B • 8 MENIT</span><h2>Pembayaran Distributor Kopi Sembada</h2><p>Tabel rincian faktur dan tabel alokasi pembayaran sama-sama memuat beberapa baris untuk nomor faktur yang sama. Tim diminta menghitung jumlah pembayaran.</p>
+ <p><strong>Uji dua pendekatan:</strong></p>
+ <div class="row"><button type="button" class="btn secondary" id="rawJoin">Gabung langsung menurut ID faktur</button><button type="button" class="btn" id="safeJoin">Ringkas alokasi per faktur lebih dahulu</button></div>
+ <div class="out" id="joinResult" hidden aria-live="polite"></div>
+ <h3>Pendekatan yang Anda pilih untuk kertas kerja</h3>
+ <label class="option"><input name="joinChoice" type="radio" value="raw"> Menggunakan jumlah dari hasil join mentah</label>
+ <label class="option"><input name="joinChoice" type="radio" value="group"> Menggunakan total alokasi unik per faktur</label>
+ <label class="option"><input name="joinChoice" type="radio" value="drop"> Mengeluarkan faktur yang memiliki lebih dari satu baris</label></article>
+ <article class="card"><h3>Data yang disediakan</h3><p class="small muted">Rincian faktur (jumlah baris): F21 = 2, F22 = 1, F23 = 3.</p><table><thead><tr><th>Faktur</th><th>Alokasi</th><th>Nominal (Rp)</th></tr></thead><tbody><tr><td>F21</td><td>P01</td><td class="num">600.000</td></tr><tr><td>F21</td><td>P02</td><td class="num">400.000</td></tr><tr><td>F22</td><td>P03</td><td class="num">700.000</td></tr><tr><td>F23</td><td>P04</td><td class="num">300.000</td></tr></tbody></table>
+ <div class="scenario">Jika kedua tabel digabung menurut ID faktur saja, alokasi dapat berulang sesuai banyaknya baris rincian. Angka hasil query tetap perlu direkonsiliasi dengan sumber.</div></article></div>
+ <article class="card"><h3>Catatan kelompok</h3><textarea id="reasonJoin" maxlength="700" placeholder="Apa yang menyebabkan perbedaan total? Bagaimana dokumentasi relasi tabelnya?"></textarea></article>
+ <div class="card teacher" data-teacher><h3>Panduan diskusi — kasus B</h3><p>Join langsung menghasilkan 8 baris dan total pembayaran tampak Rp3.600.000, padahal empat alokasi unik berjumlah Rp2.000.000. Jumlah per faktur adalah F21 Rp1.000.000; F22 Rp700.000; F23 Rp300.000. Agregasi alokasi di level faktur sebelum join menghindari penggandaan, tetapi rekonsiliasi setiap tabel dan cardinality tetap dibutuhkan.</p><div class="vote" data-vote="B"></div></div>
+</section>
+<section class="panel" id="method">
+ <div class="grid"><article class="card"><span class="pill green">KASUS C • 8 MENIT</span><h2>Pengujian pola angka: Hotel Pesisir</h2>
+ <p>Audit manager mempertimbangkan analisis digit pertama. Tiga kumpulan data tersedia, tetapi karakteristiknya berbeda.</p>
+ <p><strong>Dataset yang paling layak dipertimbangkan untuk uji eksploratif Benford:</strong></p>
+ <label class="option"><input type="radio" name="methodChoice" value="tariff"> Tarif parkir hotel: 1.200 transaksi, hanya tiga harga tetap</label>
+ <label class="option"><input type="radio" name="methodChoice" value="claim"> Klaim perjalanan: 92 transaksi, rentang Rp75 ribu–2,2 juta</label>
+ <label class="option"><input type="radio" name="methodChoice" value="energy"> Pemakaian energi: 5.200 pengamatan, rentang 15–68.000 unit</label>
+ <button type="button" class="btn" id="assessMethod">Catat penilaian populasi</button>
+ <div class="out" id="methodResult" hidden aria-live="polite"></div></article>
+ <article class="card"><h3>Dokumen awal</h3><table><thead><tr><th>Populasi</th><th>Karakteristik</th></tr></thead><tbody><tr><td>Parkir</td><td>Tarif ditetapkan manajemen</td></tr><tr><td>Klaim</td><td>Nilai tidak tetap; jumlah pengamatan terbatas</td></tr><tr><td>Energi</td><td>Nilai penggunaan bervariasi, periode 12 bulan</td></tr></tbody></table>
+ <div class="scenario"><strong>Catatan:</strong> ukuran sampel dan rentang nilai bukan satu-satunya syarat. Perlu dipastikan definisi, pengukuran, keterwakilan, dan proses pembentukan angka.</div></article></div>
+ <article class="card"><h3>Catatan kelompok</h3><textarea id="reasonMethod" maxlength="700" placeholder="Jelaskan syarat kelayakan dan apa yang tidak dapat disimpulkan dari deviasi digit pertama..."></textarea></article>
+ <div class="card teacher" data-teacher><h3>Panduan diskusi — kasus C</h3><p>Energi adalah calon yang relatif paling layak untuk <em>screening</em> karena skala dan ragam nilai, bukan otomatis pasti memenuhi Benford. Perlu memastikan nilai alamiah, tanpa batas buatan atau pengelompokan, keakuratan satuan, kelengkapan, dan pola distribusi sebenarnya. Tarif tetap umumnya tidak sesuai; klaim perjalanan terlalu sedikit untuk inferensi yang kuat. Deviasi bukan bukti fraud.</p><div class="vote" data-vote="C"></div></div>
+</section>
+<section class="panel" id="close"><article class="card"><h2>Penutup dan refleksi</h2><p>Diskusikan satu perubahan cara berpikir yang paling penting ketika menggunakan analitik audit.</p><textarea id="takeaway" maxlength="500" placeholder="Satu kalimat: keputusan apa yang tidak boleh dibuat hanya berdasarkan hasil uji?"></textarea>
+ <div class="row" style="margin-top:14px"><button type="button" class="btn" id="copySummary">Salin catatan kelompok</button><button type="button" class="btn secondary" id="resetWork">Hapus jawaban lokal</button></div><p class="small muted" id="copyStatus"></p>
+ <div class="scenario">Tidak perlu mengunggah tugas tambahan. Gunakan hasil diskusi ini untuk memperjelas pertanyaan analitik yang Anda bawa ke latihan Colab. Aktivitas ini tidak mengganti pekerjaan buku ataupun AuditLab.</div></article>
+ <div class="card teacher" data-teacher><h3>Penutupan dosen</h3><p>Tekankan tiga alasan: populasi harus mewakili tujuan pengujian; relasi tabel dapat mengubah jumlah baris dan nilai; teknik statistik memerlukan kelayakan data dan tindak lanjut. Tidak ada satu metode yang otomatis membuktikan salah saji.</p></div>
+</section>
+<p class="foot">Sumber konsep: Pengauditan Sistem Informasi, Bab 9 §§9.1–9.6. Seluruh data kasus kelas sintetis dan terpisah dari NRD AuditLab. Pilihan serta catatan disimpan pada browser perangkat ini. Mode dosen hanya mengubah tampilan dan bukan akses rahasia.</p>
+</main>
+<script>
+"use strict";
+const STORE="psi10-classdiscussion-v1";
+const visits=[
+["K01","dilayani","T011"],["K02","dilayani","T012"],["K03","batal",""],["K04","dilayani","T014"],
+["K05","terjadwal",""],["K06","dilayani",""],["K07","dilayani","T017"],["K08","dilayani","T018"],
+["K09","batal",""],["K10","dilayani","T020"],["K11","terjadwal",""],["K12","dilayani","T022"]
+];
+const payment=[["F21","P01",600000,2],["F21","P02",400000,2],["F22","P03",700000,1],["F23","P04",300000,3]];
+const $=id=>document.getElementById(id), fmt=n=>new Intl.NumberFormat("id-ID").format(n);
+let state={};try{state=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){}
+if(!state.notes)state.notes={};if(!state.choices)state.choices={};if(!state.tally)state.tally={};
+function save(){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}}
+function choose(k,v){state.choices[k]=v;save()}
+function showTab(id){document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===id));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));window.scrollTo({top:0,behavior:"smooth"});state.tab=id;save()}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.next)));
+$("visitRows").innerHTML=visits.map(v=>"<tr>"+v.map(x=>"<td>"+(x||"—")+"</td>").join("")+"</tr>").join("");
+function selected(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||""}
+document.querySelectorAll('input[type="radio"]').forEach(el=>{
+if(state.choices[el.name]===el.value)el.checked=true;
+el.addEventListener("change",()=>choose(el.name,el.value))
+});
+for(const id of ["reasonPop","reasonJoin","reasonMethod","takeaway"]){
+$(id).value=state.notes[id]||"";
+$(id).addEventListener("input",()=>{state.notes[id]=$(id).value;save()})
+}
+$("runPop").onclick=()=>{
+let k=selected("population");if(!k){alert("Pilih dasar populasi terlebih dahulu.");return}
+let r=visits.filter(v=>k==="all"||k==="served"&&v[1]==="dilayani"||k==="billed"&&v[2]);
+let withBill=r.filter(v=>v[2]).length,without=r.length-withBill,unmatched=r.filter(v=>!v[2]).map(v=>v[0]);
+$("popResult").hidden=false;$("popResult").innerHTML='<div class="kpi"><div><strong>'+r.length+'</strong><span>Record dipilih</span></div><div><strong>'+withBill+'</strong><span>Dengan tagihan</span></div><div><strong>'+without+'</strong><span>Tanpa tagihan</span></div></div><p><strong>Belum tertagih menurut filter ini:</strong> '+(unmatched.join(", ")||"tidak ada")+'</p><p class="small muted">Hasil hitung bukan otomatis temuan. Perhatikan apakah status yang dipilih cocok dengan asersi dan aturan penagihan.</p>';
+};
+function join(showRaw){
+const rows=showRaw?payment.reduce((a,p)=>a+p[3],0):new Set(payment.map(p=>p[0])).size;
+const total=payment.reduce((a,p)=>a+p[2]*(showRaw?p[3]:1),0);
+$("joinResult").hidden=false;$("joinResult").innerHTML='<div class="kpi"><div><strong>'+rows+'</strong><span>Baris hasil</span></div><div><strong>Rp'+fmt(total)+'</strong><span>Total pembayaran terhitung</span></div><div><strong>'+payment.length+'</strong><span>Alokasi unik asal</span></div></div><p class="small muted">Perhitungan berdasarkan data contoh yang terlihat di tabel. Nilai pembayaran sebenarnya harus direkonsiliasi dengan sumber dan bukti bank.</p>';
+}
+$("rawJoin").onclick=()=>join(true);$("safeJoin").onclick=()=>join(false);
+$("assessMethod").onclick=()=>{
+const k=selected("methodChoice");if(!k){alert("Pilih satu populasi terlebih dahulu.");return}
+const msg={tariff:"Pola digit didominasi tarif yang ditentukan, bukan rentang nilai alamiah. Ketidaksesuaian digit mungkin wajar.",claim:"Nilai bervariasi, tetapi 92 observasi dan rentang terbatas memerlukan kehati-hatian sebelum analisis digit.",energy:"Populasi ini kandidat awal yang lebih masuk akal, tetapi satuan, proses pencatatan, kelengkapan, serta distribusi sesungguhnya tetap perlu diuji."};
+$("methodResult").hidden=false;$("methodResult").textContent=msg[k];
+};
+let teacher=false;
+function teacherMode(on){teacher=on;document.querySelectorAll("[data-teacher]").forEach(e=>e.classList.toggle("visible",on));$("teacherToggle").setAttribute("aria-pressed",String(on));$("teacherToggle").textContent=on?"Tampilan mahasiswa":"Tampilan dosen";try{const u=new URL(location.href);if(on)u.searchParams.set("dosen","1");else u.searchParams.delete("dosen");history.replaceState(null,"",u)}catch(e){} }
+$("teacherToggle").onclick=()=>teacherMode(!teacher);if(new URLSearchParams(location.search).get("dosen")==="1")teacherMode(true);
+function renderTally(){
+document.querySelectorAll("[data-vote]").forEach(el=>{
+let id=el.dataset.vote,count=state.tally[id]||[0,0,0];el.innerHTML='<p class="small"><strong>Catatan angkat tangan di kelas</strong> (dihitung dosen secara manual; tidak disinkronkan dari perangkat mahasiswa)</p><div class="row">'+count.map((n,i)=>'<button type="button" data-inc="'+id+'" data-n="'+i+'">'+String.fromCharCode(65+i)+' <strong>'+n+'</strong> +1</button>').join("")+'<button type="button" data-clear="'+id+'">Reset</button></div>';
+});
+document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{let id=b.dataset.inc,n=+b.dataset.n,a=state.tally[id]||[0,0,0];a[n]++;state.tally[id]=a;save();renderTally()});
+document.querySelectorAll("[data-clear]").forEach(b=>b.onclick=()=>{state.tally[b.dataset.clear]=[0,0,0];save();renderTally()})
+}renderTally();
+let seconds=1800,clockId=null;
+function displayTime(){$("time").textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");$("time").style.color=seconds<120?"#b95346":""}
+$("startTimer").onclick=()=>{if(clockId)return;clockId=setInterval(()=>{if(seconds>0){seconds--;displayTime()}else{clearInterval(clockId);clockId=null}},1000)};
+$("pauseTimer").onclick=()=>{clearInterval(clockId);clockId=null};
+$("resetTimer").onclick=()=>{clearInterval(clockId);clockId=null;seconds=1800;displayTime()};displayTime();
+$("copySummary").onclick=async()=>{
+let out=["Diskusi PSI Sesi 10 — Catatan kelompok", "Populasi: "+(state.choices.population||"belum dipilih"),"Alasan: "+(state.notes.reasonPop||"—"),"Relasi data: "+(state.choices.joinChoice||"belum dipilih"),"Alasan: "+(state.notes.reasonJoin||"—"),"Metode: "+(state.choices.methodChoice||"belum dipilih"),"Alasan: "+(state.notes.reasonMethod||"—"),"Refleksi: "+(state.notes.takeaway||"—")].join("\n");
+try{await navigator.clipboard.writeText(out);$("copyStatus").textContent="Catatan telah disalin."}catch(e){const ta=document.createElement("textarea");ta.value=out;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();$("copyStatus").textContent="Silakan tempel hasil salinan pada catatan kelompok."}
+};
+$("resetWork").onclick=()=>{if(confirm("Hapus seluruh catatan dan pilihan pada perangkat ini?")){localStorage.removeItem(STORE);location.reload()}};
+if(["intro","pop","join","method","close"].includes(state.tab))showTab(state.tab);
+</script>
+</body></html>
