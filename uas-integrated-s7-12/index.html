@@ -1,0 +1,474 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UAS SIPI | Integrated Professional Assurance Case</title><style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#f1f5f9;color:#14283f;line-height:1.52}*{box-sizing:border-box}body{margin:0}button,input,textarea,select{font:inherit}button{border:0;border-radius:9px;background:#16446b;color:white;padding:10px 15px;cursor:pointer;font-weight:650}button:disabled{opacity:.45;cursor:not-allowed}.outline{background:white;color:#16446b;border:1px solid #b8cbdc}.wrap{max-width:1250px;margin:auto;padding:17px}.top{background:#102d4c;color:white}.top .wrap{display:flex;justify-content:space-between;gap:15px;align-items:center}.top h1{font-size:1.3rem;margin:3px 0}.top small{color:#bed7ed}.tag{border:1px solid #7097b8;border-radius:18px;padding:6px 12px;font-size:.8rem}.layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:18px;padding-top:20px}.side,.panel{background:white;border:1px solid #d9e2ed;border-radius:14px;padding:19px;box-shadow:0 2px 5px #12345610}.side{position:sticky;top:14px;align-self:start;padding:12px}.side button{width:100%;text-align:left;margin:4px 0;background:#edf3f8;color:#254d70;font-size:.83rem}.side button.active{background:#16446b;color:white}.side button.locked{opacity:.55}.stack{display:grid;gap:14px}h2{margin:0 0 9px;font-size:1.4rem}h3{font-size:1.05rem;margin:18px 0 8px}.muted{color:#586f87}.small{font-size:.87rem;color:#526b84}.fine{font-size:.78rem;color:#657d93}.bar{height:9px;background:#e3ebf3;border-radius:10px;overflow:hidden;margin:8px 0}.bar span{display:block;height:100%;background:#2c7997}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.box{padding:15px;border-radius:10px;border:1px solid #dce5ee;background:#fbfcfe}.notice{border-left:4px solid #b97b27;background:#fff9ec;padding:13px;margin:13px 0;border-radius:6px}.hint{border-left:4px solid #3b789f;background:#edf5fb;padding:12px;margin:12px 0;border-radius:6px}.doc{border:1px solid #d5e0ec;border-radius:10px;margin:8px 0;overflow:hidden}.doc summary{cursor:pointer;background:#f0f5fa;padding:13px;font-weight:650}.doc .body{padding:13px}.fact{background:#f7fafc;padding:13px;border-left:3px solid #7c9ab5}.answer{border:1px solid #dfe6ef;border-radius:11px;padding:14px;margin:10px 0;background:#fdfefe}label{display:block;font-weight:600;font-size:.92rem;margin:6px 0 8px}textarea,select,input[type=text]{width:100%;border:1px solid #b7c8da;border-radius:8px;padding:11px;background:white;color:#16283c}textarea{min-height:125px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap}.metric{font-size:1.55rem;font-weight:750;color:#1c5779}.pill{display:inline-block;background:#e7f0f7;color:#214f76;border-radius:20px;padding:5px 10px;font-size:.78rem;font-weight:700}.headrow{display:flex;justify-content:space-between;gap:12px}.hide{display:none}.footer{padding:18px 0;color:#74879b;font-size:.75rem}.calc{background:#f3f8fb;padding:15px;border-radius:10px;margin-top:14px}#msg{min-height:1px}@media(max-width:760px){.wrap{padding:11px}.layout{display:block}.side{position:static;display:flex;overflow:auto;gap:5px;margin-bottom:13px}.side button{flex:0 0 132px}.grid,.three{grid-template-columns:1fr}.top .wrap{align-items:start;flex-direction:column}.panel{padding:14px}}@media print{.top,.side,.actions,.footer,.no-print{display:none!important}.layout{display:block}.panel{border:0;box-shadow:none}.wrap{max-width:100%}}
+</style></head><body><header class="top"><div class="wrap"><div><small>Program Profesi Akuntan • Sistem Informasi dan Pengendalian Internal</small><h1>UAS — Integrated Assurance & Decision Lab</h1><small>PT NusaNiaga · Sesi 7–12 · Data kasus simulasi</small></div><div class="tag">Akses 2×24 jam · Estimasi kerja efektif 4 jam</div></div></header><div class="wrap layout"><nav id="nav" class="side"></nav><main class="stack"><section id="head" class="panel"></section><div id="msg" aria-live="polite"></div><section id="body" class="panel"></section><section class="panel no-print"><div class="actions"><button class="outline" id="prev">← Sebelumnya</button><button id="next">Berikutnya →</button><button id="backup" class="outline">Unduh backup JSON</button><button id="import" class="outline">Impor backup JSON</button><input id="pick" type="file" accept=".json,application/json" class="hide"></div><p class="fine">Jawaban tersimpan otomatis di browser. Backup JSON dianjurkan setiap selesai sesi. Pengumpulan UAS secara resmi dilakukan melalui eLOK/Moodle.</p></section></main></div><div class="wrap footer">SIPI • Asesmen individual berbasis bukti • Tidak terhubung dengan database mahasiswa atau penilaian otomatis.</div>
+<script>
+'use strict';
+const DATA={
+  "steps": [
+    [
+      "Orientasi",
+      15
+    ],
+    [
+      "S7 Produksi dan WIP",
+      35
+    ],
+    [
+      "S8 Payroll",
+      40
+    ],
+    [
+      "S9 Closing dan Digital Reporting",
+      45
+    ],
+    [
+      "S10 ICoFR",
+      45
+    ],
+    [
+      "S11 ERP Readiness",
+      35
+    ],
+    [
+      "S12 Komite Final",
+      25
+    ]
+  ],
+  "docs": [
+    {
+      "id": "PR-01",
+      "stage": 1,
+      "title": "BOM, material issue, MES",
+      "owner": "Production Control",
+      "period": "30 Sep 2026",
+      "source": "ERP issue register, stock movement, MES",
+      "facts": "BOM sensor versi 5 diubah tanpa persetujuan akhir. ERP menunjukkan material terpakai 9.800 kg, catatan gudang dan timbang fisik 10.250 kg. Harga standar Rp120.000/kg. MES kehilangan sinkronisasi selama empat jam; catatan manual operator tersedia hanya untuk dua jam.",
+      "limit": "Selisih volume bukan otomatis material hilang atau salah saji final; perlu uji cut-off, rework, scrap dan kelengkapan pencatatan."
+    },
+    {
+      "id": "PR-02",
+      "stage": 1,
+      "title": "WIP roll-forward dan margin",
+      "owner": "Cost Accounting",
+      "period": "30 Sep 2026",
+      "source": "WIP subledger, GL, margin snapshot",
+      "facts": "WIP subledger Rp14,82 miliar; GL Rp13,58 miliar. Selisih Rp1,24 miliar belum direkonsiliasi. Standard overhead rate diperbarui tanpa analisis dampak yang disetujui. Laporan margin menggunakan snapshot sebelum penyesuaian.",
+      "limit": "Selisih material dan WIP tidak boleh langsung dijumlahkan tanpa mengevaluasi tumpang tindih."
+    },
+    {
+      "id": "PY-01",
+      "stage": 2,
+      "title": "Roster dan payroll register",
+      "owner": "HRIS/Payroll",
+      "period": "Sep 2026",
+      "source": "HR roster, register, overtime approval",
+      "facts": "Dua pegawai berstatus terminated sejak 15 September masih tercantum dalam payroll; pembayaran terkait Rp28 juta. Tiga lembur Rp24 juta baru disetujui setelah payroll run. Register final Rp4,78 miliar. Tabel pajak belum ditinjau sejak awal tahun.",
+      "limit": "Rp28 juta belum tentu seluruhnya pembayaran tidak sah: hak akhir pegawai harus diverifikasi. Dampak tabel pajak memerlukan perhitungan ulang."
+    },
+    {
+      "id": "PY-02",
+      "stage": 2,
+      "title": "Payment file, bank, GL",
+      "owner": "Treasury",
+      "period": "Sep 2026",
+      "source": "Payment file audit trail, bank statement, GL",
+      "facts": "Payment file Rp5,56 miliar; payroll register Rp4,78 miliar; debit payroll GL Rp4,82 miliar. File diubah setelah persetujuan. Dua rekening penerima berubah tanpa verifikasi independen.",
+      "limit": "Selisih tidak otomatis kerugian. Pengujian harus membedakan file, bank settlement, payroll liability, dan GL."
+    },
+    {
+      "id": "CL-01",
+      "stage": 3,
+      "title": "Revenue interface dan suspense",
+      "owner": "Finance Close",
+      "period": "30 Sep 2026",
+      "source": "Source, interface, GL, ageing",
+      "facts": "Revenue source Rp84,10 miliar; GL revenue Rp82,00 miliar. Selisih interface Rp2,10 miliar belum diselesaikan. Suspense Rp860 juta berusia lebih dari 60 hari; 35% item belum memiliki owner.",
+      "limit": "Tidak semua record sumber otomatis memenuhi syarat pengakuan pendapatan; perlu uji timing, retur, duplikasi dan cut-off."
+    },
+    {
+      "id": "CL-02",
+      "stage": 3,
+      "title": "Jurnal manual dan intercompany",
+      "owner": "Corporate Accounting",
+      "period": "30 Sep 2026",
+      "source": "GL journal log, IC reconciliation",
+      "facts": "Jurnal manual Rp3,4 miliar diposting pukul 23:41 dengan deskripsi close alignment. Kalkulasi tidak tersedia dan pembuat/reviewer orang sama. Piutang intercompany A Rp5,20 miliar, utang B Rp4,95 miliar; eliminasi belum disetujui.",
+      "limit": "Jurnal malam bukan bukti fraud. Nilai jurnal belum membuktikan jumlah salah saji; selisih IC mungkin timing atau FX."
+    },
+    {
+      "id": "CL-03",
+      "stage": 3,
+      "title": "Filing XBRL dan narasi AI",
+      "owner": "External Reporting",
+      "period": "Draft Q3",
+      "source": "XBRL validation, snapshot history",
+      "facts": "Validator XBRL menunjukkan context periode salah dan scale salah 1.000 kali pada satu tagged fact. Narasi AI memakai snapshot v18 (margin naik 4,2 poin) sedangkan approved v20 menunjukkan 3,7 poin. CFO belum menandatangani release.",
+      "limit": "Kesalahan tagging dan narasi dapat terpisah dari keandalan laporan sumber; klaim kausal margin tetap memerlukan bukti."
+    },
+    {
+      "id": "IC-01",
+      "stage": 4,
+      "title": "RCM dan testing kontrol",
+      "owner": "Internal Audit",
+      "period": "Jul–Sep 2026",
+      "source": "RCM, walkthrough, sample test",
+      "facts": "Revenue management review threshold Rp3 miliar, sedangkan materialitas laporan Rp2,5 miliar. Pengujian 12 rekonsiliasi menemukan tiga tanpa jejak independent review. Review privileged access mengecualikan vendor/break-glass. Dua dari 25 jurnal memiliki preparer dan reviewer sama.",
+      "limit": "Materialitas bukan satu-satunya ukuran presisi review. Ketiadaan sign-off belum otomatis membuktikan review tidak dilakukan."
+    },
+    {
+      "id": "IC-02",
+      "stage": 4,
+      "title": "Deficiency tracker dan monitoring",
+      "owner": "Risk Secretariat",
+      "period": "30 Sep 2026",
+      "source": "Issue register, minutes",
+      "facts": "Ada 17 isu berumur lebih dari 30 hari; enam terkait persetujuan/rekonsiliasi; tiga belum punya owner. Lima isu ditutup setelah SOP baru terbit tanpa bukti retest. Komite risiko belum mengevaluasi agregasi kelemahan jurnal dan akses.",
+      "limit": "Dashboard closed bukan bukti operasi kontrol efektif atau remediation selesai."
+    },
+    {
+      "id": "ER-01",
+      "stage": 5,
+      "title": "Vendor, SoD, pricing change dan interface",
+      "owner": "ERP PMO",
+      "period": "Sep 2026",
+      "source": "Vendor analytics, role matrix, change log",
+      "facts": "Ada 34 kandidat duplikat vendor; sembilan menggunakan rekening bank sama. Buyer dapat membuat vendor dan menyetujui PO sampai Rp900 juta. Perubahan harga memiliki approval namun bukti UAT/rollback tidak ada. Dashboard monitoring transaksi hanya menghitung order sukses, bukan rejected orders.",
+      "limit": "Indikator duplikat dan konflik peran bukan bukti penyalahgunaan. Uji hubungan perubahan harga terhadap biaya produksi."
+    },
+    {
+      "id": "ER-02",
+      "stage": 5,
+      "title": "Dependency dan readiness pack",
+      "owner": "Steering Committee",
+      "period": "Sep 2026",
+      "source": "Readiness dependencies",
+      "facts": "Perubahan price-list memengaruhi standard unit cost dan margin produksi. Rejected sales orders memengaruhi revenue interface, GL dan pelaporan. Manajemen mengusulkan go-live ERP dan publikasi laporan dalam satu keputusan bersama.",
+      "limit": "Keputusan operasi dan publikasi harus dipisahkan; keberlanjutan operasi tidak otomatis membenarkan laporan."
+    },
+    {
+      "id": "FX-01",
+      "stage": 6,
+      "title": "Evidence update dari follow-up",
+      "owner": "Independent Follow-up",
+      "period": "Hari berikutnya",
+      "source": "Follow-up memo, CFO email",
+      "facts": "Jurnal Rp3,4 miliar telah dibalik setelah auditor mempertanyakannya, tetapi substansi transaksi asli belum diklarifikasi. Dua rekening payroll terbukti milik pegawai aktif, tetapi persetujuan perubahan setelah approval tetap belum dapat ditunjukkan. CFO meminta filing XBRL dan narasi AI segera diterbitkan karena target investor.",
+      "limit": "Pembalikan tidak otomatis menyembuhkan control deficiency; validitas rekening tidak membuktikan validitas perubahan file."
+    }
+  ],
+  "fields": [
+    [
+      [
+        "identity",
+        "Nama lengkap dan NIM",
+        "short"
+      ],
+      [
+        "class",
+        "Kelas",
+        "short"
+      ],
+      [
+        "plan",
+        "Rencana kerja 240 menit, jeda, validasi dan backup",
+        "long"
+      ],
+      [
+        "integrity",
+        "Pernyataan integritas akademik dan penggunaan bantuan",
+        "long"
+      ]
+    ],
+    [
+      [
+        "prod_calc",
+        "Rekonsiliasi 9.800 vs 10.250 kg; estimasi harga standar; WIP 14,82 vs 13,58 miliar; risiko overlap",
+        "long"
+      ],
+      [
+        "prod_controls",
+        "Dua kontrol produksi/costing: tujuan, owner, bukti desain dan operasi",
+        "long"
+      ],
+      [
+        "prod_evidence",
+        "Persuasivitas PR-01 dan PR-02 untuk asersi berbeda",
+        "long"
+      ],
+      [
+        "prod_vote",
+        "Rekomendasi laporan margin/WIP",
+        "choice",
+        [
+          "Rilis",
+          "Rilis dengan kualifikasi yang dibatasi",
+          "Tahan"
+        ]
+      ],
+      [
+        "prod_conditions",
+        "Syarat rilis, tindakan, owner dan bukti closure",
+        "long"
+      ]
+    ],
+    [
+      [
+        "pay_calc",
+        "Rekonsiliasi payroll register, payment file dan GL; nilai selisih dan kemungkinan penjelasan",
+        "long"
+      ],
+      [
+        "pay_actions",
+        "Disposition dua terminated employees, bank change, overtime dan pajak",
+        "long"
+      ],
+      [
+        "pay_controls",
+        "Dua key controls dan pengujian mencegah pembayaran tidak sah",
+        "long"
+      ],
+      [
+        "pay_vote",
+        "Rekomendasi rilis keseluruhan payroll",
+        "choice",
+        [
+          "Rilis",
+          "Tahan"
+        ]
+      ],
+      [
+        "pay_conditions",
+        "Kriteria sebelum keputusan dapat berubah dan residual risks",
+        "long"
+      ]
+    ],
+    [
+      [
+        "close_flow",
+        "Peta source–interface–GL–close–consolidation–publication; blocker utama",
+        "long"
+      ],
+      [
+        "close_recon",
+        "Rekonsiliasi revenue, suspense, IC; bukti dan prosedur alternatif",
+        "long"
+      ],
+      [
+        "close_journal",
+        "Hipotesis alasan bisnis jurnal 3,4 miliar dan prosedur investigasi",
+        "long"
+      ],
+      [
+        "fs_vote",
+        "Keputusan laporan keuangan",
+        "choice",
+        [
+          "Release",
+          "Release bersyarat",
+          "Hold"
+        ]
+      ],
+      [
+        "xbrl_vote",
+        "Keputusan filing XBRL",
+        "choice",
+        [
+          "Release",
+          "Release bersyarat",
+          "Hold"
+        ]
+      ],
+      [
+        "ai_vote",
+        "Keputusan narasi AI",
+        "choice",
+        [
+          "Release",
+          "Release bersyarat",
+          "Hold"
+        ]
+      ],
+      [
+        "pub_terms",
+        "Bukti wajib sebelum publikasi setiap output",
+        "long"
+      ]
+    ],
+    [
+      [
+        "scope",
+        "ICoFR scoping: significant accounts, assertions, process, fraud dan IT",
+        "long"
+      ],
+      [
+        "four_controls",
+        "Evaluasi empat kontrol: revenue review, journals/SoD, privileged access, close",
+        "long"
+      ],
+      [
+        "deficiencies",
+        "Tipe design/operating; aspek monitoring, severity, aggregation dan compensating control",
+        "long"
+      ],
+      [
+        "monitor",
+        "Monitoring deficiency: owner, due date, escalation, retest, evidence closure minimal dua isu",
+        "long"
+      ],
+      [
+        "ic_vote",
+        "Kesimpulan ICoFR",
+        "choice",
+        [
+          "Efektif—bukti memadai",
+          "Tidak efektif—material weakness dibuktikan",
+          "Belum cukup bukti untuk kesimpulan final"
+        ]
+      ],
+      [
+        "ic_why",
+        "Argumentasi kesimpulan dan batas bukti",
+        "long"
+      ]
+    ],
+    [
+      [
+        "risks",
+        "Empat risiko prioritas lintas proses, asersi/objektif, dan ID evidence",
+        "long"
+      ],
+      [
+        "erp_treatment",
+        "Treatment vendor/SoD, change management, exception queue, monitoring",
+        "long"
+      ],
+      [
+        "ops_vote",
+        "Kesiapan operasi ERP",
+        "choice",
+        [
+          "Go",
+          "Go dengan pembatasan",
+          "No-go"
+        ]
+      ],
+      [
+        "report_vote",
+        "Kesiapan laporan manajemen",
+        "choice",
+        [
+          "Release",
+          "Release bersyarat",
+          "Hold"
+        ]
+      ],
+      [
+        "roadmap",
+        "Roadmap 0–30, 31–60, 61–90 hari: owner, bukti dan dependency",
+        "long"
+      ]
+    ],
+    [
+      [
+        "new_evidence",
+        "Apa berubah setelah FX-01? Identifikasi fakta, inferensi dan yang tidak terbukti",
+        "long"
+      ],
+      [
+        "final_ops",
+        "Keputusan final operasi",
+        "choice",
+        [
+          "Go",
+          "Go terbatas",
+          "No-go"
+        ]
+      ],
+      [
+        "final_fs",
+        "Keputusan final laporan keuangan",
+        "choice",
+        [
+          "Release",
+          "Release bersyarat",
+          "Hold"
+        ]
+      ],
+      [
+        "final_xbrl",
+        "Keputusan final XBRL",
+        "choice",
+        [
+          "Release",
+          "Release bersyarat",
+          "Hold"
+        ]
+      ],
+      [
+        "final_ai",
+        "Keputusan final narasi AI",
+        "choice",
+        [
+          "Release",
+          "Release bersyarat",
+          "Hold"
+        ]
+      ],
+      [
+        "final_ic",
+        "Kesimpulan final ICoFR",
+        "choice",
+        [
+          "Efektif",
+          "Tidak efektif",
+          "Bukti belum cukup"
+        ]
+      ],
+      [
+        "memo",
+        "Executive memo komite 250–350 kata: keputusan, bukti, kontra-argumen, syarat, residual risks",
+        "long"
+      ],
+      [
+        "reflection",
+        "Refleksi evidence terlemah dan perubahan posisi profesional",
+        "long"
+      ]
+    ]
+  ]
+};
+const KEY='sipi-uas-s7-s12-2026-v1';
+const blank=()=>({schema:1,answers:{},read:{},completed:{},active:0,created:new Date().toISOString(),changed:null,locked:false,lockedAt:null});
+let S;try{const x=JSON.parse(localStorage.getItem(KEY)||'null');S=x&&x.schema===1?x:blank()}catch(e){S=blank()}
+const $=id=>document.getElementById(id);
+const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const value=k=>S.answers[k]||'';
+function save(){S.changed=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){message('Penyimpanan lokal gagal. Unduh backup JSON sekarang.',true)}}
+function message(t,bad){$('msg').innerHTML='<div class="'+(bad?'notice':'hint')+'">'+esc(t)+'</div>'}
+function fieldsDone(i){return DATA.fields[i].every(f=>String(value(f[0])).trim().length>=(f[2]==='long'?40:1))}
+function nDone(){return DATA.fields.flat().filter(f=>String(value(f[0])).trim().length>=(f[2]==='long'?40:1)).length}
+function nFields(){return DATA.fields.flat().length}
+function canOpen(i){for(let j=0;j<i;j++){if(!fieldsDone(j))return false}return true}
+function go(i){if(i<0||i>=DATA.steps.length)return;if(!canOpen(i)){message('Lengkapi seluruh isian minimum tahap sebelumnya sebelum membuka tahap ini.',true);return}S.active=i;save();render();window.scrollTo(0,0)}
+function render(){const i=S.active;let nav='';DATA.steps.forEach((x,j)=>{nav+='<button class="'+(j===i?'active ':'')+(!canOpen(j)?'locked':'')+'" data-step="'+j+'" '+(!canOpen(j)?'disabled':'')+'>'+(fieldsDone(j)?'✓ ':'')+esc(x[0])+'<small> · '+x[1]+' menit</small></button>'});$('nav').innerHTML=nav;document.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>go(Number(b.dataset.step)));
+$('head').innerHTML='<div class="headrow"><div><p class="fine">TAHAP '+(i+1)+' / 7</p><h2>'+esc(DATA.steps[i][0])+'</h2><p class="small">Estimasi tahap: '+DATA.steps[i][1]+' menit efektif</p></div><span class="pill">'+nDone()+'/'+nFields()+' isian</span></div><div class="bar"><span style="width:'+(100*nDone()/nFields()).toFixed(1)+'%"></span></div><p class="fine">Penilaian berdasarkan kualitas alasan dan bukti, bukan jumlah karakter. Indikator ini hanya memeriksa kelengkapan minimum.</p>';
+let html='';if(i===0){html+='<div class="notice"><b>Instruksi UAS.</b> Rentang pengumpulan 2×24 jam sesuai jadwal yang ditentukan dosen dalam eLOK. Estimasi waktu kerja efektif 240 menit, dapat dicicil. Batas waktu resmi tidak ditegakkan oleh aplikasi browser ini. Jawaban individual; rujuk ID dokumen ketika membuat klaim, bedakan fakta, inferensi, dan informasi yang belum diketahui.</div><div class="grid three">';DATA.steps.slice(1).forEach(s=>html+='<div class="box"><b>'+esc(s[0])+'</b><div class="metric">'+s[1]+' m</div></div>');html+='</div><div class="hint">Keputusan operasi, keandalan pelaporan, dan efektivitas ICoFR dapat berbeda. Nilai jurnal, exception, atau indikator anomali bukan otomatis kerugian atau fraud.</div>'}
+const docs=DATA.docs.filter(d=>d.stage===i);if(docs.length){html+='<h3>Evidence Room</h3><p class="small">Dokumen kasus memuat fakta sekaligus keterbatasan. Anda wajib membangun argumen sendiri; tidak ada nilai persuasivitas atau solusi yang diberikan otomatis.</p>';docs.forEach(d=>{html+='<details class="doc"><summary>'+esc(d.id)+' — '+esc(d.title)+(S.read[d.id]?' ✓':'')+'</summary><div class="body"><p><b>Pemilik:</b> '+esc(d.owner)+' · <b>Periode:</b> '+esc(d.period)+'</p><p><b>Sumber:</b> '+esc(d.source)+'</p><div class="fact">'+esc(d.facts)+'</div><p class="small"><b>Batas interpretasi:</b> '+esc(d.limit)+'</p><button class="outline" data-read="'+esc(d.id)+'">Tandai sudah ditelaah</button></div></details>'})}
+if(i===1)html+='<div class="calc"><h3>Scratchpad kuantitatif</h3><p class="small">Kalkulasi membantu, tetapi tidak otomatis membuktikan penyebab selisih.</p><button id="calcprod" class="outline">Hitung material dan WIP</button><div id="outprod"></div></div>';
+if(i===2)html+='<div class="calc"><h3>Scratchpad rekonsiliasi payroll</h3><button id="calcpay" class="outline">Hitung selisih perlapisan</button><div id="outpay"></div></div>';
+if(i===6)html+='<div class="notice">FX-01 baru tersedia pada tahap akhir. Pertahankan jejak penalaran awal dan jelaskan dampak bukti baru terhadap keputusan.</div>';
+html+='<h3>Working papers & keputusan profesional</h3>';DATA.fields[i].forEach((f,j)=>{html+='<div class="answer"><label for="a_'+esc(f[0])+'">'+(j+1)+'. '+esc(f[1])+'</label>';if(f[2]==='choice'){html+='<select id="a_'+esc(f[0])+'" data-ans="'+esc(f[0])+'" '+(S.locked?'disabled':'')+'><option value="">Pilih berdasarkan bukti</option>';f[3].forEach(opt=>html+='<option value="'+esc(opt)+'" '+(value(f[0])===opt?'selected':'')+'>'+esc(opt)+'</option>');html+='</select>'}else if(f[2]==='short')html+='<input type="text" data-ans="'+esc(f[0])+'" id="a_'+esc(f[0])+'" value="'+esc(value(f[0]))+'" '+(S.locked?'disabled':'')+'>';else html+='<textarea data-ans="'+esc(f[0])+'" id="a_'+esc(f[0])+'" placeholder="Gunakan ID bukti, alasan, pengujian alternatif, dan batas kesimpulan..." '+(S.locked?'disabled':'')+'>'+esc(value(f[0]))+'</textarea><div class="fine">Minimum isian teknis 40 karakter. Kualitas dinilai berdasarkan rubrik.</div>';html+='</div>'});
+if(i===6){html+='<div class="box"><h3>Ekspor dan pengumpulan</h3><p>Simpan laporan HTML (dapat dibuka di browser dan dicetak ke PDF), serta backup JSON. Unggah berkas sesuai instruksi eLOK.</p><div class="actions"><button id="report">Unduh laporan lengkap HTML</button><button id="print" class="outline">Cetak halaman</button><button id="lock" class="outline" '+(S.locked?'disabled':'')+'>Kunci lokal</button></div><p class="fine">Kunci lokal bukan submit resmi dan tidak memiliki pengamanan server.</p></div>'}
+$('body').innerHTML=html;document.querySelectorAll('[data-ans]').forEach(el=>el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{if(S.locked)return;S.answers[el.dataset.ans]=el.value;save();updateNav()}));document.querySelectorAll('[data-read]').forEach(b=>b.onclick=()=>{S.read[b.dataset.read]=true;save();render()});
+if($('calcprod'))$('calcprod').onclick=()=>{$('outprod').textContent='Material: 10.250 − 9.800 = 450 kg; pada harga standar Rp120.000/kg setara Rp54.000.000. WIP: Rp14,82 − Rp13,58 = Rp1,24 miliar. Jangan jumlahkan keduanya sebagai salah saji tanpa uji overlap.'};
+if($('calcpay'))$('calcpay').onclick=()=>{$('outpay').textContent='Payment file − register = Rp780 juta. GL − register = Rp40 juta. Selisih belum otomatis fraud; uji akun, populasi, settlement, dan cut-off.'};
+if($('report'))$('report').onclick=exportReport;if($('print'))$('print').onclick=()=>window.print();if($('lock'))$('lock').onclick=()=>{if(!DATA.steps.every((_,j)=>fieldsDone(j))){message('Lengkapi semua tahap sebelum mengunci.',true);return}if(confirm('Kunci jawaban lokal? Pengumpulan tetap dilakukan melalui eLOK.')){S.locked=true;S.lockedAt=new Date().toISOString();save();render()}};
+$('prev').disabled=i===0;$('next').disabled=i===6||S.locked;$('prev').onclick=()=>go(i-1);$('next').onclick=()=>{S.completed[i]=fieldsDone(i);save();go(i+1)};}
+function updateNav(){const i=S.active;document.querySelector('.bar span').style.width=(100*nDone()/nFields()).toFixed(1)+'%';}
+function download(name,data,type){const blob=new Blob([data],{type:type||'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1800)}
+function exportBackup(){save();download('SIPI_UAS_backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({format:'SIPI_UAS_2026',state:S},null,2))}
+function restore(file){file.text().then(s=>{const x=JSON.parse(s);if(x.format!=='SIPI_UAS_2026'||x.state.schema!==1||!x.state.answers)throw Error('Format tidak cocok');if(!confirm('Timpa jawaban lokal dengan backup ini?'))return;S=x.state;save();render();message('Backup telah dipulihkan.')}).catch(e=>message('Impor gagal: '+e.message,true))}
+function exportReport(){save();let o='<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Laporan UAS SIPI</title><style>body{font:14px/1.5 Arial;max-width:920px;margin:30px auto;color:#1a2b3c}h2{margin-top:26px;border-bottom:1px solid #ddd}.answer{white-space:pre-wrap;border:1px solid #dae1e8;background:#f6f8fa;padding:12px;margin:8px 0}</style></head><body><h1>UAS SIPI — PT NusaNiaga</h1><p>Nama/NIM: '+esc(value('identity'))+' | Kelas: '+esc(value('class'))+' | Status: '+(S.locked?'Dikunci lokal':'Draf')+'</p>';DATA.steps.forEach((st,i)=>{o+='<h2>'+esc(st[0])+'</h2>';DATA.fields[i].forEach(f=>o+='<h3>'+esc(f[1])+'</h3><div class="answer">'+esc(value(f[0]))+'</div>')});o+='<p>Dokumen diekspor dari browser; waktu submit resmi melalui eLOK.</p></body></html>';download('SIPI_UAS_Laporan_'+String(value('identity')||'mahasiswa').replace(/[^a-z0-9_-]/gi,'_').slice(0,38)+'.html',o,'text/html;charset=utf-8')}
+$('backup').onclick=exportBackup;$('import').onclick=()=>$('pick').click();$('pick').onchange=e=>{if(e.target.files[0])restore(e.target.files[0]);e.target.value=''};
+go(S.active);
+</script></body></html>
