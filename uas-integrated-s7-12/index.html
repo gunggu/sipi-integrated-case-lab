@@ -42,7 +42,7 @@ const DATA={
       "owner": "Production Control",
       "period": "30 Sep 2026",
       "source": "ERP issue register, stock movement, MES",
-      "facts": "BOM sensor versi 5 diubah tanpa persetujuan akhir. ERP menunjukkan material terpakai 9.800 kg, catatan gudang dan timbang fisik 10.250 kg. Harga standar Rp120.000/kg. MES kehilangan sinkronisasi selama empat jam; catatan manual operator tersedia hanya untuk dua jam.",
+      "facts": "BOM sensor versi 5 diubah tanpa persetujuan akhir. ERP menunjukkan material terpakai 9.800 kg, catatan gudang dan timbang fisik 10.250 kg. Harga standar Rp120.000/kg. MES kehilangan sinkronisasi selama empat jam; catatan manual operator tersedia hanya untuk dua jam. Supervisor produksi menyatakan bagian dari selisih merupakan material untuk rework. Ringkasan rework belum ditautkan ke nomor lot dan tidak ada bon gudang koreksi.",
       "limit": "Ekstrak ERP dan catatan gudang; bukti persetujuan perubahan tidak disertakan."
     },
     {
@@ -52,7 +52,7 @@ const DATA={
       "owner": "Cost Accounting",
       "period": "30 Sep 2026",
       "source": "WIP subledger, GL, margin snapshot",
-      "facts": "WIP subledger Rp14,82 miliar; GL Rp13,58 miliar. Selisih Rp1,24 miliar belum direkonsiliasi. Standard overhead rate diperbarui tanpa analisis dampak yang disetujui. Laporan margin menggunakan snapshot sebelum penyesuaian.",
+      "facts": "WIP subledger Rp14,82 miliar; GL Rp13,58 miliar. Selisih Rp1,24 miliar belum direkonsiliasi. Standard overhead rate diperbarui tanpa analisis dampak yang disetujui. Laporan margin menggunakan snapshot sebelum penyesuaian. Manajer biaya menyebut ada posting overhead tertunda dan mengirim estimasi Rp0,7 miliar. Daftar jurnal serta bukti posting terkait belum dilampirkan.",
       "limit": "Rekap subledger, GL dan margin; metadata penarikan data tidak dicantumkan."
     },
     {
@@ -62,7 +62,7 @@ const DATA={
       "owner": "HRIS/Payroll",
       "period": "Sep 2026",
       "source": "HR roster, register, overtime approval",
-      "facts": "Dua pegawai berstatus terminated sejak 15 September masih tercantum dalam payroll; pembayaran terkait Rp28 juta. Tiga lembur Rp24 juta baru disetujui setelah payroll run. Register final Rp4,78 miliar. Tabel pajak belum ditinjau sejak awal tahun.",
+      "facts": "Dua pegawai berstatus terminated sejak 15 September masih tercantum dalam payroll; pembayaran terkait Rp28 juta. Tiga lembur Rp24 juta baru disetujui setelah payroll run. Register final Rp4,78 miliar. Tabel pajak belum ditinjau sejak awal tahun. HR menyatakan salah satu pegawai menerima hak penyelesaian akhir kontrak. Memo perhitungan final pay belum tersedia dalam paket ini.",
       "limit": "Roster, register dan log persetujuan disusun oleh HRIS/Payroll."
     },
     {
@@ -72,7 +72,7 @@ const DATA={
       "owner": "Treasury",
       "period": "Sep 2026",
       "source": "Payment file audit trail, bank statement, GL",
-      "facts": "Payment file Rp5,56 miliar; payroll register Rp4,78 miliar; debit payroll GL Rp4,82 miliar. File diubah setelah persetujuan. Dua rekening penerima berubah tanpa verifikasi independen.",
+      "facts": "Payment file Rp5,56 miliar; payroll register Rp4,78 miliar; debit payroll GL Rp4,82 miliar. File diubah setelah persetujuan. Dua rekening penerima berubah tanpa verifikasi independen. Treasury menyebut berkas bank turut berisi pembayaran di luar gaji rutin. Daftar item tambahan belum dicocokkan dengan rekening dan approval per transaksi.",
       "limit": "Payment file dan buku besar berasal dari dua sistem; dokumen rekonsiliasi final belum tersedia."
     },
     {
@@ -82,7 +82,7 @@ const DATA={
       "owner": "Finance Close",
       "period": "30 Sep 2026",
       "source": "Source, interface, GL, ageing",
-      "facts": "Revenue source Rp84,10 miliar; GL revenue Rp82,00 miliar. Selisih interface Rp2,10 miliar belum diselesaikan. Suspense Rp860 juta berusia lebih dari 60 hari; 35% item belum memiliki owner.",
+      "facts": "Revenue source Rp84,10 miliar; GL revenue Rp82,00 miliar. Selisih interface Rp2,10 miliar belum diselesaikan. Suspense Rp860 juta berusia lebih dari 60 hari; 35% item belum memiliki owner. Finance menjelaskan sebagian transaksi berada pada batch akhir periode. Log antrean menyebut batch tersebut tetapi tidak memuat daftar nilai transaksi yang dapat ditelusuri ke GL.",
       "limit": "Ekstrak sumber dan GL serta ageing tersedia; status persetujuan akhir belum tercantum."
     },
     {
@@ -92,7 +92,7 @@ const DATA={
       "owner": "Corporate Accounting",
       "period": "30 Sep 2026",
       "source": "GL journal log, IC reconciliation",
-      "facts": "Jurnal manual Rp3,4 miliar diposting pukul 23:41 dengan deskripsi close alignment. Kalkulasi tidak tersedia dan pembuat/reviewer orang sama. Piutang intercompany A Rp5,20 miliar, utang B Rp4,95 miliar; eliminasi belum disetujui.",
+      "facts": "Jurnal manual Rp3,4 miliar diposting pukul 23:41 dengan deskripsi close alignment. Kalkulasi tidak tersedia dan pembuat/reviewer orang sama. Piutang intercompany A Rp5,20 miliar, utang B Rp4,95 miliar; eliminasi belum disetujui. Controller mengaku jurnal dibuat untuk menyelaraskan alokasi beban antardivisi atas instruksi CFO. Instruksi tertulis dan basis alokasinya belum disertakan.",
       "limit": "Log jurnal dan saldo antarpihak tersedia; dokumen kalkulasi jurnal dan eliminasi belum terlampir."
     },
     {
@@ -102,7 +102,7 @@ const DATA={
       "owner": "External Reporting",
       "period": "Draft Q3",
       "source": "XBRL validation, snapshot history",
-      "facts": "Validator XBRL menunjukkan context periode salah dan scale salah 1.000 kali pada satu tagged fact. Narasi AI memakai snapshot v18 (margin naik 4,2 poin) sedangkan approved v20 menunjukkan 3,7 poin. CFO belum menandatangani release.",
+      "facts": "Validator XBRL menunjukkan context periode salah dan scale salah 1.000 kali pada satu tagged fact. Narasi AI memakai snapshot v18 (margin naik 4,2 poin) sedangkan approved v20 menunjukkan 3,7 poin. CFO belum menandatangani release. Tim pelaporan telah menyiapkan XBRL revisi dan narasi AI versi baru, tetapi berkas validator serta hasil review independen untuk versi revisi belum tersedia.",
       "limit": "Validator dan ringkasan snapshot tersedia; berkas publikasi final belum terlampir."
     },
     {
@@ -112,7 +112,7 @@ const DATA={
       "owner": "Internal Audit",
       "period": "Jul–Sep 2026",
       "source": "RCM, walkthrough, sample test",
-      "facts": "Revenue management review threshold Rp3 miliar, sedangkan materialitas laporan Rp2,5 miliar. Pengujian 12 rekonsiliasi menemukan tiga tanpa jejak independent review. Review privileged access mengecualikan vendor/break-glass. Dua dari 25 jurnal memiliki preparer dan reviewer sama.",
+      "facts": "Revenue management review threshold Rp3 miliar, sedangkan materialitas laporan Rp2,5 miliar. Pengujian 12 rekonsiliasi menemukan tiga tanpa jejak independent review. Review privileged access mengecualikan vendor/break-glass. Dua dari 25 jurnal memiliki preparer dan reviewer sama. Beberapa reviewer menyatakan review dilakukan melalui rapat mingguan. Notulen yang diserahkan hanya mencatat agenda, tanpa daftar pengecualian yang diperiksa.",
       "limit": "Kertas kerja berisi ringkasan populasi dan sampel; dokumentasi rinci walkthrough tidak terlampir."
     },
     {
@@ -122,7 +122,7 @@ const DATA={
       "owner": "Risk Secretariat",
       "period": "30 Sep 2026",
       "source": "Issue register, minutes",
-      "facts": "Ada 17 isu berumur lebih dari 30 hari; enam terkait persetujuan/rekonsiliasi; tiga belum punya owner. Lima isu ditutup setelah SOP baru terbit tanpa bukti retest. Komite risiko belum mengevaluasi agregasi kelemahan jurnal dan akses.",
+      "facts": "Ada 17 isu berumur lebih dari 30 hari; enam terkait persetujuan/rekonsiliasi; tiga belum punya owner. Lima isu ditutup setelah SOP baru terbit tanpa bukti retest. Komite risiko belum mengevaluasi agregasi kelemahan jurnal dan akses. Manajemen menyatakan kelima SOP baru sudah dikomunikasikan dan dipakai dalam bulan berjalan. Register belum memuat pengujian transaksi setelah tanggal perubahan.",
       "limit": "Daftar status disusun sekretariat risiko; notulen mencakup satu rapat terakhir."
     },
     {
@@ -132,7 +132,7 @@ const DATA={
       "owner": "ERP PMO",
       "period": "Sep 2026",
       "source": "Vendor analytics, role matrix, change log",
-      "facts": "Ada 34 kandidat duplikat vendor; sembilan menggunakan rekening bank sama. Buyer dapat membuat vendor dan menyetujui PO sampai Rp900 juta. Perubahan harga memiliki approval namun bukti UAT/rollback tidak ada. Dashboard monitoring transaksi hanya menghitung order sukses, bukan rejected orders.",
+      "facts": "Ada 34 kandidat duplikat vendor; sembilan menggunakan rekening bank sama. Buyer dapat membuat vendor dan menyetujui PO sampai Rp900 juta. Perubahan harga memiliki approval namun bukti UAT/rollback tidak ada. Dashboard monitoring transaksi hanya menghitung order sukses, bukan rejected orders. Procurement menyatakan sejumlah vendor berbagi rekening karena dikelola satu grup usaha; tim master data belum menerima konfirmasi legal entity dan beneficial owner.",
       "limit": "Ringkasan analytics dan matriks akses; investigasi item-level tidak disertakan."
     },
     {
@@ -142,7 +142,7 @@ const DATA={
       "owner": "Steering Committee",
       "period": "Sep 2026",
       "source": "Readiness dependencies",
-      "facts": "Perubahan price-list memengaruhi standard unit cost dan margin produksi. Rejected sales orders memengaruhi revenue interface, GL dan pelaporan. Manajemen mengusulkan go-live ERP dan publikasi laporan dalam satu keputusan bersama.",
+      "facts": "Perubahan price-list memengaruhi standard unit cost dan margin produksi. Rejected sales orders memengaruhi revenue interface, GL dan pelaporan. Manajemen mengusulkan go-live ERP dan publikasi laporan dalam satu keputusan bersama. Direktur operasi mengusulkan pembatasan transaksi berisiko tinggi selama periode stabilisasi; proposal tidak menjelaskan batas transaksi atau mekanisme pengecualian.",
       "limit": "Peta dependensi disusun steering committee; proposal operasional dan pelaporan dijadwalkan bersama."
     },
     {
@@ -152,7 +152,7 @@ const DATA={
       "owner": "Independent Follow-up",
       "period": "Hari berikutnya",
       "source": "Follow-up memo, CFO email",
-      "facts": "Jurnal Rp3,4 miliar telah dibalik setelah auditor mempertanyakannya, tetapi substansi transaksi asli belum diklarifikasi. Dua rekening payroll terbukti milik pegawai aktif, tetapi persetujuan perubahan setelah approval tetap belum dapat ditunjukkan. CFO meminta filing XBRL dan narasi AI segera diterbitkan karena target investor.",
+      "facts": "Jurnal Rp3,4 miliar telah dibalik setelah auditor mempertanyakannya, tetapi substansi transaksi asli belum diklarifikasi. Dua rekening payroll terbukti milik pegawai aktif, tetapi persetujuan perubahan setelah approval tetap belum dapat ditunjukkan. CFO meminta filing XBRL dan narasi AI segera diterbitkan karena target investor. Treasury mengirim tangkapan layar nama penerima yang cocok; catatan persetujuan pada versi payment file setelah perubahan masih berstatus pending.",
       "limit": "Memo follow-up mencakup tiket, konfirmasi data, dan permintaan manajemen; dokumen pendukung lengkap tidak disertakan."
     }
   ],
