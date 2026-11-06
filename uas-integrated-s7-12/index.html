@@ -465,15 +465,66 @@ if(i===1)html+='<div class="calc"><h3>Lembar perhitungan</h3><p class="small">Ca
 if(i===2)html+='<div class="calc"><h3>Lembar perhitungan</h3><p class="small">Cantumkan langkah perhitungan di dalam working paper.</p></div>';
 if(i===6)html+='<div class="notice">Memo FX-01 diterbitkan setelah analisis tahap sebelumnya. Gunakan keseluruhan informasi yang tersedia.</div>';
 html+='<h3>Working papers & keputusan profesional</h3>';DATA.fields[i].forEach((f,j)=>{html+='<div class="answer"><label for="a_'+esc(f[0])+'">'+(j+1)+'. '+esc(f[1])+'</label>';if(f[2]==='choice'){html+='<select id="a_'+esc(f[0])+'" data-ans="'+esc(f[0])+'" '+(S.locked?'disabled':'')+'><option value="">Pilih berdasarkan bukti</option>';f[3].forEach(opt=>html+='<option value="'+esc(opt)+'" '+(value(f[0])===opt?'selected':'')+'>'+esc(opt)+'</option>');html+='</select>'}else if(f[2]==='short')html+='<input type="text" data-ans="'+esc(f[0])+'" id="a_'+esc(f[0])+'" value="'+esc(value(f[0]))+'" '+(S.locked?'disabled':'')+'>';else html+='<textarea data-ans="'+esc(f[0])+'" id="a_'+esc(f[0])+'" placeholder="Tuliskan jawaban dan referensi dokumen yang digunakan..." '+(S.locked?'disabled':'')+'>'+esc(value(f[0]))+'</textarea><div class="fine">Tanggapan analitis: sedikitnya 12 kata dan 80 karakter; memo 250–350 kata.</div>';html+='</div>'});
-if(i===6){html+='<div class="box"><h3>Rekam keputusan awal</h3>'+(S.initialSnapshot?Object.entries(S.initialSnapshot.answers).map(([k,v])=>'<p><b>'+esc(DATA.fields.flat().find(x=>x[0]===k)?.[1]||k)+':</b> '+esc(v)+'</p>').join(''):'')+'</div><div class="box"><h3>Ekspor dan pengumpulan</h3><p>Simpan laporan HTML (dapat dibuka di browser dan dicetak ke PDF), serta backup JSON. Unggah berkas sesuai instruksi eLOK.</p><div class="actions"><button id="report">Unduh laporan lengkap HTML</button><button id="print" class="outline">Cetak tahap aktif</button><button id="lock" class="outline" '+(S.locked?'disabled':'')+'>Kunci lokal</button></div><p class="fine">Status terkunci hanya berlaku pada salinan lokal; tenggat dan pengumpulan resmi dikelola melalui eLOK.</p></div>'}
+if(i===6){html+='<div class="box"><h3>Rekam keputusan awal</h3>'+(S.initialSnapshot?Object.entries(S.initialSnapshot.answers).map(([k,v])=>'<p><b>'+esc(DATA.fields.flat().find(x=>x[0]===k)?.[1]||k)+':</b> '+esc(v)+'</p>').join(''):'')+'</div><div class="box"><h3>Ekspor dan pengumpulan</h3><p>Unduh laporan lengkap dan paket final JSON. Backup JSON digunakan untuk pemulihan draf. Unggah berkas sesuai instruksi eLOK.</p><div class="actions"><button id="report">Unduh laporan lengkap HTML</button><button id="submission" class="outline">Ekspor paket final JSON</button><button id="print" class="outline">Cetak laporan lengkap</button><button id="lock" class="outline" '+(S.locked?'disabled':'')+'>Kunci lokal</button></div><p class="fine">Status terkunci hanya berlaku pada salinan lokal; tenggat dan pengumpulan resmi dikelola melalui eLOK.</p></div>'}
 $('body').innerHTML=html;document.querySelectorAll('[data-ans]').forEach(el=>el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{if(S.locked)return;S.answers[el.dataset.ans]=el.value;save();updateNav()}));document.querySelectorAll('[data-read]').forEach(b=>b.onclick=()=>{S.read[b.dataset.read]=true;save();render()});document.querySelectorAll('[data-investigation]').forEach(b=>b.onchange=()=>{const q=S.investigations[i]||{};if(b.checked&&Object.keys(q).length>=2){message('Pilih maksimal dua prosedur.',true);b.checked=false;return}if(b.checked)q[b.dataset.investigation]=true;else delete q[b.dataset.investigation];S.investigations[i]=q;save();render()});
-if($('report'))$('report').onclick=exportReport;if($('print'))$('print').onclick=()=>window.print();if($('lock'))$('lock').onclick=()=>{if(!DATA.steps.every((_,j)=>fieldsDone(j))){message('Lengkapi semua tahap sebelum mengunci.',true);return}if(confirm('Kunci jawaban lokal? Pengumpulan tetap dilakukan melalui eLOK.')){S.locked=true;S.lockedAt=new Date().toISOString();save();render()}};
+if($('report'))$('report').onclick=exportReport;if($('submission'))$('submission').onclick=exportSubmission;if($('print'))$('print').onclick=printReport;if($('lock'))$('lock').onclick=()=>{if(!DATA.steps.every((_,j)=>fieldsDone(j))){message('Lengkapi semua tahap sebelum mengunci.',true);return}if(confirm('Kunci jawaban lokal? Pengumpulan tetap dilakukan melalui eLOK.')){S.locked=true;S.lockedAt=new Date().toISOString();save();render()}};
 $('prev').disabled=i===0;$('next').disabled=i===6||S.locked;$('prev').onclick=()=>go(i-1);$('next').onclick=()=>{S.completed[i]=fieldsDone(i);save();go(i+1)};}
 function updateNav(){const i=S.active;document.querySelector('.bar span').style.width=(100*nDone()/nFields()).toFixed(1)+'%';}
 function download(name,data,type){const blob=new Blob([data],{type:type||'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1800)}
-function exportBackup(){save();download('SIPI_UAS_backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({format:'SIPI_UAS_2026',state:S},null,2))}
-function restore(file){file.text().then(s=>{const x=JSON.parse(s);if(x.format!=='SIPI_UAS_2026'||x.state.schema!==1||!x.state.answers)throw Error('Format tidak cocok');if(!confirm('Timpa jawaban lokal dengan backup ini?'))return;S=x.state;save();render();message('Backup telah dipulihkan.')}).catch(e=>message('Impor gagal: '+e.message,true))}
-function exportReport(){save();let o='<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Laporan UAS SIPI</title><style>body{font:14px/1.5 Arial;max-width:920px;margin:30px auto;color:#1a2b3c}h2{margin-top:26px;border-bottom:1px solid #ddd}.answer{white-space:pre-wrap;border:1px solid #dae1e8;background:#f6f8fa;padding:12px;margin:8px 0}</style></head><body><h1>UAS SIPI — PT NusaNiaga</h1><p>Nama/NIM: '+esc(value('identity'))+' | Kelas: '+esc(value('class'))+' | Status: '+(S.locked?'Dikunci lokal':'Draf')+'</p>';DATA.steps.forEach((st,i)=>{o+='<h2>'+esc(st[0])+'</h2>';DATA.fields[i].forEach(f=>o+='<h3>'+esc(f[1])+'</h3><div class="answer">'+esc(value(f[0]))+'</div>')});o+='<p>Dokumen diekspor dari browser; waktu submit resmi melalui eLOK.</p></body></html>';download('SIPI_UAS_Laporan_'+String(value('identity')||'mahasiswa').replace(/[^a-z0-9_-]/gi,'_').slice(0,38)+'.html',o,'text/html;charset=utf-8')}
+
+function answerInventory(){return Object.fromEntries(DATA.fields.flat().map(f=>[f[0],value(f[0])]))}
+function exportBackup(){save();download('SIPI_UAS_Backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({format:'SIPI_UAS_2026',caseVersion:CASE_VERSION,exportedAt:new Date().toISOString(),state:S},null,2))}
+function validateBackup(x){
+ if(!x||x.format!=='SIPI_UAS_2026'||!x.state||x.state.schema!==1||!x.state.answers||typeof x.state.answers!=='object'||Array.isArray(x.state.answers))throw Error('Format backup tidak sesuai.');
+ const allowed=new Map(DATA.fields.flat().map(f=>[f[0],f]));
+ for(const [key,v] of Object.entries(x.state.answers)){
+  const field=allowed.get(key);if(!field||typeof v!=='string'||v.length>16000)throw Error('Jawaban pada backup tidak valid: '+key);
+  if(field[2]==='choice'&&v&&!field[3].includes(v))throw Error('Pilihan jawaban tidak dikenali: '+key);
+ }
+ const permitted=new Set(DATA.docs.map(d=>d.id));
+ if(x.state.read==null)x.state.read={};
+ if(typeof x.state.read!=='object'||Array.isArray(x.state.read))throw Error('Daftar berkas tidak valid.');
+ for(const [id,v] of Object.entries(x.state.read))if(!permitted.has(id)||v!==true)throw Error('Status berkas tidak valid.');
+ if(x.state.investigations==null)x.state.investigations={};
+ if(typeof x.state.investigations!=='object'||Array.isArray(x.state.investigations))throw Error('Status pemeriksaan tidak valid.');
+ for(const [st,chosen] of Object.entries(x.state.investigations)){
+  const p=PROCEDURES.find(z=>String(z.stage)===st);if(!p||!chosen||typeof chosen!=='object'||Array.isArray(chosen))throw Error('Pemeriksaan tidak dikenal.');
+  const ids=Object.keys(chosen);if(ids.length>2||ids.some(id=>!p.options.some(o=>o.id===id)||chosen[id]!==true))throw Error('Pilihan pemeriksaan pada backup tidak valid.');
+ }
+ if(!Number.isInteger(x.state.active)||x.state.active<0||x.state.active>=DATA.steps.length)throw Error('Tahap aplikasi tidak valid.');
+ return x.state;
+}
+function restore(file){
+ if(file.size>2000000){message('Berkas melebihi batas 2 MB.',true);return}
+ file.text().then(t=>{
+  const x=JSON.parse(t),candidate=validateBackup(x);
+  if(!confirm('Pulihkan backup ini? Seluruh jawaban lokal yang ada akan diganti.'))return;
+  const previous=S;S=candidate;S.investigations=S.investigations||{};S.completed=S.completed||{};
+  if(S.locked&&!DATA.steps.every((_,j)=>fieldsDone(j)))S.locked=false;
+  while(S.active>0&&!canOpen(S.active))S.active--;
+  try{save();render();message('Backup dipulihkan. Periksa kembali isi jawaban.')}catch(e){S=previous;render();throw e}
+ }).catch(e=>message('Impor gagal: '+e.message,true))
+}
+function buildReport(){
+ let o='<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Laporan UAS SIPI</title><style>body{font:14px/1.5 Arial,sans-serif;max-width:920px;margin:30px auto;color:#1a2b3c}h1{border-bottom:2px solid #263f57}h2{margin-top:28px;padding-top:6px;border-top:1px solid #ccd}h3{margin-bottom:5px}.ans{white-space:pre-wrap;border:1px solid #dae1e8;background:#f6f8fa;padding:10px;margin:5px 0 15px}p{line-height:1.5}.meta{background:#eef2f6;padding:12px} @media print{body{margin:12mm auto}h2{break-after:avoid}.ans{break-inside:avoid}}</style></head><body>';
+ o+='<h1>UAS SIPI — PT NusaNiaga</h1><div class="meta"><p><b>Nama/NIM:</b> '+esc(value('identity'))+' · <b>Kelas:</b> '+esc(value('class'))+'</p><p><b>Versi kasus:</b> '+esc(CASE_VERSION)+' · <b>Ekspor:</b> '+esc(new Date().toISOString())+'</p><p><b>Status:</b> '+(S.locked?'Dikunci pada perangkat ini':'Draf')+' · <b>Isian lengkap:</b> '+nDone()+'/'+nFields()+' · <b>Dokumen ditelaah:</b> '+DATA.docs.filter(d=>S.read[d.id]).length+'/'+DATA.docs.length+'</p><p>Tanda terima resmi dan waktu pengumpulan ditentukan oleh eLOK, bukan oleh berkas ini.</p></div>';
+ DATA.steps.forEach((st,i)=>{
+  o+='<h2>'+esc(st[0])+'</h2>';
+  const docs=DATA.docs.filter(d=>d.stage===i);if(docs.length)o+='<p><b>Dokumen yang ditandai ditelaah:</b> '+esc(docs.filter(d=>S.read[d.id]).map(d=>d.id).join(', ')||'Tidak ada')+'</p>';
+  const pro=PROCEDURES.find(p=>p.stage===i);if(pro){const chosen=S.investigations[i]||{};o+='<h3>Pemeriksaan lanjutan</h3>';pro.options.filter(p=>chosen[p.id]).forEach(z=>o+='<p><b>'+esc(z.label)+'</b>: '+esc(z.result)+'</p>')}
+  DATA.fields[i].forEach(f=>o+='<h3>'+esc(f[1])+'</h3><div class="ans">'+esc(value(f[0]))+'</div>');
+ });
+ if(S.initialSnapshot)o+='<h2>Rekam keputusan sebelum FX-01</h2>'+Object.entries(S.initialSnapshot.answers||{}).map(([k,v])=>'<p>'+esc(k)+': '+esc(v)+'</p>').join('');
+ o+='<p><small>Dokumen ini diekspor dari aplikasi mandiri. Validasi pengumpulan dilakukan melalui eLOK.</small></p></body></html>';return o;
+}
+function exportReport(){save();download('SIPI_UAS_Laporan_'+String(value('identity')||'mahasiswa').replace(/[^a-z0-9_-]/gi,'_').slice(0,38)+'.html',buildReport(),'text/html;charset=utf-8')}
+function printReport(){const w=window.open('','_blank');if(!w){message('Popup cetak diblokir. Unduh laporan HTML lalu cetak berkas tersebut.',true);return}w.document.open();w.document.write(buildReport());w.document.close();w.focus();w.print()}
+function exportSubmission(){
+ save();
+ if(!DATA.steps.every((_,j)=>fieldsDone(j))){message('Belum semua komponen lengkap. Selesaikan dan telaah tiap tahap sebelum mengekspor paket final.',true);return}
+ const pkg={format:'SIPI_UAS_SUBMISSION_2026',caseVersion:CASE_VERSION,createdAt:S.created,exportedAt:new Date().toISOString(),identity:value('identity'),className:value('class'),answers:answerInventory(),documentsRead:DATA.docs.filter(x=>S.read[x.id]).map(x=>x.id),investigations:S.investigations,initialDecisions:S.initialSnapshot,localLock:S.locked};
+ download('SIPI_UAS_Submission_'+String(value('identity')).replace(/[^a-z0-9_-]/gi,'_').slice(0,38)+'.json',JSON.stringify(pkg,null,2));
+}
 $('backup').onclick=exportBackup;$('import').onclick=()=>$('pick').click();$('pick').onchange=e=>{if(e.target.files[0])restore(e.target.files[0]);e.target.value=''};
 go(S.active);
 </script></body></html>
