@@ -17,18 +17,18 @@ A 30-minute small-group simulation of digital forensics, evidence handling, aler
 
 - The Instructor button uses client-side SHA-256 comparison only. It is an organizational divider, not secure authentication.
 - Import multiple JSON files. Each run has a random group ID (FFR-XXXXXXXX); overwriting a duplicate run requires confirmation. Different runs with identical group names remain distinct.
-- The instructor dashboard calculates team scores from imported responses, shows choice distribution, and exposes cited evidence, procedural responses, and written rationale.
-- A separate **Class Discussion** projector view deliberately hides individual scores and displays choice distributions, group positions, facilitation questions, and expandable lecturer notes to reveal only after students have defended their reasoning.
+- The instructor dashboard shows imported group responses, choice distributions, cited evidence, procedural responses, and written rationale. It contains no answer key or automated score.
+- A separate **Class Discussion** view displays choice distributions and group positions without answer keys or evaluations.
 - CSV export is available. Instructor import data remain on that browser in localStorage, not in the cloud.
 
 ## Assessment
 
-Automatic score **0–112**, computed in the instructor dashboard and not revealed to students: selected actions up to 60, relevance of cited evidence up to 28, and procedural choices up to 24. A score is a formative indicator only; written justification needs separate instructor review. Students can inspect and modify client code and local storage. No assessment-integrity claim is made.
+The app records group decisions and evidence citations without scoring or evaluating correctness. Answers are discussed and evaluated separately outside the application.
 
 ## Known static-site limitations
 
 - The countdown uses the local device clock and can be circumvented by changing browser storage or system time. Treat it as pacing only.
-- Full student scoring and the SHA-256 hash are in public code; this cannot be a secure examination.
+- The SHA-256 password verifier and case options are in public code; the page is not secure authentication or a high-integrity examination.
 - Reset starts a new local session, and session data are lost if browser data are cleared.
 - No cross-device real-time classroom progress.
 - Browser downloading, printing, and file selection require on-device validation on each target browser.
@@ -41,11 +41,11 @@ Automatic score **0–112**, computed in the instructor dashboard and not reveal
 3. Open/close every evidence artifact, inspect source and local/UTC time, ensure no clipped content on phone.
 4. For stage 2 select an acquisition procedure; stage 3 select a monitoring rule.
 5. Confirm a stage cannot be locked without a choice, 1–2 citations, a required procedure, and a 25+ character rationale.
-6. Refresh between stages to confirm autosave; verify the consequence and next stage.
+6. Refresh between stages to confirm autosave; verify saved-decision confirmation and next stage.
 7. Complete the exercise: verify that no stage reveals correctness, outcome, or score; inspect final locked answer summary and download version-2 JSON **without score or outcome fields**.
 8. In instructor mode import two runs with the same group name but different run IDs; both should appear.
 9. Import the same run ID twice and verify overwrite confirmation; reject malformed JSON.
-10. Verify score totals and reasons on instructor dashboard; export CSV; test projector mode without scores and lecturer note reveal.
+10. Verify group decisions and reasons on the instructor dashboard; export CSV and check the class discussion view.
 11. Verify reset clears read markers, and note the clock limitation.
 12. Ensure no documents or student private data are used in a public repository.
 
