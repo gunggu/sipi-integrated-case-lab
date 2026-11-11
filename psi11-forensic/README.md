@@ -10,19 +10,20 @@ A 30-minute small-group simulation of digital forensics, evidence handling, aler
 - Begin with a 2-minute briefing, complete all four decisions by minute 26, then allow 4 minutes for JSON export and debrief.
 - Stage 1: evidence preservation versus restoration; Stage 2: source reconciliation and chain of custody; Stage 3: risk-based alert triage and monitoring-rule calibration; Stage 4: appropriately limited audit conclusion.
 - Each stage has realistic expandable case artifacts with metadata, dates, log excerpts and provenance limitations. Students cite **one or two** evidence IDs, submit their selected action, and explain a tradeoff in at least 25 characters. Stages 2 and 3 contain an additional procedural decision.
-- The outcome text is shown **after** submission. Source limitation notes are factual and avoid explicitly declaring the best action.
-- After the case, students download a JSON result file; this must be submitted to eLOK or transferred to the lecturer manually. The website does **not** collect files centrally.
+- Submitting a decision only confirms that it was saved. No immediate outcome or correct/incorrect feedback is shown. Source limitation notes are factual and avoid explicitly declaring the best action.
+- At the end, students receive a **locked decision summary for whole-class discussion**, without scores or outcomes. They download a JSON result file containing choices, cited evidence, procedure and reasoning (no score or model feedback); it must be submitted to eLOK or transferred to the lecturer manually. The website does **not** collect files centrally.
 
 ## Instructor area
 
 - The Instructor button uses client-side SHA-256 comparison only. It is an organizational divider, not secure authentication.
 - Import multiple JSON files. Each run has a random group ID (FFR-XXXXXXXX); overwriting a duplicate run requires confirmation. Different runs with identical group names remain distinct.
-- The dashboard shows team scores, choice distribution, and each team’s cited evidence, procedural responses, and written rationale.
+- The instructor dashboard calculates team scores from imported responses, shows choice distribution, and exposes cited evidence, procedural responses, and written rationale.
+- A separate **Class Discussion** projector view deliberately hides individual scores and displays choice distributions, group positions, facilitation questions, and expandable lecturer notes to reveal only after students have defended their reasoning.
 - CSV export is available. Instructor import data remain on that browser in localStorage, not in the cloud.
 
 ## Assessment
 
-Automatic score **0–112**: selected actions up to 60, relevance of cited evidence up to 28, and procedural choices up to 24. A score is a formative indicator only; written justification needs separate instructor review. Students can inspect and modify client code and local storage. No assessment-integrity claim is made.
+Automatic score **0–112**, computed in the instructor dashboard and not revealed to students: selected actions up to 60, relevance of cited evidence up to 28, and procedural choices up to 24. A score is a formative indicator only; written justification needs separate instructor review. Students can inspect and modify client code and local storage. No assessment-integrity claim is made.
 
 ## Known static-site limitations
 
@@ -41,10 +42,10 @@ Automatic score **0–112**: selected actions up to 60, relevance of cited evide
 4. For stage 2 select an acquisition procedure; stage 3 select a monitoring rule.
 5. Confirm a stage cannot be locked without a choice, 1–2 citations, a required procedure, and a 25+ character rationale.
 6. Refresh between stages to confirm autosave; verify the consequence and next stage.
-7. Complete the exercise and download valid version-2 JSON.
+7. Complete the exercise: verify that no stage reveals correctness, outcome, or score; inspect final locked answer summary and download version-2 JSON **without score or outcome fields**.
 8. In instructor mode import two runs with the same group name but different run IDs; both should appear.
 9. Import the same run ID twice and verify overwrite confirmation; reject malformed JSON.
-10. Verify score totals and reasons on dashboard; export CSV.
+10. Verify score totals and reasons on instructor dashboard; export CSV; test projector mode without scores and lecturer note reveal.
 11. Verify reset clears read markers, and note the clock limitation.
 12. Ensure no documents or student private data are used in a public repository.
 
