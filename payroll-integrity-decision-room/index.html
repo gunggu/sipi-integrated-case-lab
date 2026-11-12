@@ -64,10 +64,10 @@ function refreshStatus(){
  const progress=$('head')?.querySelector('.progress span');if(progress)progress.style.width=(complete/6*100)+'%';
  const tag=$('head')?.querySelector('.tag');if(tag)tag.textContent=complete+'/6 selesai · '+PHASES[S.phase][1]+' menit';
  document.querySelectorAll('[data-go]').forEach(b=>{const i=Number(b.dataset.go);b.disabled=!can(i);b.textContent=(isReady(i)?'✓ ':'')+PHASES[i][0]+' ('+PHASES[i][1]+' m)'});
- const btn=$('next');if(btn){btn.disabled=S.phase===5||S.locked;btn.title=S.phase===5?'Tahap akhir':isReady(S.phase)?'Tahap berikutnya':'Lengkapi isian tahap ini'}
+ const btn=$('next');if(btn){btn.disabled=S.phase===5||S.locked;btn.title=S.phase===5?'Tahap akhir':isReady(S.phase)?'Tahap berikutnya':'Lengkapi isian tahap ini'}if(isReady(S.phase)&&$('msg')?.textContent?.includes('belum lengkap'))$('msg').innerHTML=''
 }
 
-function go(i){if(i<0||i>=PHASES.length)return;if(!can(i)){const j=Array.from({length:i},(_,k)=>k).find(k=>!isReady(k));alertBox('Tahap '+(j+1)+' belum lengkap: '+missing(j).join('; '),true);return}S.phase=i;save();render();if(window.scrollTo)window.scrollTo(0,0)}
+function go(i){if(i<0||i>=PHASES.length)return;if(!can(i)){const j=Array.from({length:i},(_,k)=>k).find(k=>!isReady(k));alertBox('Tahap '+(j+1)+' belum lengkap: '+missing(j).join('; '),true);return}S.phase=i;save();render();$('msg').innerHTML='';if(window.scrollTo)window.scrollTo(0,0)}
 function table(d){return '<div class="ledger"><table><thead><tr>'+d.heads.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+d.rows.map(row=>'<tr>'+row.map(t=>'<td>'+esc(t)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>'}
 function flow(){return '<div class="flow">'+[['MASTER','Hire / terminate'],['TIME','Roster / overtime'],['CALCULATE','Gross / deductions'],['PAY','Register / staged file'],['POST','GL / clearing'],['REMIT','Liability / due date']].map(n=>'<div class="node"><b>'+n[0]+'</b><small>'+n[1]+'</small></div>').join('<span class="arrow" aria-hidden="true">›</span>')+'</div>'}
 function register(){return '<div class="box"><div class="row"><h3>Register pengecualian</h3><span class="tag">'+S.probes.length+'/3 pemeriksaan</span></div><div class="ledger"><table><thead><tr><th>Area</th><th>Status pemeriksaan</th></tr></thead><tbody>'+PROBES.map(p=>'<tr><td>'+esc(p.area)+'</td><td>'+esc(S.probes.includes(p.id)?p.finding:'Belum diperiksa tim')+'</td></tr>').join('')+'</tbody></table></div></div>'}
