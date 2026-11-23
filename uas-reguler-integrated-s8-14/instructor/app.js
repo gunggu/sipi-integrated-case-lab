@@ -109,7 +109,7 @@ function validHTML(text){
  const docMatches=[...doc.querySelectorAll('h2')].map(h=>h.nextElementSibling?.textContent||'').join(' ');
  const docs=[...new Set((docMatches.match(/\b(?:SC|PY|CL|IC|IT|DR)-\d{2}\b/g)||[]))];
  validateDocumentIDs(docs);
- const investigations=INVESTIGATIONS.map(p=>({step:p.step,chosen:[],results:[]}));
+ const investigations=INVESTIGATIONS.map(p=>({step:p.step,chosen:[]}));
  for(const h of doc.querySelectorAll('h3'))if(h.textContent.trim()==='Pemeriksaan lanjutan'){
   let n=h.nextElementSibling;while(n&&n.tagName!=='H2'&&n.tagName!=='H3'){
    const t=n.textContent||'',id=t.match(/\b(PYA|PYB|PYC|CLA|CLB|CLC|ICA|ICB|ICC|ITA|ITB|ITC|DRA|DRB|DRC)\b/)?.[1];
