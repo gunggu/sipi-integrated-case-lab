@@ -47,3 +47,12 @@ Level setara dengan kelas profesional pada integrasi proses dan mutu bukti, teta
 - Pilihan dua investigasi per tahap sekarang harus dikonfirmasi melalui tombol penetapan; hasil baru terlihat setelah keputusan dikunci.
 - Halaman instruktur ada di subfolder `instructor/` dengan kunci dan rubrik terenkripsi, impor JSON/HTML, dan penilaian manual 100 poin.
 - Pada berkas JSON final, setiap investigasi juga menyimpan status `committed` untuk membantu pemeriksaan; status ini tidak menjadi bukti anti-manipulasi.
+
+## Pembaruan ruang kerja dan evidensi simulasi (23 November 2026)
+- Antarmuka arsip dokumen disajikan sebagai *case workspace*, dengan metadata dokumen, nama file, nomor referensi, pemilik, status, tabel detail, dan riwayat sistem yang disimulasikan.
+- Sebanyak 15 dokumen pada `data.js` dilengkapi artefak terstruktur dalam `evidence.js`. Data dan riwayat tambahan bersifat fiktif, bukan arsip sebenarnya; tidak dimaksudkan sebagai jawaban atau penilaian otomatis.
+- Mahasiswa dapat menelusuri arsip melalui pencarian lokal, melihat setiap dokumen, dan menandai status penelaahan tanpa otomatis menutup dokumen.
+- Investigasi tetap dibatasi pada dua prosedur yang harus ditetapkan; berkas hasil baru tersedia setelah penetapan. Pemilihan awal tidak lagi mereset dokumen yang dibuka.
+- Format jawaban, CASE_VERSION, localStorage, cadangan, ekspor final JSON/HTML, dan penilaian instruktur dipertahankan untuk kompatibilitas dengan pekerjaan mahasiswa yang telah ada.
+- Laporan HTML/JSON hanya mencatat artefak investigasi yang dipilih. Seluruh artefak tambahan merupakan referensi tampilan lokal dan tidak memerlukan backend.
+- Pemeriksaan statis telah memvalidasi sintaks JavaScript dan keberadaan seluruh 15 artefak. Pengujian end-to-end dalam browser, tampilan mobile, dan integrasi dengan eLOK perlu dilakukan sebelum ujian resmi.
