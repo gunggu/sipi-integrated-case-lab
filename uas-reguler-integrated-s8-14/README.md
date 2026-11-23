@@ -56,3 +56,32 @@ Level setara dengan kelas profesional pada integrasi proses dan mutu bukti, teta
 - Format jawaban, CASE_VERSION, localStorage, cadangan, ekspor final JSON/HTML, dan penilaian instruktur dipertahankan untuk kompatibilitas dengan pekerjaan mahasiswa yang telah ada.
 - Laporan HTML/JSON hanya mencatat artefak investigasi yang dipilih. Seluruh artefak tambahan merupakan referensi tampilan lokal dan tidak memerlukan backend.
 - Pemeriksaan statis telah memvalidasi sintaks JavaScript dan keberadaan seluruh 15 artefak. Pengujian end-to-end dalam browser, tampilan mobile, dan integrasi dengan eLOK perlu dilakukan sebelum ujian resmi.
+
+## Hardening dan audit ulang operasional — 23 November 2026
+
+### Pengumpulan mahasiswa
+- JSON final hanya dapat diekspor setelah **Finalisasi lokal** dan semua tahap lengkap. Backup progres tetap tersedia sebelum finalisasi.
+- Validasi pemulihan backup memeriksa struktur, kode investigasi dan bahwa semua investigasi pada state terkunci sudah ditetapkan.
+- Peringatan kegagalan `localStorage` diperjelas; mahasiswa diminta menyimpan backup di luar browser.
+- `CASE_VERSION` tetap `SIPI-UAS-REG-S8-14-v1`, sehingga struktur penyerahan dan pekerjaan lama tetap dikenali.
+
+### Validasi instruktur
+- JSON wajib berstatus final, memiliki identitas yang konsisten, 23 field lengkap, 15 dokumen ditelaah, lima tahap investigasi dengan dua pilihan valid dan status `committed`.
+- Hasil investigasi JSON diperiksa terhadap kode dan data kasus. Ini **bukan validasi kriptografis**; JSON dapat diedit dan semua data kasus publik.
+- HTML diparsing sebagai dokumen inert dan diwajibkan konsisten secara struktural: identitas, status final, field wajib, daftar dokumen serta pilihan investigasi.
+- Saat HTML dan JSON sama-sama diimpor, seluruh field, daftar dokumen, identitas, dan pilihan investigasi dibandingkan. Ekspor CSV mencatat kolom `verification` (COCOK / PERLU VERIFIKASI).
+- Nilai dosen disimpan otomatis dalam `localStorage` **hanya di browser instruktur** dan dipulihkan setelah sandi instruktur dibuka lagi. Nilai tidak dikirim ke server. Simpan pula backup penilaian JSON secara berkala dan jangan gunakan perangkat bersama karena cache nilai tidak terenkripsi.
+- Form penilaian tetap manual. Status cocok bukan bukti keaslian atau kepatuhan tenggat.
+
+### Hasil audit ulang (pengujian JavaScript dengan DOM/browser tiruan)
+- 25/25 skenario mahasiswa lulus: render tujuh tahap, 15 arsip, progres, finalisasi, backup, payload dan laporan.
+- 14/14 skenario instruktur lulus: satu JSON valid diterima; variasi kosong, belum final, identitas berbeda, dokumen kurang, investigasi tidak lengkap, hasil berbeda dan field ilegal ditolak; autosave/restore nilai serta peringatan beda HTML–JSON.
+- Pengujian silang menggunakan output mahasiswa yang dibentuk dari aplikasi: laporan HTML dan JSON diterima, 23 field terpetakan, 15 dokumen terbaca, lima tahap investigasi masing-masing dua pilihan, selisih nol.
+- Semua file JavaScript lolos pemeriksaan sintaks.
+- **Belum dilakukan**: browser end-to-end sungguhan, pengukuran performa pada perangkat, pemeriksaan visual mobile, uji eLOK, dan tes sandi/dekripsi dengan browser. Pengujian DOM tiruan tidak boleh disamakan dengan hasil browser sungguhan.
+
+### Risiko tersisa
+1. Karena seluruh aplikasi berjalan di GitHub Pages tanpa backend, semua bukti kasus dan hasil prosedur yang tidak dipilih tetap dapat ditemukan oleh mahasiswa yang mengakses sumber aplikasi. Menjamin kerahasiaan hasil investigasi memerlukan layanan server dengan otorisasi dan distribusi bukti per mahasiswa.
+2. Waktu ekspor, status final, identitas, dan isi JSON/HTML dapat diubah oleh pemilik perangkat. Rekaman waktu serta penyerahan resmi wajib diverifikasi di eLOK.
+3. Penyimpanan penilaian lokal tidak menyinkronkan data antarperangkat dan tidak mengenkripsi isi nilai. Gunakan perangkat tepercaya, ekspor backup berkala, dan hapus cache selesai penilaian.
+4. Perlu tes ujung-ke-ujung dan pilot sebelum UAS resmi.
