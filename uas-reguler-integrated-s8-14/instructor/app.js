@@ -127,16 +127,20 @@ async function importFiles(fileList){if(!KEYDATA)return;let ok=0,errors=[];for(c
 function renderList(){$('fileCount').textContent=submissions.length+' mahasiswa';$('students').innerHTML=submissions.length?submissions.map(s=>'<button data-id="'+escapeHTML(s.id)+'" class="'+(s.id===selected?'selected':'')+'">'+escapeHTML(s.identity)+'<br><small>'+(s.json?'JSON ':'')+(s.html?'HTML':'')+'</small></button>').join(''):'<p class="small">Belum ada berkas.</p>';$('students').querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{selected=b.dataset.id;renderList();renderReview()})}
 function current(){return submissions.find(x=>x.id===selected)||null}
 
-function compareFiles(s){
- if(!s.json||!s.html)return '<div class="flag">Pasangan '+(s.json?'HTML':'JSON final')+' belum diimpor. Penilaian sebaiknya dilakukan setelah kedua berkas tersedia.</div>';
+function pairDifferences(s){
+ if(!s.json||!s.html)return ['Pasangan JSON/HTML belum lengkap'];
  const diff=FIELDS.filter(f=>String(s.json.answers[f.id]||'').trim()!==String(s.html.answers[f.id]||'').trim()).map(f=>f.id);
- const jd=[...s.json.docs].sort().join('|'),hd=[...s.html.docs].sort().join('|');
- if(jd!==hd)diff.push('documentsRead');
+ if([...s.json.docs].sort().join('|')!==[...s.html.docs].sort().join('|'))diff.push('documentsRead');
  for(const p of INVESTIGATIONS){
   const j=s.json.investigations.find(x=>x.step===p.step),h=s.html.investigations.find(x=>x.step===p.step);
   if((j?.chosen||[]).slice().sort().join('|')!==(h?.chosen||[]).slice().sort().join('|'))diff.push('investigation_'+p.step);
  }
  if(s.json.identity!==s.html.identity)diff.push('identity');
+ return diff;
+}
+function compareFiles(s){
+ const diff=pairDifferences(s);
+ if(!s.json||!s.html)return '<div class="flag">Pasangan '+(s.json?'HTML':'JSON final')+' belum diimpor. Penilaian sebaiknya dilakukan setelah kedua berkas tersedia.</div>';
  return diff.length?'<div class="flag"><strong>PERBEDAAN HTML–JSON:</strong> '+escapeHTML(diff.join(', '))+'. Verifikasi dengan mahasiswa dan eLOK sebelum menilai.</div>':'<p class="match">Isi dan investigasi HTML–JSON konsisten. Keaslian tetap diverifikasi melalui eLOK.</p>';
 }
 
@@ -154,7 +158,7 @@ $('saveReview').onclick=()=>{setStatus(persistRatings()?'Penilaian tersimpan di 
 function renderKey(){if(!KEYDATA)return;$('keyBody').innerHTML='<p>'+escapeHTML(KEYDATA.judgement)+'</p><h3>Prinsip penilaian</h3><ul>'+KEYDATA.gradingPrinciples.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ul><h3>Referensi pertimbangan keputusan</h3>'+Object.entries(KEYDATA.preferredDecisions).map(([k,x])=>'<div class="info"><b>'+escapeHTML(k)+' · '+escapeHTML(x.strong.join(' / '))+'</b><p>'+escapeHTML(x.note)+'</p></div>').join('')}
 function csvSafe(x){let s=String(x??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
 function createDownload(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
-function exportScores(){if(!KEYDATA)return;persistRatings();const cols=['identity','hasJSON','hasHTML',...KEYDATA.categories.map(x=>x.id),'total','notes'];const rows=submissions.map(s=>{const v=ratings[s.id]||{},complete=KEYDATA.categories.every(x=>v[x.id]&&v[x.id].score!==''&&v[x.id].score!==undefined);const total=complete?KEYDATA.categories.reduce((n,x)=>n+Number(v[x.id].score),0):'';const all={identity:s.identity,hasJSON:!!s.json,hasHTML:!!s.html,total,notes:KEYDATA.categories.map(x=>x.title+': '+(v[x.id]?.comment||'')).join(' | ')};KEYDATA.categories.forEach(c=>all[c.id]=v[c.id]?.score??'');return cols.map(k=>csvSafe(all[k])).join(',')});createDownload('UAS_SIPI_Reguler_Nilai_Manual.csv','\ufeff'+[cols.map(csvSafe).join(','),...rows].join('\r\n'),'text/csv;charset=utf-8')}
+function exportScores(){if(!KEYDATA)return;persistRatings();const cols=['identity','hasJSON','hasHTML','verification',...KEYDATA.categories.map(x=>x.id),'total','notes'];const rows=submissions.map(s=>{const v=ratings[s.id]||{},complete=KEYDATA.categories.every(x=>v[x.id]&&v[x.id].score!==''&&v[x.id].score!==undefined);const total=complete?KEYDATA.categories.reduce((n,x)=>n+Number(v[x.id].score),0):'';const all={identity:s.identity,hasJSON:!!s.json,hasHTML:!!s.html,verification:pairDifferences(s).length?'PERLU VERIFIKASI':'COCOK',total,notes:KEYDATA.categories.map(x=>x.title+': '+(v[x.id]?.comment||'')).join(' | ')};KEYDATA.categories.forEach(c=>all[c.id]=v[c.id]?.score??'');return cols.map(k=>csvSafe(all[k])).join(',')});createDownload('UAS_SIPI_Reguler_Nilai_Manual.csv','\ufeff'+[cols.map(csvSafe).join(','),...rows].join('\r\n'),'text/csv;charset=utf-8')}
 function exportReview(){persistRatings();const data={format:'SIPI_UAS_REG_INSTRUCTOR_REVIEW',version:CASE_VERSION,exportedAt:new Date().toISOString(),students:submissions.map(s=>({identity:s.identity,id:s.id,hasJSON:!!s.json,hasHTML:!!s.html})),ratings};createDownload('UAS_SIPI_Reguler_Penilaian_Backup.json',JSON.stringify(data,null,2),'application/json')}
 async function importReview(file){try{if(file.size>1000000)throw Error('Berkas terlalu besar');const x=JSON.parse(await file.text());if(x.format!=='SIPI_UAS_REG_INSTRUCTOR_REVIEW'||x.version!==CASE_VERSION)throw Error('Bukan cadangan penilaian');validateRatings(x.ratings);if(!confirm('Ganti penilaian saat ini dengan cadangan ini?'))return;ratings=x.ratings;persistRatings();renderReview();setStatus('Penilaian dipulihkan dan disimpan di browser ini.')}catch(e){setStatus('Cadangan penilaian ditolak: '+e.message)}}
 $('unlock').onclick=unlock;$('pass').onkeydown=e=>{if(e.key==='Enter')unlock()};
