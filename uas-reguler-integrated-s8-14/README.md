@@ -1,0 +1,43 @@
+# UAS SIPI Reguler — Integrated Control & Reporting Lab
+
+**Alamat aplikasi:** https://gunggu.github.io/sipi-integrated-case-lab/uas-reguler-integrated-s8-14/
+
+## Tujuan
+Asesmen individual take-home berbasis kasus PT Cakrawala Distribusi Industri, selaras dengan RPKPS reguler pasca-UTS Sesi 8–14.
+
+**Jendela pengumpulan:** 2 × 24 jam, ditentukan dan dikendalikan sepenuhnya oleh eLOK/Moodle. **Kerja efektif:** ±360 menit yang disarankan, bukan timer pada halaman publik.
+
+| Tahap | Fokus | Menit |
+|---|---|---:|
+| 1 | Penugasan & ruang lingkup | 20 |
+| 2 | Payroll & HRIS (S8) | 55 |
+| 3 | GL & financial close (S9) | 60 |
+| 4 | ICoFR & pengujian kontrol (S10) | 65 |
+| 5 | Data lineage & ERP (S11) | 60 |
+| 6 | Cloud, cyber & AI reporting (S12–13) | 55 |
+| 7 | Keputusan & memo akhir (S12–14) | 45 |
+| **Total** | | **360** |
+
+## Fitur
+- Aplikasi statis dengan 15 dokumen kasus, lima set investigasi dengan pemilihan dua dari tiga prosedur, rekonsiliasi numerik, evaluasi kontrol, dan keputusan bercabang.
+- Penyimpanan otomatis localStorage hanya pada perangkat dan browser mahasiswa.
+- Backup JSON dapat diimpor untuk melanjutkan progres, dengan validasi versi, struktur dan status investigasi.
+- Hasil final sebagai JSON terstruktur dan laporan HTML yang dapat dicetak atau disimpan PDF melalui browser.
+- Tahap berikutnya terbuka setelah dokumen ditelaah, dua investigasi dipilih, dan semua isian minimum terisi.
+- Finalisasi lokal mengunci jawaban tetapi bukan tanda terima LMS.
+
+## Penggunaan
+1. Bagikan tautan melalui eLOK sebagai sumber kegiatan ujian yang hanya terlihat selama jendela 48 jam.
+2. Mahasiswa mengisi nama, NIU, dan kelas; menyelesaikan tahap 1–7 secara individual; unduh backup berkala.
+3. Mahasiswa mengunduh laporan HTML dan JSON final, kemudian unggah keduanya melalui Assignment eLOK.
+4. Dosen menilai bukti, perhitungan, argumentasi, kualitas keputusan, dan rencana tindakan; tidak ada skor otomatis untuk mahasiswa.
+
+## Pedagogi
+Level setara dengan kelas profesional pada integrasi proses dan mutu bukti, tetapi lebih terstruktur agar tidak mengandaikan pengalaman praktisi. Kasus baru berfokus pada Sesi 8–14 dan berbeda dari kasus UAS profesional Sesi 7–12.
+
+## Batasan
+- Tidak ada backend, login, deteksi plagiarisme, server penyerahan, atau sinkronisasi lintas-perangkat.
+- Jangan menyimpan kunci jawaban atau data mahasiswa dalam repositori publik.
+- Tenggat 48 jam bukan pembatasan keamanan GitHub Pages. Akses terjadwal serta submission harus dikendalikan LMS.
+- Isian minimum hanya mengukur kelengkapan, bukan kebenaran substantif.
+- Uji alur pada browser mahasiswa dan impor pengumpulan sebelum ujian resmi.
