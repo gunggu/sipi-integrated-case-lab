@@ -19,7 +19,7 @@ Asesmen individual take-home berbasis kasus PT Cakrawala Distribusi Industri, se
 | **Total** | | **360** |
 
 ## Fitur
-- Aplikasi statis dengan 15 dokumen kasus, lima set investigasi dengan pemilihan dua dari tiga prosedur, rekonsiliasi numerik, evaluasi kontrol, dan keputusan bercabang.
+- Aplikasi statis dengan 15 dokumen kasus, lima set investigasi dengan pemilihan dua dari tiga prosedur yang harus dikonfirmasi dan dikunci sebelum hasil ditampilkan, rekonsiliasi numerik, evaluasi kontrol, dan keputusan bercabang.
 - Penyimpanan otomatis localStorage hanya pada perangkat dan browser mahasiswa.
 - Backup JSON dapat diimpor untuk melanjutkan progres, dengan validasi versi, struktur dan status investigasi.
 - Hasil final sebagai JSON terstruktur dan laporan HTML yang dapat dicetak atau disimpan PDF melalui browser.
@@ -41,3 +41,9 @@ Level setara dengan kelas profesional pada integrasi proses dan mutu bukti, teta
 - Tenggat 48 jam bukan pembatasan keamanan GitHub Pages. Akses terjadwal serta submission harus dikendalikan LMS.
 - Isian minimum hanya mengukur kelengkapan, bukan kebenaran substantif.
 - Uji alur pada browser mahasiswa dan impor pengumpulan sebelum ujian resmi.
+
+## Perbaikan setelah audit instruktur (23 November 2026)
+- Opsi keputusan diperhalus agar pilihan salah tidak selalu ekstrem atau mengungkap jawaban kuat dari bentuk kalimat.
+- Pilihan dua investigasi per tahap sekarang harus dikonfirmasi melalui tombol penetapan; hasil baru terlihat setelah keputusan dikunci.
+- Halaman instruktur ada di subfolder `instructor/` dengan kunci dan rubrik terenkripsi, impor JSON/HTML, dan penilaian manual 100 poin.
+- Pada berkas JSON final, setiap investigasi juga menyimpan status `committed` untuk membantu pemeriksaan; status ini tidak menjadi bukti anti-manipulasi.
