@@ -34,8 +34,8 @@ Alamat: https://gunggu.github.io/sipi-integrated-case-lab/uas-reguler-integrated
 - Jika ingin nilai PDF, gunakan fitur cetak browser pada tampilan instruktur.
 
 ## Masalah pedagogis yang perlu dipertimbangkan
-1. Distraktor pilihan keputusan saat ini terlalu ekstrem sehingga tidak seluruhnya menguji professional judgment.
-2. Pergantian prosedur investigasi masih mungkin; mahasiswa dapat menelusuri semua alternatif secara bertahap.
+1. Distraktor awal terlalu ekstrem; label pilihan telah direvisi menjadi trade-off lebih realistis. Kualitas reasoning tetap harus dinilai manual.
+2. Pergantian investigasi telah ditutup: pilihan dua prosedur harus ditetapkan sebelum hasil bukti dibuka. Kontrol ini tetap hanya kontrol pada browser, bukan pengamanan anti-manipulasi.
 3. Mekanisme kelengkapan hanya memverifikasi jumlah kata/angka dan penandaan berkas, bukan validitas kesimpulan.
 4. Semua timestamp pada ekspor dibuat browser; jangan perlakukan sebagai bukti pengumpulan.
 5. Waktu efektif 360 menit merupakan estimasi rancangan; diperlukan pilot untuk menguji waktu nyata.
@@ -46,6 +46,7 @@ Alamat: https://gunggu.github.io/sipi-integrated-case-lab/uas-reguler-integrated
 - Jumlah kategori rubrik 7 dengan total bobot 100; 7 jawaban numerik acuan.
 - Pemeriksaan struktur JSON final, versi kasus, numerik Indonesia dan penolakan berkas backup diuji.
 - Struktur HTML laporan ditinjau terhadap implementasi student-side; browser Chromium diuji untuk ekstraksi identitas.
+- Pengujian regresi simulasi aplikasi mahasiswa dan pengenalan JSON final oleh instruktur: 23/23 pemeriksaan lulus.
 - Uji impor penuh dari LMS dan uji end-to-end lintas perangkat belum dilakukan.
 
 ## Privasi
