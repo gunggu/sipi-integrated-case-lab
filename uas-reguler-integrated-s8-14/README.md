@@ -85,3 +85,13 @@ Level setara dengan kelas profesional pada integrasi proses dan mutu bukti, teta
 2. Waktu ekspor, status final, identitas, dan isi JSON/HTML dapat diubah oleh pemilik perangkat. Rekaman waktu serta penyerahan resmi wajib diverifikasi di eLOK.
 3. Penyimpanan penilaian lokal tidak menyinkronkan data antarperangkat dan tidak mengenkripsi isi nilai. Gunakan perangkat tepercaya, ekspor backup berkala, dan hapus cache selesai penilaian.
 4. Perlu tes ujung-ke-ujung dan pilot sebelum UAS resmi.
+
+## Penilaian indikator awal di laman instruktur — 28 November 2026
+
+- Setelah berkas mahasiswa diimpor dan sandi instruktur dibuka, laman instruktur menyajikan **indikator awal pekerjaan mahasiswa** tanpa mengganti rubrik penilaian manual.
+- Indeks indikator terstruktur (0–100) dihitung dari proporsi kecocokan setiap nilai numerik terhadap `KEYDATA.exactNumbers` serta, jika referensi tersedia, kecocokan opsi keputusan terhadap `KEYDATA.preferredDecisions.*.strong`. Semua indikator terstruktur yang tersedia diberi bobot sama; indikator yang tidak memiliki referensi tidak masuk penyebut.
+- Kertas kerja naratif diperiksa untuk **jumlah kata dan penyebutan kode dokumen kasus**, sebagai sinyal keterlacakan dan prioritas pembacaan, **bukan** penilaian isi, kualitas argumen, kecermatan kesimpulan, atau tingkat penguasaan mahasiswa.
+- Panel menampilkan peringatan ketika perhitungan berbeda, keputusan memerlukan telaah, esai tidak memenuhi batas teknis, atau tidak ada kode dokumen eksplisit. Jawaban alternatif yang beralasan bisa mendapatkan nilai tinggi setelah pemeriksaan dosen meskipun tidak sejalan dengan opsi referensi.
+- Hasil indikator awal **tidak ditransfer** ke skor kategori, tidak disimpan sebagai nilai UAS final, dan tidak mengubah penilaian manual 100 poin.
+- CSV penilaian sekarang menyertakan kolom `preliminary_index_structured`, `number_correct`, `number_total`, `decision_reference_matches`, `decision_reference_total`, dan `narrative_fields_with_document_codes` untuk membantu moderasi.
+- 9 dari 9 pemeriksaan fungsi indikator awal lulus pada input simulasi, termasuk pemisahan skor awal dari nilai manual. Pengujian browser sungguhan dan kalibrasi dengan penilaian dosen manusia tetap diperlukan.
