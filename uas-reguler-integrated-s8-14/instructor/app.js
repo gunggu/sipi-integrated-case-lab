@@ -146,11 +146,62 @@ function compareFiles(s){
 
 function numericTable(row){return'<h3>Rekonsiliasi numerik · pembanding, bukan nilai otomatis</h3><div class="tablewrap"><table class="smalltable"><tr><th>Field</th><th>Mahasiswa</th><th>Kunci</th><th>Indikasi</th></tr>'+Object.entries(KEYDATA.exactNumbers).map(([key,correct])=>{const n=num(row.answers[key]);return'<tr><td>'+escapeHTML(FIELDS.find(f=>f.id===key)?.label||key)+'</td><td>'+escapeHTML(row.answers[key]??'—')+'</td><td>'+fmt(correct)+'</td><td class="'+(n===correct?'match':'difference')+'">'+(n===correct?'Sesuai':'Tinjau')+'</td></tr>'}).join('')+'</table></div>'}
 function investigationTable(row){const inv=row.investigations||[];return'<h3>Investigasi yang tercatat</h3><div class="tablewrap"><table><tr><th>Tahap</th><th>Dipilih</th><th>Hasil menurut kasus</th></tr>'+INVESTIGATIONS.map(p=>{const entry=inv.find(x=>x.step===p.step)||{chosen:[]};const chosen=entry.chosen||[];return'<tr><td>'+escapeHTML(p.title)+'</td><td>'+escapeHTML(chosen.join(', ')||'—')+'</td><td>'+p.options.filter(o=>chosen.includes(o[0])).map(o=>'<p><b>'+escapeHTML(o[0])+'</b>: '+escapeHTML(o[2])+'</p>').join('')+'</td></tr>'}).join('')+'</table></div>'}
+// Diagnostic-only indicators. No AI grading, no semantic essay scoring, no automatic grade transfer.
+function preliminaryReview(record){
+ if(!KEYDATA||!record)return null;
+ const answers=record.answers||{};
+ const numberChecks=Object.entries(KEYDATA.exactNumbers||{}).map(([id,reference])=>({id,actual:num(answers[id]),reference,match:num(answers[id])===reference}));
+ const numericCorrect=numberChecks.filter(x=>x.match).length;
+ const decIDs=FIELDS.filter(f=>f.type==='select');
+ const choiceChecks=decIDs.map(f=>{
+  const reference=KEYDATA.preferredDecisions?.[f.id];
+  const choices=Array.isArray(reference?.strong)?reference.strong:[];
+  const chosen=String(answers[f.id]||'');
+  const label=f.options.find(o=>o[0]===chosen)?.[1]||'';
+  const normal=x=>String(x||'').trim().toLowerCase();
+  const known=choices.length>0;
+  return {id:f.id,chosen,label,known,preferred:known&&(choices.some(v=>normal(v)===normal(chosen)||normal(v)===normal(label)))};
+ });
+ const knownChoices=choiceChecks.filter(x=>x.known);
+ const essays=FIELDS.filter(f=>f.type==='essay').map(f=>{
+  const raw=String(answers[f.id]||'');
+  const words=countWords(raw);
+  const refs=[...new Set((raw.toUpperCase().match(/\b(?:SC|PY|CL|IC|IT|DR)-\d{2}\b/g)||[]).filter(id=>DOCUMENTS.some(d=>d.id===id)))];
+  return {id:f.id,label:f.label,words,min:f.min,references:refs.length};
+ });
+ const documented=essays.filter(x=>x.references>0).length;
+ const supported=numberChecks.length+knownChoices.length;
+ const correct=numericCorrect+knownChoices.filter(x=>x.preferred).length;
+ const index=supported?Math.round(100*correct/supported):null;
+ const issues=[];
+ if(numberChecks.some(x=>!x.match))issues.push('Ada perhitungan yang berbeda dari angka pembanding.');
+ if(knownChoices.some(x=>!x.preferred))issues.push('Ada keputusan yang memerlukan penelaahan lebih lanjut terhadap argumennya.');
+ if(essays.some(x=>x.words<x.min))issues.push('Ada jawaban esai di bawah ambang panjang.');
+ if(documented===0)issues.push('Tidak ada rujukan kode dokumen eksplisit pada jawaban naratif.');
+ const attention=(numberChecks.some(x=>!x.match)||knownChoices.some(x=>!x.preferred)||documented===0);
+ return {numberChecks,numericCorrect,choiceChecks,knownChoices,essays,documented,index,supported,correct,issues,attention};
+}
+function preliminaryPanel(s){
+ const row=s.json||s.html,pre=preliminaryReview(row);
+ if(!pre)return '';
+ const verified=!!s.json&&!!s.html&&pairDifferences(s).length===0;
+ const main=pre.index===null?'Tidak tersedia':pre.index+' / 100';
+ return '<section class="initial-review"><div class="statline"><div><span class="workspace-eyebrow">Diagnosis pendahuluan · hanya indikator terstruktur</span><h3>Indikator awal pekerjaan mahasiswa</h3></div><span class="pill">'+escapeHTML(verified?'Dua berkas konsisten':'Perlu verifikasi berkas')+'</span></div>'+
+ '<p class="small">Indeks berikut menghitung kecocokan angka dan, bila referensi tersedia, pilihan keputusan. Bobot setiap indikator yang dapat diperiksa sama. Angka ini <strong>bukan nilai UAS, bukan prediksi kualitas esai, dan tidak dimasukkan ke skor manual</strong>. Jawaban alternatif yang beralasan perlu dinilai dosen.</p>'+
+ '<div class="grid three initial-stats"><div class="kpi"><small>Indeks indikator terstruktur</small><strong>'+escapeHTML(main)+'</strong><small>'+pre.correct+' dari '+pre.supported+' indikator yang dapat diperiksa</small></div>'+
+ '<div class="kpi"><small>Rekonsiliasi numerik</small><strong>'+pre.numericCorrect+' / '+pre.numberChecks.length+'</strong><small>Kecocokan angka pembanding</small></div>'+
+ '<div class="kpi"><small>Keputusan dengan referensi</small><strong>'+pre.knownChoices.filter(x=>x.preferred).length+' / '+pre.knownChoices.length+'</strong><small>Hanya orientasi pembahasan, bukan benar/salah mutlak</small></div></div>'+
+ '<h4>Kajian penulisan dan penggunaan bukti</h4><div class="tablewrap"><table class="smalltable"><thead><tr><th>Kertas kerja</th><th>Jumlah kata</th><th>Referensi dokumen</th></tr></thead><tbody>'+pre.essays.map(x=>'<tr><td>'+escapeHTML(x.label)+'</td><td>'+x.words+' (min. '+x.min+')</td><td>'+x.references+' kode</td></tr>').join('')+'</tbody></table></div>'+
+ '<p class="small">Penyebutan kode dokumen hanyalah indikator keterlacakan tekstual. Jumlah kata dan sitasi tidak mengukur validitas analisis, ketepatan asersi, kualitas bukti, maupun pertimbangan profesional.</p>'+
+ (pre.issues.length?'<div class="note"><b>Butir yang perlu dibaca dosen:</b><ul>'+pre.issues.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ul></div>':'<p class="small">Tidak ada pengecualian pada indikator sederhana yang dapat diperiksa. Evaluasi substantif tetap wajib.</p>')+
+ '</section>';
+}
+
 function gradeRow(id){const r=ratings[id]||{};return r}
 function gradeForm(s){const values=gradeRow(s.id);return '<h3>Rubrik dan skor manual (100 poin)</h3>'+KEYDATA.categories.map(cat=>{const v=values[cat.id]||{score:'',comment:''};return'<div class="rubric"><div class="statline"><b>'+escapeHTML(cat.title)+'</b><label>Skor <input aria-label="Skor '+escapeHTML(cat.title)+'" type="number" min="0" max="'+cat.weight+'" step="0.5" data-score="'+cat.id+'" value="'+escapeHTML(v.score)+'"> / '+cat.weight+'</label></div><ul>'+cat.anchors.map(a=>'<li>'+escapeHTML(a)+'</li>').join('')+'</ul><label class="small" for="comment_'+cat.id+'">Catatan dosen</label><textarea id="comment_'+cat.id+'" data-comment="'+cat.id+'">'+escapeHTML(v.comment)+'</textarea></div>'}).join('')+'<div class="statline"><strong id="total">Belum lengkap</strong><button id="saveReview" class="secondary">Simpan dan cadangkan penilaian</button></div><p class="small">Skor tetap manual. Kunci numerik dan opsi kuat tidak memberi nilai secara otomatis; dosen wajib membaca argumen dan bukti yang tersedia bagi mahasiswa.</p>'}
 function answersView(row){return'<h3>Jawaban mahasiswa</h3>'+FIELDS.map(f=>'<div><b>'+escapeHTML(f.label)+'</b><p class="answertext">'+escapeHTML(row.answers[f.id]||'—')+'</p></div>').join('')}
 function refreshTotal(){const s=current();if(!s||!KEYDATA)return;const values=ratings[s.id]||{};const complete=KEYDATA.categories.every(c=>values[c.id]&&values[c.id].score!==''&&values[c.id].score!==undefined&&Number.isFinite(Number(values[c.id].score)));$('total').textContent=complete?'Total manual: '+KEYDATA.categories.reduce((x,c)=>x+Number(values[c.id].score),0).toFixed(1)+' / 100':'Penilaian belum lengkap'}
-function renderReview(){if(!KEYDATA)return;const s=current();if(!s){$('review').innerHTML='<h2>Pilih mahasiswa</h2><p class="small">Impor JSON atau laporan HTML yang diekspor mahasiswa.</p>';return}const row=s.json||s.html;$('review').innerHTML='<div class="statline"><div><h2>'+escapeHTML(s.identity)+'</h2><p class="small">'+(s.json?'JSON final':'Tanpa JSON')+' · '+(s.html?'HTML laporan':'Tanpa HTML')+' · Final lokal: '+(row.locked?'Ya':'Tidak')+'</p></div><span class="pill">Penilaian dosen</span></div><div class="note">Metadata dan kelengkapan bukan bukti independensi kerja. Verifikasi identitas dan jam pengumpulan melalui LMS.</div>'+compareFiles(s)+'<p><b>Dokumen yang ditandai:</b> '+escapeHTML(row.docs.join(', ')||'—')+'</p>'+numericTable(row)+investigationTable(row)+answersView(row)+gradeForm(s);
+function renderReview(){if(!KEYDATA)return;const s=current();if(!s){$('review').innerHTML='<h2>Pilih mahasiswa</h2><p class="small">Impor JSON atau laporan HTML yang diekspor mahasiswa.</p>';return}const row=s.json||s.html;$('review').innerHTML='<div class="statline"><div><h2>'+escapeHTML(s.identity)+'</h2><p class="small">'+(s.json?'JSON final':'Tanpa JSON')+' · '+(s.html?'HTML laporan':'Tanpa HTML')+' · Final lokal: '+(row.locked?'Ya':'Tidak')+'</p></div><span class="pill">Penilaian dosen</span></div><div class="note">Metadata dan kelengkapan bukan bukti independensi kerja. Verifikasi identitas dan jam pengumpulan melalui LMS.</div>'+compareFiles(s)+'<p><b>Dokumen yang ditandai:</b> '+escapeHTML(row.docs.join(', ')||'—')+'</p>'+preliminaryPanel(s)+numericTable(row)+investigationTable(row)+answersView(row)+gradeForm(s);
 $('review').querySelectorAll('[data-score]').forEach(e=>e.oninput=()=>{const cat=KEYDATA.categories.find(c=>c.id===e.dataset.score),v=e.value===''?'':Number(e.value);if(v!==''&&(!Number.isFinite(v)||v<0||v>cat.weight)){e.setCustomValidity('Rentang 0 sampai '+cat.weight);return}e.setCustomValidity('');ratings[s.id]??={};ratings[s.id][cat.id]??={score:'',comment:''};ratings[s.id][cat.id].score=v;ratingsDirty=true;persistRatings();refreshTotal()});
 $('review').querySelectorAll('[data-comment]').forEach(e=>e.oninput=()=>{ratings[s.id]??={};ratings[s.id][e.dataset.comment]??={score:'',comment:''};ratings[s.id][e.dataset.comment].comment=e.value;ratingsDirty=true;persistRatings()});
 $('saveReview').onclick=()=>{setStatus(persistRatings()?'Penilaian tersimpan di browser ini. Unduh backup JSON untuk cadangan terpisah.':'Gagal menyimpan; unduh backup JSON.')};refreshTotal()
@@ -158,7 +209,7 @@ $('saveReview').onclick=()=>{setStatus(persistRatings()?'Penilaian tersimpan di 
 function renderKey(){if(!KEYDATA)return;$('keyBody').innerHTML='<p>'+escapeHTML(KEYDATA.judgement)+'</p><h3>Prinsip penilaian</h3><ul>'+KEYDATA.gradingPrinciples.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ul><h3>Referensi pertimbangan keputusan</h3>'+Object.entries(KEYDATA.preferredDecisions).map(([k,x])=>'<div class="info"><b>'+escapeHTML(k)+' · '+escapeHTML(x.strong.join(' / '))+'</b><p>'+escapeHTML(x.note)+'</p></div>').join('')}
 function csvSafe(x){let s=String(x??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
 function createDownload(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
-function exportScores(){if(!KEYDATA)return;persistRatings();const cols=['identity','hasJSON','hasHTML','verification',...KEYDATA.categories.map(x=>x.id),'total','notes'];const rows=submissions.map(s=>{const v=ratings[s.id]||{},complete=KEYDATA.categories.every(x=>v[x.id]&&v[x.id].score!==''&&v[x.id].score!==undefined);const total=complete?KEYDATA.categories.reduce((n,x)=>n+Number(v[x.id].score),0):'';const all={identity:s.identity,hasJSON:!!s.json,hasHTML:!!s.html,verification:pairDifferences(s).length?'PERLU VERIFIKASI':'COCOK',total,notes:KEYDATA.categories.map(x=>x.title+': '+(v[x.id]?.comment||'')).join(' | ')};KEYDATA.categories.forEach(c=>all[c.id]=v[c.id]?.score??'');return cols.map(k=>csvSafe(all[k])).join(',')});createDownload('UAS_SIPI_Reguler_Nilai_Manual.csv','\ufeff'+[cols.map(csvSafe).join(','),...rows].join('\r\n'),'text/csv;charset=utf-8')}
+function exportScores(){if(!KEYDATA)return;persistRatings();const cols=['identity','hasJSON','hasHTML','verification','preliminary_index_structured','number_correct','number_total','decision_reference_matches','decision_reference_total','narrative_fields_with_document_codes',...KEYDATA.categories.map(x=>x.id),'total','notes'];const rows=submissions.map(s=>{const v=ratings[s.id]||{},complete=KEYDATA.categories.every(x=>v[x.id]&&v[x.id].score!==''&&v[x.id].score!==undefined);const total=complete?KEYDATA.categories.reduce((n,x)=>n+Number(v[x.id].score),0):'';const pre=preliminaryReview(s.json||s.html);const all={identity:s.identity,hasJSON:!!s.json,hasHTML:!!s.html,verification:pairDifferences(s).length?'PERLU VERIFIKASI':'COCOK',preliminary_index_structured:pre?.index??'',number_correct:pre?.numericCorrect??'',number_total:pre?.numberChecks.length??'',decision_reference_matches:pre?.knownChoices.filter(x=>x.preferred).length??'',decision_reference_total:pre?.knownChoices.length??'',narrative_fields_with_document_codes:pre?.documented??'',total,notes:KEYDATA.categories.map(x=>x.title+': '+(v[x.id]?.comment||'')).join(' | ')};KEYDATA.categories.forEach(c=>all[c.id]=v[c.id]?.score??'');return cols.map(k=>csvSafe(all[k])).join(',')});createDownload('UAS_SIPI_Reguler_Nilai_Manual.csv','\ufeff'+[cols.map(csvSafe).join(','),...rows].join('\r\n'),'text/csv;charset=utf-8')}
 function exportReview(){persistRatings();const data={format:'SIPI_UAS_REG_INSTRUCTOR_REVIEW',version:CASE_VERSION,exportedAt:new Date().toISOString(),students:submissions.map(s=>({identity:s.identity,id:s.id,hasJSON:!!s.json,hasHTML:!!s.html})),ratings};createDownload('UAS_SIPI_Reguler_Penilaian_Backup.json',JSON.stringify(data,null,2),'application/json')}
 async function importReview(file){try{if(file.size>1000000)throw Error('Berkas terlalu besar');const x=JSON.parse(await file.text());if(x.format!=='SIPI_UAS_REG_INSTRUCTOR_REVIEW'||x.version!==CASE_VERSION)throw Error('Bukan cadangan penilaian');validateRatings(x.ratings);if(!confirm('Ganti penilaian saat ini dengan cadangan ini?'))return;ratings=x.ratings;persistRatings();renderReview();setStatus('Penilaian dipulihkan dan disimpan di browser ini.')}catch(e){setStatus('Cadangan penilaian ditolak: '+e.message)}}
 $('unlock').onclick=unlock;$('pass').onkeydown=e=>{if(e.key==='Enter')unlock()};
